@@ -5,7 +5,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { OutlinedInput, Stack, Button, InputAdornment, IconButton, FormControl, InputLabel } from '@mui/material';
 import '../css/login.css';
 
-function Login(){
+export default function Login(){
 
     // Initialize the google OAUTH
     useEffect(() => {
@@ -91,5 +91,3 @@ function Login(){
         </>
     );
 }
-
-export default Login;

@@ -44,7 +44,7 @@ function Home() {
     ];
     return (
         <>
-        <Box sx={{height:600, width:'100%'}}>
+        <Box height='100%'>
             <DataGrid
                 rows={rows}
                 columns={columns}

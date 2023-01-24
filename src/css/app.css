@@ -1,0 +1,14 @@
+.app{
+    display: flex;
+    flex-flow: column;
+    align-items: stretch;
+    height: 100vh;
+}
+
+.nav{
+    flex: 0 1 auto;
+}
+
+.content{
+    flex: 1 1 auto;
+}
