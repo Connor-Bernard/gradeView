@@ -1,3 +1,8 @@
+:root{
+  --accent: #7253ed;
+  --tertiary: #e3a83b;
+}
+
 .app{
     display: flex;
     flex-flow: column;

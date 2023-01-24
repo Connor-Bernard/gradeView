@@ -10,6 +10,8 @@ import NavBar from './components/NavBar';
 import Home from './views/home';
 import Login from './views/login';
 import Buckets from './views/buckets';
+import LogOut from './views/logout';
+import jwtDecode from 'jwt-decode';
 
 const theme = createTheme({
 	palette: {
@@ -27,6 +29,19 @@ const theme = createTheme({
 	},
 });
 
+function LoginRoute(props){
+	if(props.token !== null){
+		try{
+			jwtDecode(props.token);
+			return (<LogOut />);
+		} catch (InvalidTokenError) {
+			return(<Login />)
+		}
+	} else {
+		return(<Login />)
+	}
+}
+
 export default function App() {
 	return (
 		<ThemeProvider theme={theme}>
@@ -38,7 +53,7 @@ export default function App() {
 					<Router>
 						<Routes>
 							<Route exact path="/" element={<Home />} />
-							<Route path="/login" element={<Login />} />
+							<Route path="/login" element={<LoginRoute token={localStorage.getItem('token')}/>} />
 							<Route path='/buckets' element={<Buckets />} />
 						</Routes>
 					</Router>

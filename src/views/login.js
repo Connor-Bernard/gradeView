@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { OutlinedInput, Stack, Button, InputAdornment, IconButton, FormControl, InputLabel } from '@mui/material';
+import { OutlinedInput, Stack, Button, InputAdornment, IconButton, FormControl, InputLabel, Typography, Divider } from '@mui/material';
 import '../css/login.css';
 
 export default function Login(){
@@ -47,43 +47,43 @@ export default function Login(){
         <>
         <form>
             <Stack id="loginStack" spacing={2} alignItems='center' justifyContent="center">
-                <h1>Login</h1>
-                    <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-                        <InputLabel htmlFor="username">Username</InputLabel>
-                        <OutlinedInput
-                            id='username'
-                            autoComplete='username'
-                            label='Username'
-                            onChange={(e) => {
-                                setUsername(e.target.value);
-                            }}
-                        />
-                    </FormControl>
-                    <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-                        <InputLabel htmlFor="password">Password</InputLabel>
-                        <OutlinedInput
-                            id="password"
-                            type={showPassword ? 'text' : 'password'}
-                            autoComplete='current-password'
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        edge="end"
-                                    >
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="Password"
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                            }}
-                        />
-                    </FormControl>
-                    <Button variant='contained' size="large" onClick={handleLogin}>Login</Button>
+                <Typography variant='h3' sx={{fontWeight:500}}>Login</Typography>
+                <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+                    <InputLabel htmlFor="username">Username</InputLabel>
+                    <OutlinedInput
+                        id='username'
+                        autoComplete='username'
+                        label='Username'
+                        onChange={(e) => {
+                            setUsername(e.target.value);
+                        }}
+                    />
+                </FormControl>
+                <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+                    <InputLabel htmlFor="password">Password</InputLabel>
+                    <OutlinedInput
+                        id="password"
+                        type={showPassword ? 'text' : 'password'}
+                        autoComplete='current-password'
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                        label="Password"
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                        }}
+                    />
+                </FormControl>
+                <Button variant='contained' size="large" onClick={handleLogin}>Login</Button>
                 <p><i>or</i></p>
                 <div id="googleSignInButton"></div>
             </Stack>
