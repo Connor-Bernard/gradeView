@@ -1,0 +1,25 @@
+{
+  "name": "server.gradeview.com",
+  "version": "1.0.0",
+  "description": "Gradeview Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "Connor Bernard",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@google-cloud/iam-credentials": "^2.0.2",
+    "@google-cloud/local-auth": "^2.1.0",
+    "cors": "^2.8.5",
+    "es-main": "^1.2.0",
+    "express": "^4.18.2",
+    "googleapis": "^105.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

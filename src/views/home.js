@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
 function Home() {
+
     let columns = [
         {field: 'assignment', headerName: 'Assignment', width:400},
         {field: 'grade', headerName: 'Grade', width:100}
