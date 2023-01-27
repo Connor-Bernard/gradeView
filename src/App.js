@@ -6,12 +6,14 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './css/app.css';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import PrivateRoutes from './utils/privateRoutes';
 import NavBar from './components/NavBar';
 import Home from './views/home';
 import Login from './views/login';
 import Buckets from './views/buckets';
-import LogOut from './views/logout';
-import jwtDecode from 'jwt-decode';
+import NotFound from './views/notFound';
+
+// TODO: Prevent horizontal scrolling
 
 const theme = createTheme({
 	palette: {
@@ -29,19 +31,6 @@ const theme = createTheme({
 	},
 });
 
-function LoginRoute(props){
-	if(props.token !== null){
-		try{
-			jwtDecode(props.token);
-			return (<LogOut />);
-		} catch (InvalidTokenError) {
-			return(<Login />)
-		}
-	} else {
-		return(<Login />)
-	}
-}
-
 export default function App() {
 	return (
 		<ThemeProvider theme={theme}>
@@ -52,9 +41,12 @@ export default function App() {
 				<div className="content">
 					<Router>
 						<Routes>
-							<Route exact path="/" element={<Home />} />
-							<Route path="/login" element={<LoginRoute token={localStorage.getItem('token')}/>} />
-							<Route path='/buckets' element={<Buckets />} />
+							<Route exact path='/login' element={<Login />} />
+							<Route exact path='/buckets' element={<Buckets />} />
+							<Route element={<PrivateRoutes />}>
+								<Route exact path='/' element={<Home />} />
+							</Route>
+							<Route exact path='*' element={<NotFound />}/> 
 						</Routes>
 					</Router>
 				</div>

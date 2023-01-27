@@ -14,6 +14,7 @@
   "dependencies": {
     "@google-cloud/iam-credentials": "^2.0.2",
     "@google-cloud/local-auth": "^2.1.0",
+    "axios": "^1.2.4",
     "concurrently": "^7.6.0",
     "cors": "^2.8.5",
     "es-main": "^1.2.0",

@@ -3,6 +3,8 @@ import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 
 export default function Buckets(){
 
+    console.log('test');
+
     function createGradingRow(assignment, points){
         return { assignment, points };
     }

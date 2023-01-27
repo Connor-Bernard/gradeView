@@ -21,24 +21,6 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 const OAUTHCLIENTID = '435032403387-5sph719eh205fc6ks0taft7ojvgipdji.apps.googleusercontent.com';
 
 /**
- * Test to see if the provided token is a valid token.
- * @param {OAuth2Client} oauthClient 
- * @param {String} token 
- * @returns {Promise<Boolean>} true if token is valid otherwise false
- */
-async function verifyToken(oauthClient, token){
-    try {
-        const ticket = await oauthClient.verifyIdToken({
-            idToken: token,
-            audience: OAUTHCLIENTID
-        });
-        return ticket.getPayload()['hd'] == 'berkeley.edu';
-    } catch(err) {
-        return false;
-    }
-}
-
-/**
  * Verifies token and gets the associated email.
  * @param {OAuth2Client} oauthClient 
  * @param {String} token 
@@ -52,9 +34,25 @@ async function getEmailFromIdToken(oauthClient, token){
         });
         const payload = ticket.getPayload();
         if(payload['hd'] != 'berkeley.edu'){
-            throw new Error('domain mismatch');
+            throw new AuthenticationError('domain mismatch');
         }
         return payload['email'];
+    } catch (err) {
+        throw new AuthenticationError('Could not authenticate authorization token.');
+    }
+}
+
+async function getProfilePictureFromIdToken(oauthClient, token){
+    try {
+        const ticket = await oauthClient.verifyIdToken({
+            idToken: token,
+            audience: OAUTHCLIENTID
+        });
+        const payload = ticket.getPayload();
+        if (payload['hd'] != 'berkeley.edu') {
+            throw new AuthenticationError('domain mismatch');
+        }
+        return payload['picture'];
     } catch (err) {
         throw new AuthenticationError('Could not authenticate authorization token.');
     }
@@ -104,16 +102,24 @@ async function getUserGrades(apiAuthClient, email){
     });
     const gradesRows = gradesRes.data.values;
 
-    let assignments = {}
+    let assignments = []
 
     // Populate assignments dictionary with grades so far
     for(let i = 0; i < gradesRows[0].length; i++){
-        assignments[assignmentsRows[0][i]] = gradesRows[0][i];
+        assignments.push({
+            'id': i,
+            'assignment': assignmentsRows[0][i],
+            'grade': gradesRows[0][i]
+        });
     }
     
-    // Populate rest of dictionary ungraded (remove to only show assignments to date)
+    // Populate rest of dictionary ungraded (comment to only show assignments to date)
     for(let i = gradesRows[0].length; i < assignmentsRows[0].length; i++){
-        assignments[assignmentsRows[0][i]] = '';
+        assignments.push({
+            'id': i,
+            'assignment': assignmentsRows[0][i],
+            'grade': gradesRows[0][i]
+        });
     }
 
     return assignments;
@@ -143,12 +149,13 @@ async function main(){
      * @param {any} res 
      * @param {any} next 
      */
-    async function validationMiddleWare(req, res, next){
+    async function verificationMiddleWare(req, res, next){
         let auth = req.headers['authorization'];
         if(!auth){
             return res.status(401).json({error: 'No Authorization provided.'});
         }
         auth = auth.split(' ');
+        // Make sure the user's email is in the google sheet
         try{
             getUserRow(apiAuthClient, await getEmailFromIdToken(oauthClient, auth[1]));
         } catch (e){
@@ -160,12 +167,23 @@ async function main(){
         }
         next();
     }
-    app.use(validationMiddleWare);
+    app.use(verificationMiddleWare);
+
+    // Use the auth checking of middleware to verify proper auth
+    app.get('/api/verifyaccess', (req, res) => {
+        return res.status(200).send(true);
+    })
 
     // Responds with json dictionary caller's grade data
     app.get('/api/grades', async (req, res) => {
         return res.status(200).json(await getUserGradesFromToken(apiAuthClient,
             oauthClient, req.headers['authorization'].split(' ')[1]));
+    });
+
+    // Responds with the user's profile picture extracted from their token
+    app.get('/api/profilepicture', async (req, res) => {
+        return res.status(200).json(await getProfilePictureFromIdToken(oauthClient,
+            req.headers['authorization'].split(' ')[1]));
     });
 
     app.listen(PORT, HOSTNAME, () => {

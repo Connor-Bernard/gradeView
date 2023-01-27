@@ -1,21 +1,30 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { AppBar, Box, Toolbar, Typography, Button, Link, Avatar } from '@mui/material'
-import jwtDecode from 'jwt-decode';
+import api from '../utils/api';
 
 export default function ButtonAppBar() {
 
-    //TODO: update this function to actually verify the token
+    // Sets up the profile picture on element load by getting pfp url from api
+    // This also serves as a auth verification
+    const [profilePicture, updateProfilePicture] = useState('');
+    useEffect(() => {
+        let mounted = true;
+        if(localStorage.getItem('token')){
+            api.get('/profilepicture').then((res) => {
+                if(mounted){
+                    updateProfilePicture(res.data);
+                }
+            });
+        }
+        return () => mounted = false;
+    }, []);
+
     function LogInButton(props){
         if(props.token){
-            try{
-                return (
-                <Avatar src={jwtDecode(props.token).picture} />
-                );
-            } catch (InvalidTokenError){
-                return (
-                    <Button variant='outlined' color='inherit'>Login</Button>
-                );
-            }
+            return (
+                <Avatar src={profilePicture} />
+            );
         } else {
             return (
                 <Button variant='outlined' color='inherit'>Login</Button>
@@ -28,7 +37,7 @@ export default function ButtonAppBar() {
             <Link href={props.href} color='inherit' underline='none'>
                 <Button color='inherit'>{props.children}</Button>
             </Link>
-        )
+        );
     }
 
     return (

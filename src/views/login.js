@@ -2,8 +2,11 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { OutlinedInput, Stack, Button, InputAdornment, IconButton, FormControl, InputLabel, Typography, Divider } from '@mui/material';
+import { OutlinedInput, Stack, Button, InputAdornment, IconButton, FormControl, InputLabel, Typography } from '@mui/material';
+import { WEBURL } from '../utils/api';
 import '../css/login.css';
+import { Navigate } from 'react-router-dom';
+
 
 export default function Login(){
 
@@ -20,7 +23,6 @@ export default function Login(){
     }, []);
 
     function handleGoogleLogin(response) {
-        console.log("TOKEN: " + response.credential);
         localStorage.setItem("token", response.credential);
         window.location.reload(false);
     }
@@ -41,8 +43,15 @@ export default function Login(){
         // TODO: Make a post request to the server to verify username and password
         // TODO: store retreived JWT token to localStorage
     }
+    
+    // TODO: use this to create error messages
     const [error, setError] = useState(false);
 
+    if (localStorage.getItem('token')) {
+        return (
+            <Navigate to='/' />
+        );
+    }
     return (
         <>
         <form>
