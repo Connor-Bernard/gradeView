@@ -1,0 +1,21 @@
+{
+    "server": {
+        "host": "127.0.0.1",
+        "port": 8000
+    },
+    "spreadsheet": {
+        "id": "1kaCebQXcx0DCu0-FNPbJlmF_XfN8QOOyI4LJxg4_J74",
+        "scopes": ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+        "startcolumn": "G",
+        "endcolumn": "AQ"
+    },
+    "googleconfig": {
+        "oauth": {
+            "clientid": "435032403387-5sph719eh205fc6ks0taft7ojvgipdji.apps.googleusercontent.com"
+        },
+        "service_account": {
+            "keyfile": "./auth/service_account.json"
+        }
+    },
+    "admins": ["connorbernard@berkeley.edu"]
+}

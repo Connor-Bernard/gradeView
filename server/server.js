@@ -3,6 +3,9 @@ import cors from 'cors';
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import esMain from 'es-main';
+import config from 'config';
+
+// TODO: Allow admins to use normal api calls if not in sheet
 
 class AuthenticationError extends Error{}
 class UnauthorizedAccessError extends Error{}
@@ -14,15 +17,15 @@ app.use(json());
 // Update below constants for individual implementation
 // Get keyfile and oauthclientid from google cloud project with an oauth2 client and a service account
 // For keyfile, add a key under the service account and add the json keyfile to the auth folder
-const HOSTNAME = '127.0.0.1';
-const PORT = 8000;
-const SPREADSHEETID = '1kaCebQXcx0DCu0-FNPbJlmF_XfN8QOOyI4LJxg4_J74'; // In spreadsheet URL
-const KEYFILE = './auth/service_account.json';
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']; // Keep the same for readOnly
-const OAUTHCLIENTID = '435032403387-5sph719eh205fc6ks0taft7ojvgipdji.apps.googleusercontent.com';
-const ADMINS = ['connorbernard@berkeley.edu'];
-const STARTCOLNAME = 'G'; // Starting column of the spreadsheet where grade data should be read
-const ENDCOLNAME = 'AQ'; // Ending column of the spreadsheet where grade data should be read
+const HOSTNAME = config.get('server.host');
+const PORT = config.get('server.port');
+const SPREADSHEETID = config.get('spreadsheet.id'); // In spreadsheet URL
+const KEYFILE = config.get('googleconfig.service_account.keyfile');
+const SCOPES = config.get('spreadsheet.scopes'); // Keep the same for readOnly
+const OAUTHCLIENTID = config.get('googleconfig.oauth.clientid');
+const ADMINS = config.get('admins');
+const STARTCOLNAME = config.get('spreadsheet.startcolumn'); // Starting column of the spreadsheet where grade data should be read
+const ENDCOLNAME = config.get('spreadsheet.endcolumn') // Ending column of the spreadsheet where grade data should be read
 
 /**
  * Verifies token and gets the associated email.
@@ -75,6 +78,9 @@ async function getProfilePictureFromIdToken(oauthClient, token){
  * @returns {Promise<Boolean>} the user's row, null if invalid
  */
 async function getUserRow(apiAuthClient, email){
+    if(ADMINS.includes(email)){
+        return 2;
+    }
     const sheets = google.sheets({version: 'v4', auth: apiAuthClient});
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
@@ -231,7 +237,7 @@ async function main(){
         auth = auth.split(' ');
         // Make sure the user's email is in the google sheet
         try{
-            getUserRow(apiAuthClient, await getEmailFromIdToken(oauthClient, auth[1]));
+            await getUserRow(apiAuthClient, await getEmailFromIdToken(oauthClient, auth[1]));
         } catch (e){
             if(e instanceof AuthenticationError){
                 return res.status(401).json({ error: 'User not authorized.' });
