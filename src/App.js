@@ -5,7 +5,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './css/app.css';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes, Navigate } from 'react-router-dom';
 import PrivateRoutes from './utils/privateRoutes';
 import NavBar from './components/NavBar';
 import Home from './views/home';
@@ -41,7 +41,7 @@ export default function App() {
 				<div className="content">
 					<Router>
 						<Routes>
-							<Route exact path='/login' element={<Login />} />
+							<Route exact path='/login' element={localStorage.getItem('token') ? <Navigate to='/' /> : <Login />} />
 							<Route exact path='/buckets' element={<Buckets />} />
 							<Route element={<PrivateRoutes />}>
 								<Route exact path='/' element={<Home />} />

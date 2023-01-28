@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { AppBar, Box, Toolbar, Typography, Button, Link, Avatar } from '@mui/material'
+import { AppBar, Box, Toolbar, Typography, Button, Link, Avatar, Menu, MenuItem, IconButton } from '@mui/material'
 import api from '../utils/api';
+import NavBarItem from './NavBarItem';
 
 export default function ButtonAppBar() {
 
@@ -20,24 +21,17 @@ export default function ButtonAppBar() {
         return () => mounted = false;
     }, []);
 
-    function LogInButton(props){
-        if(props.token){
-            return (
-                <Avatar src={profilePicture} />
-            );
-        } else {
-            return (
-                <Button variant='outlined' color='inherit'>Login</Button>
-            );
-        }
+    // Set up handlers for user menu
+    const [anchorEl, setAnchorEl] = useState(null);
+    function handleMenu(e){
+        setAnchorEl(e.currentTarget);
     }
-
-    function NavBarItem(props){
-        return (
-            <Link href={props.href} color='inherit' underline='none'>
-                <Button color='inherit'>{props.children}</Button>
-            </Link>
-        );
+    function handleClose(){
+        setAnchorEl(null);
+    }
+    function doLogout(){
+        localStorage.setItem('token', '');
+        window.location.reload(false);
     }
 
     return (
@@ -48,12 +42,35 @@ export default function ButtonAppBar() {
                         <Typography variant='h6' component='div' display='inline-block'>
                             <a href='/' style={{textDecoration:'none',color:'inherit'}}>Grade Viewer</a>
                         </Typography>
-                        <NavBarItem href='/'>My Grades</NavBarItem>
+                        {localStorage.getItem('token') &&
+                            <NavBarItem href='/'>My Grades</NavBarItem>
+                        }
                         <NavBarItem href='/buckets'>Buckets</NavBarItem>
                     </Box>
-                    <Link href='/login' color='inherit' underline='none'>
-                        <LogInButton token={localStorage.getItem('token')} />
-                    </Link>
+                    { localStorage.getItem('token') ?
+                    (
+                        <>
+                            <IconButton onClick={handleMenu} >
+                                <Avatar src={profilePicture} />
+                            </IconButton>
+                            <Menu
+                                id='loggedInMenu'
+                                anchorEl={anchorEl}
+                                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                keepMounted
+                                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                open={Boolean(anchorEl)}
+                                onClose={handleClose}
+                            >
+                                <MenuItem onClick={doLogout}>Logout</MenuItem>
+                            </Menu>
+                        </>
+                    ) : (
+                        <Link href='/login' color='inherit' underline='none'>
+                            <Button variant='outlined' color='inherit'>Login</Button>
+                        </Link>
+                    )
+                }
                 </Toolbar>
             </AppBar>
         </Box>
