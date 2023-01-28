@@ -1,7 +1,7 @@
 # GradeView Web Aplication
 
 ## About
-This application was created by Connor Bernard at the University of California, Berkeley for the sake of displaying student grade information.
+This application was created using Node and React by Connor Bernard at the University of California, Berkeley for the sake of displaying student grade information.
 
 ## Configuration
 ### -- SERVER SETUP --
