@@ -16,9 +16,9 @@ app.use(json());
 // For keyfile, add a key under the service account and add the json keyfile to the auth folder
 const HOSTNAME = '127.0.0.1';
 const PORT = 8000;
-const SPREADSHEETID = '1kaCebQXcx0DCu0-FNPbJlmF_XfN8QOOyI4LJxg4_J74';
+const SPREADSHEETID = '1kaCebQXcx0DCu0-FNPbJlmF_XfN8QOOyI4LJxg4_J74'; // In spreadsheet URL
 const KEYFILE = './auth/service_account.json';
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']; // Keep the same for readOnly
 const OAUTHCLIENTID = '435032403387-5sph719eh205fc6ks0taft7ojvgipdji.apps.googleusercontent.com';
 const ADMINS = ['connorbernard@berkeley.edu'];
 const STARTCOLNAME = 'G'; // Starting column of the spreadsheet where grade data should be read

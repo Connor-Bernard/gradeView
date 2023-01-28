@@ -14,7 +14,7 @@ export default function NotFound(){
             <Typography sx={{marginBottom:'20px'}}>
                 Here's a gif of a cat though :D
             </Typography>
-                <img src="https://cataas.com/cat/gif" />
+                <img src="https://cataas.com/cat/gif" alt='Funny gif of a cat.' />
         </Box>
         </>
     );

@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  gradeView:
+    build:
+      context: .
+    volumes:
+      - .:/grade-view
+    ports:
+      - 3000:3000
+    image: app:react
+    container_name: grade-view
+    command: npm start
