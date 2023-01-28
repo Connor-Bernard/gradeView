@@ -13,8 +13,6 @@ import Login from './views/login';
 import Buckets from './views/buckets';
 import NotFound from './views/notFound';
 
-// TODO: Prevent horizontal scrolling
-
 const theme = createTheme({
 	palette: {
 		primary: {

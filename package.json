@@ -1,7 +1,7 @@
 {
   "name": "grade-view",
   "version": "0.1.0",
-  "proxy": "http://localhost:8000",
+  "proxy": "http://127.0.0.1:8000",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",

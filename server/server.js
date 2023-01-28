@@ -5,6 +5,7 @@ import { OAuth2Client } from 'google-auth-library';
 import esMain from 'es-main';
 
 class AuthenticationError extends Error{}
+class UnauthorizedAccessError extends Error{}
 
 const app = express();
 app.use(cors());
@@ -19,6 +20,9 @@ const SPREADSHEETID = '1kaCebQXcx0DCu0-FNPbJlmF_XfN8QOOyI4LJxg4_J74';
 const KEYFILE = './auth/service_account.json';
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 const OAUTHCLIENTID = '435032403387-5sph719eh205fc6ks0taft7ojvgipdji.apps.googleusercontent.com';
+const ADMINS = ['connorbernard@berkeley.edu'];
+const STARTCOLNAME = 'G'; // Starting column of the spreadsheet where grade data should be read
+const ENDCOLNAME = 'AQ'; // Ending column of the spreadsheet where grade data should be read
 
 /**
  * Verifies token and gets the associated email.
@@ -42,6 +46,12 @@ async function getEmailFromIdToken(oauthClient, token){
     }
 }
 
+/**
+ * Gets the current user's profile picture.
+ * @param {OAuth2Client} oauthClient 
+ * @param {String} token 
+ * @returns url of current user profile picture
+ */
 async function getProfilePictureFromIdToken(oauthClient, token){
     try {
         const ticket = await oauthClient.verifyIdToken({
@@ -92,15 +102,23 @@ async function getUserGrades(apiAuthClient, email){
 
     const assignmentsRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
-        range: `HAID!F1:AQ1` 
+        range: `HAID!${STARTCOLNAME}1:${ENDCOLNAME}1` 
     });
-    const assignmentsRows = assignmentsRes.data.values;
+    let assignmentsRows = assignmentsRes.data.values;
 
     const gradesRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
-        range: `HAID!F${userRow}:AQ${userRow}`
+        range: `HAID!${STARTCOLNAME}${userRow}:${ENDCOLNAME}${userRow}`
     });
-    const gradesRows = gradesRes.data.values;
+    let gradesRows = gradesRes.data.values;
+
+    // Updates values to empty lists of lists in case there are no entries
+    if(!assignmentsRows){
+        assignmentsRows = [[]];
+    }
+    if(!gradesRows){
+        gradesRows = [[]];
+    }
 
     let assignments = []
 
@@ -136,6 +154,61 @@ async function getUserGradesFromToken(apiAuthClient, oauthClient, token){
     return getUserGrades(apiAuthClient, await getEmailFromIdToken(oauthClient, token));
 }
 
+/**
+ * Checks to see if the current user is an admin.
+ * @param {OAuth2Client} oauthClient 
+ * @param {token} token 
+ * @returns whether or not the current user is an admin
+ */
+async function hasAdminStatus(oauthClient, token){
+    const ticket = await oauthClient.verifyIdToken({
+        idToken: token,
+        audience: OAUTHCLIENTID
+    });
+    const payload = ticket.getPayload();
+    return (ADMINS.includes(payload.email));
+}
+
+/**
+ * Admin access checking function for middleware.
+ * @param {OAuth2Client} oauthClient 
+ * @param {String} token 
+ */
+async function confirmAdminAccount(oauthClient, token){
+    try {
+        const ticket = await oauthClient.verifyIdToken({
+            idToken: token,
+            audience: OAUTHCLIENTID
+        });
+        const payload = ticket.getPayload();
+        if (payload['hd'] != 'berkeley.edu') {
+            throw new AuthenticationError('domain mismatch');
+        }
+        if(!(ADMINS.includes(payload.email))){
+            throw new UnauthorizedAccessError('User is not an admin.');
+        }
+    } catch (err) {
+        if(typeof err == UnauthorizedAccessError){
+            throw err;
+        }
+        throw new AuthenticationError('Could not authenticate authorization token.');
+    }
+}
+
+/**
+ * Gets a list of all of the students in the class.
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
+ * @returns list of lists with the first value of legal name and second of email
+ */
+async function getStudents(apiAuthClient) {
+    const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
+    const res = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEETID,
+        range: 'HAID!A2:B'
+    });
+    return res.data.values;
+}
+
 async function main(){
     const apiAuthClient = await new google.auth.GoogleAuth({
         keyFile: KEYFILE,
@@ -148,6 +221,7 @@ async function main(){
      * @param {any} req 
      * @param {any} res 
      * @param {any} next 
+     * @returns a response message for an error if there is one
      */
     async function verificationMiddleWare(req, res, next){
         let auth = req.headers['authorization'];
@@ -161,29 +235,78 @@ async function main(){
         } catch (e){
             if(e instanceof AuthenticationError){
                 return res.status(401).json({ error: 'User not authorized.' });
-            } else {
-                return res.status(400).json({ error: 'Unknown error.' });
             }
+            return res.status(400).json({ error: 'Unknown error.' });
         }
         next();
     }
+
+    /**
+     * Middleware for verifying admin access.
+     * @param {any} req 
+     * @param {any} res 
+     * @param {any} next 
+     * @returns a response message for an error if there is one
+     */
+    async function adminVerificationMiddleWare(req, res, next){
+        let auth = req.headers.authorization;
+        if (!auth) {
+            return res.status(401).json({ error: 'No Authorization provided.' });
+        }
+        auth = auth.split(' ');
+        try{
+            await confirmAdminAccount(oauthClient, auth[1]);
+        } catch (e) {
+            if(e instanceof AuthenticationError){
+                return res.status(401).json({ error: 'User not authorized.' });
+            }
+            if(e instanceof UnauthorizedAccessError){
+                return res.status(403).json({ error: 'User does not have access.' });
+            }
+            return res.status(400).json({ error: 'Unknown error.' });
+        }
+        next();
+    }
+
+    // Initialize middleware
     app.use(verificationMiddleWare);
+    app.use('/api/admin', adminVerificationMiddleWare);
+
+
+    getStudents(apiAuthClient);
+
 
     // Use the auth checking of middleware to verify proper auth
     app.get('/api/verifyaccess', (req, res) => {
         return res.status(200).send(true);
-    })
+    });
 
     // Responds with json dictionary caller's grade data
     app.get('/api/grades', async (req, res) => {
         return res.status(200).json(await getUserGradesFromToken(apiAuthClient,
-            oauthClient, req.headers['authorization'].split(' ')[1]));
+            oauthClient, req.headers.authorization.split(' ')[1]));
     });
 
     // Responds with the user's profile picture extracted from their token
     app.get('/api/profilepicture', async (req, res) => {
         return res.status(200).json(await getProfilePictureFromIdToken(oauthClient,
-            req.headers['authorization'].split(' ')[1]));
+            req.headers.authorization.split(' ')[1]));
+    });
+
+    // Responds with whether or not the current user is an admin
+    app.get('/api/isadmin', async (req, res) => {
+        return res.status(200).json(await hasAdminStatus(oauthClient,
+            req.headers.authorization.split(' ')[1]));
+    })
+
+    // Responds with the current students in the spreadsheet
+    app.get('/api/admin/students', async (req, res) => {
+        return res.status(200).json(await getStudents(apiAuthClient));
+    });
+
+    // Responds with the grades for the specified student
+    app.post('/api/admin/getStudent', async (req, res) => {
+        res.status(200).json(await getUserGrades(apiAuthClient, req.body.email));
     });
 
     app.listen(PORT, HOSTNAME, () => {
