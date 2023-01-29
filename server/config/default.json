@@ -7,7 +7,8 @@
         "id": "1kaCebQXcx0DCu0-FNPbJlmF_XfN8QOOyI4LJxg4_J74",
         "scopes": ["https://www.googleapis.com/auth/spreadsheets.readonly"],
         "startcolumn": "G",
-        "endcolumn": "AQ"
+        "endcolumn": "AQ",
+        "pagename": "HAID"
     },
     "googleconfig": {
         "oauth": {

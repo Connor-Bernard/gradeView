@@ -5,8 +5,6 @@ import { OAuth2Client } from 'google-auth-library';
 import esMain from 'es-main';
 import config from 'config';
 
-// TODO: Allow admins to use normal api calls if not in sheet
-
 class AuthenticationError extends Error{}
 class UnauthorizedAccessError extends Error{}
 
@@ -26,6 +24,7 @@ const OAUTHCLIENTID = config.get('googleconfig.oauth.clientid');
 const ADMINS = config.get('admins');
 const STARTCOLNAME = config.get('spreadsheet.startcolumn'); // Starting column of the spreadsheet where grade data should be read
 const ENDCOLNAME = config.get('spreadsheet.endcolumn') // Ending column of the spreadsheet where grade data should be read
+const SHEETPAGENAME = config.get('spreadsheet.pagename'); // The page in the spreadsheet to pull from
 
 /**
  * Verifies token and gets the associated email.
@@ -84,7 +83,7 @@ async function getUserRow(apiAuthClient, email){
     const sheets = google.sheets({version: 'v4', auth: apiAuthClient});
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
-        range: 'HAID!B2:B'
+        range: `${SHEETPAGENAME}!B2:B`
     });
     const rows = res.data.values;
 
@@ -108,13 +107,13 @@ async function getUserGrades(apiAuthClient, email){
 
     const assignmentsRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
-        range: `HAID!${STARTCOLNAME}1:${ENDCOLNAME}1` 
+        range: `${SHEETPAGENAME}!${STARTCOLNAME}1:${ENDCOLNAME}1` 
     });
     let assignmentsRows = assignmentsRes.data.values;
 
     const gradesRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
-        range: `HAID!${STARTCOLNAME}${userRow}:${ENDCOLNAME}${userRow}`
+        range: `${SHEETPAGENAME}!${STARTCOLNAME}${userRow}:${ENDCOLNAME}${userRow}`
     });
     let gradesRows = gradesRes.data.values;
 
@@ -210,7 +209,7 @@ async function getStudents(apiAuthClient) {
     const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
-        range: 'HAID!A2:B'
+        range: `${SHEETPAGENAME}!A2:B`
     });
     return res.data.values;
 }

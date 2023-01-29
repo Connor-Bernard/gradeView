@@ -82,7 +82,7 @@ function Home() {
                                     id='student-dropdown'
                                     label='student'
                                     onChange={loadStudentData}
-                                    defaultValue=''
+                                    defaultValue={students[0][1]}
                                     >
                                         {
                                             students.map((student) => (
