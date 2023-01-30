@@ -16,6 +16,8 @@ export default function ButtonAppBar() {
                 if(mounted){
                     updateProfilePicture(res.data);
                 }
+            }).catch((e) => {
+                localStorage.setItem('token', '');
             });
         }
         return () => mounted = false;
