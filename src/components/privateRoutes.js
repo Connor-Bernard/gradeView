@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
-import api from './api';
+import api from '../utils/api';
 
 export default function PrivateRoutes(){
     const [authorized, setAuthorized] = useState('false');

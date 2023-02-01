@@ -6,7 +6,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './css/app.css';
 import { Route, BrowserRouter as Router, Routes, Navigate } from 'react-router-dom';
-import PrivateRoutes from './utils/privateRoutes';
+import PrivateRoutes from './components/privateRoutes';
 import NavBar from './components/NavBar';
 import Home from './views/home';
 import Login from './views/login';
