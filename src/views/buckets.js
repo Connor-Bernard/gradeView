@@ -1,14 +1,32 @@
-import React from 'react'
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { Box, Typography } from '@mui/material';
+import api from '../utils/api';
+import BinTable from '../components/BinTable';
 
 export default function Buckets(){
 
-    function createGradingRow(assignment, points){
-        return { assignment, points };
-    }
+    const [binRows, setBins] = useState([]);
 
-    function createBucketRow(grade, range){
-        return { grade, range };
+    useEffect(() => {
+        let mounted = true;
+        api.get('/bins').then((res) => {
+            if(mounted){
+                let tempBins = [{ grade: res.data[0][1], range: `0-${res.data[0][0]}`}];
+                for(let i = 1; i < res.data.length; i++){
+                    const grade = res.data[i][1];
+                    const range = `${+res.data[i - 1][0] + 1}-${res.data[i][0]}`;
+                    tempBins = [...tempBins, { grade, range }];
+                }
+                setBins(tempBins);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+        return () => mounted = false;
+    }, []);
+
+    function createGradingRow(assignment, points) {
+        return { assignment, points };
     }
 
     const gradingRows = [
@@ -26,64 +44,12 @@ export default function Buckets(){
         createGradingRow('Reading Quizzes', 20)
     ]
 
-    const bucketRows = [
-        createBucketRow('A+', '485-500'),
-        createBucketRow('A', '460-484'),
-        createBucketRow('A-', '450-459'),
-        createBucketRow('B+', '440-449'),
-        createBucketRow('B', '420-439'),
-        createBucketRow('B-', '400-419'),
-        createBucketRow('C+', '375-399'),
-        createBucketRow('C', '360-374'),
-        createBucketRow('C-', '350-359'),
-        createBucketRow('D', '300-349'),
-        createBucketRow('F', '0-299'),
-    ]
-
     return(
         <>
         <Typography variant='h5' component='div' sx={{m:2, fontWeight:500}}>Grading Breakdown</Typography>
         <Box sx={{mt:4, display:'flex', flexBasis:'min-content', justifyContent:'center', gap:'10%'}}>
-            <TableContainer component={Paper} sx={{width:500}}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Assignment</TableCell>
-                            <TableCell>Points</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {
-                            gradingRows.map((row) => (
-                                <TableRow key={row.assignment}>
-                                    <TableCell>{row.assignment}</TableCell>
-                                    <TableCell>{row.points}</TableCell>
-                                </TableRow>
-                            ))
-                        }
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TableContainer component={Paper} sx={{width:500, height:'fit-content'}}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Letter Grade</TableCell>
-                            <TableCell>Range</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {
-                            bucketRows.map((row) => (
-                                <TableRow key={row.grade}>
-                                    <TableCell>{row.grade}</TableCell>
-                                    <TableCell>{row.range}</TableCell>
-                                </TableRow>
-                            ))
-                        }
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <BinTable col1='Asignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
+            <BinTable col1='Letter Grade' col2='Range' rows={binRows} keys={['grade', 'range']} />
         </Box>
         </>
     );

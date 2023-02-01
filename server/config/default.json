@@ -6,9 +6,12 @@
     "spreadsheet": {
         "id": "1kaCebQXcx0DCu0-FNPbJlmF_XfN8QOOyI4LJxg4_J74",
         "scopes": ["https://www.googleapis.com/auth/spreadsheets.readonly"],
-        "startcolumn": "G",
-        "endcolumn": "AQ",
-        "pagename": "HAID"
+        "startgradecol": "G",
+        "endgradecol": "AQ",
+        "gradepage": "HAID",
+        "binpage": "Constants",
+        "startbin": "A51",
+        "endbin": "B61"
     },
     "googleconfig": {
         "oauth": {

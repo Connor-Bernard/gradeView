@@ -22,9 +22,12 @@ const KEYFILE = config.get('googleconfig.service_account.keyfile');
 const SCOPES = config.get('spreadsheet.scopes'); // Keep the same for readOnly
 const OAUTHCLIENTID = config.get('googleconfig.oauth.clientid');
 const ADMINS = config.get('admins');
-const STARTCOLNAME = config.get('spreadsheet.startcolumn'); // Starting column of the spreadsheet where grade data should be read
-const ENDCOLNAME = config.get('spreadsheet.endcolumn') // Ending column of the spreadsheet where grade data should be read
-const SHEETPAGENAME = config.get('spreadsheet.pagename'); // The page in the spreadsheet to pull from
+const STARTGRADECOLNAME = config.get('spreadsheet.startgradecol'); // Starting column of the spreadsheet where grade data should be read
+const ENDGRADECOLNAME = config.get('spreadsheet.endgradecol') // Ending column of the spreadsheet where grade data should be read
+const GRADINGPAGENAME = config.get('spreadsheet.gradepage'); // The page in the spreadsheet that the grades are on
+const BINSPAGE = config.get('spreadsheet.binpage'); // The page in the spreadsheet that the bin are on
+const STARTBIN = config.get('spreadsheet.startbin'); // The cell that the bin start on
+const ENDBIN = config.get('spreadsheet.endbin'); // The cell that the bin end on
 
 /**
  * Verifies token and gets the associated email.
@@ -83,7 +86,7 @@ async function getUserRow(apiAuthClient, email){
     const sheets = google.sheets({version: 'v4', auth: apiAuthClient});
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
-        range: `${SHEETPAGENAME}!B2:B`
+        range: `${GRADINGPAGENAME}!B2:B`
     });
     const rows = res.data.values;
 
@@ -107,13 +110,13 @@ async function getUserGrades(apiAuthClient, email){
 
     const assignmentsRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
-        range: `${SHEETPAGENAME}!${STARTCOLNAME}1:${ENDCOLNAME}1` 
+        range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}1:${ENDGRADECOLNAME}1` 
     });
     let assignmentsRows = assignmentsRes.data.values;
 
     const gradesRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
-        range: `${SHEETPAGENAME}!${STARTCOLNAME}${userRow}:${ENDCOLNAME}${userRow}`
+        range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}${userRow}:${ENDGRADECOLNAME}${userRow}`
     });
     let gradesRows = gradesRes.data.values;
 
@@ -209,7 +212,21 @@ async function getStudents(apiAuthClient) {
     const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
-        range: `${SHEETPAGENAME}!A2:B`
+        range: `${GRADINGPAGENAME}!A2:B`
+    });
+    return res.data.values;
+}
+
+/**
+ * Gets the buckets for the current class.
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
+ * @returns list of lists with the first value being the low end bucket val and the second being the grade
+ */
+async function getBins(apiAuthClient){
+    const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
+    const res = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEETID,
+        range: `${BINSPAGE}!${STARTBIN}:${ENDBIN}`
     });
     return res.data.values;
 }
@@ -220,6 +237,22 @@ async function main(){
         scopes: SCOPES
     }).getClient();
     const oauthClient = new OAuth2Client(OAUTHCLIENTID);
+
+    /**
+     * Use to exclude a route from being verified with middleware.
+     * @param {String} path 
+     * @param {Function} middleware 
+     * @returns Function
+     */
+    function unless(path, middleware){
+        return function(req, res, next){
+            if(path === req.path){
+                return next();
+            } else {
+                return middleware(req, res, next);
+            }
+        }
+    }
 
     /**
      * Middleware for verifying user acceses.
@@ -274,12 +307,12 @@ async function main(){
     }
 
     // Initialize middleware
-    app.use(verificationMiddleWare);
+    app.use(unless('/api/bins', verificationMiddleWare));
     app.use('/api/admin', adminVerificationMiddleWare);
 
-
-    getStudents(apiAuthClient);
-
+    app.get('/api/bins', async (req, res) => {
+        return res.status(200).json(await getBins(apiAuthClient));
+    });
 
     // Use the auth checking of middleware to verify proper auth
     app.get('/api/verifyaccess', (req, res) => {
@@ -302,7 +335,7 @@ async function main(){
     app.get('/api/isadmin', async (req, res) => {
         return res.status(200).json(await hasAdminStatus(oauthClient,
             req.headers.authorization.split(' ')[1]));
-    })
+    });
 
     // Responds with the current students in the spreadsheet
     app.get('/api/admin/students', async (req, res) => {
