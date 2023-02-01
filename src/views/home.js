@@ -72,10 +72,7 @@ function Home() {
 
     return (
         <>
-            { isLoading ? 
-                (
-                    <Loader />
-                ) : (
+            { isLoading ? ( <Loader /> ) : (
                     <Box sx={{ display: 'flex', flexFlow: 'column', height: '100%' }}>
                     {isAdmin &&
                         <Box>

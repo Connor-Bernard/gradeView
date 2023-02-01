@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Box, Typography } from '@mui/material';
 import api from '../utils/api';
 import BinTable from '../components/BinTable';
+import Loader from '../components/Loader';
 
 export default function Buckets(){
 
     const [binRows, setBins] = useState([]);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
         let mounted = true;
@@ -18,6 +20,7 @@ export default function Buckets(){
                     tempBins = [...tempBins, { grade, range }];
                 }
                 setBins(tempBins);
+                setLoading(false);
             }
         }).catch((err) => {
             console.log(err);
@@ -45,12 +48,17 @@ export default function Buckets(){
     ]
 
     return(
-        <>
-        <Typography variant='h5' component='div' sx={{m:2, fontWeight:500}}>Grading Breakdown</Typography>
-        <Box sx={{mt:4, display:'flex', flexBasis:'min-content', justifyContent:'center', gap:'10%'}}>
-            <BinTable col1='Asignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
-            <BinTable col1='Letter Grade' col2='Range' rows={binRows} keys={['grade', 'range']} />
-        </Box>
-        </>
+            <>
+            { isLoading ? ( <Loader /> ) : (
+                    <>
+                    <Typography variant='h5' component='div' sx={{m:2, fontWeight:500}}>Grading Breakdown</Typography>
+                    <Box sx={{mt:4, display:'flex', flexBasis:'min-content', justifyContent:'center', gap:'10%'}}>
+                        <BinTable col1='Asignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
+                        <BinTable col1='Letter Grade' col2='Range' rows={binRows} keys={['grade', 'range']} />
+                    </Box>
+                    </>
+                )
+            }
+            </>
     );
 }
