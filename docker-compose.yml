@@ -1,17 +1,17 @@
 version: '3.8'
 services:
-  GradeView-Web:
-    container_name: grade-view-web
-    image: grade-view/website:0.1.0
+  web:
+    container_name: gradeview-web
+    image: gradeview/website:0.1.0
     build: ./website
     volumes:
       - ./website:/website
     ports:
       - 3000:3000
     command: npm run react
-  GradeView-Server:
+  server:
     container_name: grade-view-server
-    image: grade-view/server:0.1.0
+    image: gradeview/server:0.1.0
     build: ./server
     volumes:
       - ./server:/server
