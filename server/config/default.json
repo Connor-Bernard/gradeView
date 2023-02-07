@@ -5,13 +5,22 @@
     },
     "spreadsheet": {
         "id": "1kaCebQXcx0DCu0-FNPbJlmF_XfN8QOOyI4LJxg4_J74",
-        "scopes": ["https://www.googleapis.com/auth/spreadsheets.readonly"],
-        "startgradecol": "G",
-        "endgradecol": "AQ",
-        "gradepage": "HAID",
-        "binpage": "Constants",
-        "startbin": "A51",
-        "endbin": "B61"
+        "scopes": [
+            "https://www.googleapis.com/auth/spreadsheets.readonly"
+        ],
+        "pages": {
+            "gradepage": {
+                "pagename": "HAID",
+                "maxrow": "2",
+                "startrow": "3",
+                "startcol": "C"
+            },
+            "binpage": {
+                "pagename": "Constants",
+                "startcell": "A51",
+                "endcell": "B61"
+            }
+        }
     },
     "googleconfig": {
         "oauth": {

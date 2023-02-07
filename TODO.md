@@ -1,5 +1,16 @@
 # TODO
-- [ ] Ensure loader finishes on buckets page after after complete load
-- [ ] Change the theme of the app ap cal colors
+- [x] Ensure loader finishes on buckets page after after complete load
+- [x] Change the theme of the app ap cal colors
 - [ ] Add projections for how students will do going forward 
+    - [x] Get the grade data associated with the max points row
+    - [x] Calculate the user's projections
+    - [x] Set up endpoint to get info from frontend
+    - [ ] Set up frontend display of data
 - [ ] Change the layout of the my grades section to be accordion style
+- [ ] Update the favicon
+- [ ] Rename app
+- [ ] Explore more about concept map
+- [ ] Create functionality to get projected user success
+- [ ] Change the input for functions from being apiAuthClient to the google sheets API
+- [ ] Set up proper error handling with BadSheetDataError
+- [ ] Clean up return value documentation
