@@ -4,8 +4,8 @@
   "description": "Gradeview Server",
   "main": "server.js",
   "scripts": {
+    "start": "concurrently \"npm run server\" \"cd ../website && npm run react\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"npm run server\" \"cd .. && npm run load-frontend\"",
     "server": "nodemon server.js"
   },
   "author": "Connor Bernard",

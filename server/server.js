@@ -16,7 +16,6 @@ app.use(json());
 // Update below constants for individual implementation
 // Get keyfile and oauthclientid from google cloud project with an oauth2 client and a service account
 // For keyfile, add a key under the service account and add the json keyfile to the auth folder
-const HOSTNAME = config.get('server.host');
 const PORT = config.get('server.port');
 const SPREADSHEETID = config.get('spreadsheet.id'); // In spreadsheet URL
 const KEYFILE = config.get('googleconfig.service_account.keyfile');
@@ -415,7 +414,7 @@ async function main(){
         res.status(200).json(await getUserGrades(apiAuthClient, req.body.email));
     });
 
-    app.listen(PORT, HOSTNAME, () => {
+    app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}.`);
         console.log('Press Ctrl+C to quit.');
     });

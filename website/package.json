@@ -1,7 +1,7 @@
 {
   "name": "grade-view",
   "version": "0.1.0",
-  "proxy": "http://127.0.0.1:8000",
+  "proxy": "http://localhost:8000",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -22,8 +22,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "cd server && npm start",
-    "load-frontend": "react-scripts start",
+    "start": "cd ../server && npm start",
+    "react": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
