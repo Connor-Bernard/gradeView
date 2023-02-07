@@ -5,7 +5,6 @@ import BinTable from '../components/BinTable';
 import Loader from '../components/Loader';
 
 export default function Buckets(){
-
     const [binRows, setBins] = useState([]);
     const [isLoading, setLoading] = useState(true);
 

@@ -16,7 +16,7 @@ import NotFound from './views/notFound';
 const theme = createTheme({
 	palette: {
 		primary: {
-			main:"#7253ed"
+			main:"#00284e"
 		},
 		secondary: {
 			main:"#e3a83b",
