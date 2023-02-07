@@ -15,3 +15,5 @@
 - [ ] Clean up return value documentation
 - [ ] Set up webpack
 - [ ] Double check 404 redirects (redirecting when resources are not loading)
+- [x] Configure proxy server for Docker
+- [ ] Update the README.md to have accurate config information

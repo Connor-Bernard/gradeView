@@ -5,6 +5,7 @@ node:
 	npm start
 
 docker:
+	docker-compose build
 	docker-compose up
 
 build:

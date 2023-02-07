@@ -10,16 +10,15 @@ This application was created using Node and React by Connor Bernard at the Unive
 ## Configuration
 ### SERVER CONFIG
 1. Open the /server/config/default.json config file
-2. Fill out the server section with the host and port of the API
+2. Fill out the server section with the port of the API
 
-<strong style='color:red'>NOTE: If your server address is different from your live website domain, you will have to update the proxy URL in the react package.json (in the root folder) to the API URL.</strong>
+<strong style='color:red'>NOTE: If your server address is different from your live website domain, you will have to update the proxy environment variable "REACT_APP_PROXY_SERVER" to reflect the correct proxy URL.</strong>
 
 ### SPREADSHEET CONFIG
 1. Open the spreadsheet in google
 2. Copy the section between /d/ and /edit (should be a long string of letters and numbers) to the id field of the spreadsheet section of the config file
-3. Set the startcolumn field to the column that the grades start on
-4. Set the endcolumn field to the column that the grades end on
-5. Set the pagename field to the name of the tab that has the grade data on it
+3. Set the endcolumn field to the column that the grades end on
+4. Set the pagename field to the name of the tab that has the grade data on it
 
 ### Google API Configuration
 1. Go to "https://console.cloud.google.com/" and create a new project (top left)
@@ -46,7 +45,7 @@ This application was created using Node and React by Connor Bernard at the Unive
 3. Run the dockerfile with "docker-compose start" (or "docker-compose up" to see console output in console)
 
 ### LOCALLY
-1. Navigate to the root directory
+1. Navigate to the server directory
 2. run "npm start"
 
 Note: Running these will start both a back-end node server as well as a front-end react website
