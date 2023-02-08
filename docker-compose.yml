@@ -2,7 +2,7 @@ version: '3.8'
 services:
   web:
     container_name: gradeview-web
-    image: gradeview/website:0.1.0
+    image: gradeview-website:0.1.0
     build: ./website
     volumes:
       - ./website:/website
@@ -10,8 +10,8 @@ services:
       - 3000:3000
     command: npm run react
   server:
-    container_name: grade-view-server
-    image: gradeview/server:0.1.0
+    container_name: gradeview-server
+    image: gradeview-server:0.1.0
     build: ./server
     volumes:
       - ./server:/server
