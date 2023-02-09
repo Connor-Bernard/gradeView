@@ -2,7 +2,7 @@ version: '3.8'
 services:
   web:
     container_name: gradeview-web
-    image: $CI_REGISTRY_IMAGE/web:latest
+    image: $CI_REGISTRY_IMAGE/web:$WEB_VERSION
     build: ./website
     volumes:
       - ./website:/website
@@ -11,7 +11,7 @@ services:
     command: npm run react
   server:
     container_name: gradeview-server
-    image: $CI_REGISTRY_IMAGE/server:latest
+    image: $CI_REGISTRY_IMAGE/server:$SERVER_VERSION
     build: ./server
     volumes:
       - ./server:/server

@@ -1,12 +1,13 @@
 # TODO
+
 - [x] Ensure loader finishes on buckets page after after complete load
 - [x] Change the theme of the app ap cal colors
-- [ ] Add projections for how students will do going forward 
-    - [x] Get the grade data associated with the max points row
-    - [x] Calculate the user's projections
-    - [x] Set up endpoint to get info from frontend
-    - [x] Set up proper error handling with BadSheetDataError
-    - [ ] Set up frontend display of data
+- [ ] Add projections for how students will do going forward
+  - [x] Get the grade data associated with the max points row
+  - [x] Calculate the user's projections
+  - [x] Set up endpoint to get info from frontend
+  - [x] Set up proper error handling with BadSheetDataError
+  - [ ] Set up frontend display of data
 - [ ] Change the layout of the my grades section to be accordion style
 - [ ] Update the favicon
 - [ ] Rename app
@@ -17,3 +18,5 @@
 - [ ] Double check 404 redirects (redirecting when resources are not loading)
 - [x] Configure proxy server for Docker
 - [ ] Update the README.md to have accurate config information
+- [ ] Update the CI config to have a service account
+- [ ] Update the CI tags to the proper server and site versions from package.json files
