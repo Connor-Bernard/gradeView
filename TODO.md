@@ -19,4 +19,4 @@
 - [x] Configure proxy server for Docker
 - [ ] Update the README.md to have accurate config information
 - [ ] Update the CI config to have a service account
-- [ ] Update the CI tags to the proper server and site versions from package.json files
+- [x] Update the CI tags to the proper server and site versions from package.json files
