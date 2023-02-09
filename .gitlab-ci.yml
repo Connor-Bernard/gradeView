@@ -1,6 +1,7 @@
 image: docker:23.0.0
 services:
   - docker:23.0.0-dind
+
 stages:
   - Build
 
@@ -8,8 +9,9 @@ build_job:
   stage: Build
   script:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - export SERVER_VERSION=$(node -p "require('./server/package.json').version")
-  - export WEB_VERSION=$(node -p "require('./website/package.json').version")
+  - apk update && apk add jq
+  - export SERVER_VERSION=$(jq -r .version ./server/package.json)
+  - export WEB_VERSION=$(jq -r .version ./server/package.json)
   - docker-compose build
   - docker-compose push
   - docker logout
