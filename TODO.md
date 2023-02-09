@@ -14,9 +14,9 @@
 - [ ] Explore more about concept map
 - [ ] Change the input for functions from being apiAuthClient to the google sheets API
 - [ ] Clean up return value documentation
-- [ ] Set up webpack
 - [ ] Double check 404 redirects (redirecting when resources are not loading)
 - [x] Configure proxy server for Docker
 - [ ] Update the README.md to have accurate config information
 - [ ] Update the CI config to have a service account
 - [x] Update the CI tags to the proper server and site versions from package.json files
+- [ ] Set up node and express server for hosting frontend
