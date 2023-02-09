@@ -5,3 +5,5 @@ README.md
 build
 node_modules
 server/node_modules
+website/.env
+.env
