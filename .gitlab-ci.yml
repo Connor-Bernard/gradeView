@@ -1,4 +1,4 @@
-image: Runner
+image: docker:23.0.0
 services:
   - docker:23.0.0-dind
 stages:
