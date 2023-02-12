@@ -1,7 +1,7 @@
 {
-  "name": "server.gradeview.com",
+  "name": "api.gradeview.com",
   "version": "0.1.0",
-  "description": "Gradeview Server",
+  "description": "Gradeview API Server",
   "main": "server.js",
   "scripts": {
     "start": "concurrently \"npm run server\" \"cd ../website && npm run react\"",

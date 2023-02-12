@@ -10,8 +10,8 @@ build_job:
   script:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - apk update && apk add jq
-  - export SERVER_VERSION=$(jq -r .version ./server/package.json)
-  - export WEB_VERSION=$(jq -r .version ./server/package.json)
+  - export API_VERSION=$(jq -r .version ./api/package.json)
+  - export WEB_VERSION=$(jq -r .version ./website/package.json)
   - docker-compose build
   - docker-compose push
   - docker logout

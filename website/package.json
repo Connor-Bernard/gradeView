@@ -1,5 +1,5 @@
 {
-  "name": "grade-view",
+  "name": "gradeview-website",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -13,8 +13,12 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.2.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
     "http-proxy-middleware": "^2.0.6",
     "jwt-decode": "^3.1.2",
+    "nodemon": "^2.0.20",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.7.0",
@@ -23,9 +27,9 @@
   },
   "scripts": {
     "start": "cd ../server && npm start",
+    "startCurrentBuild": "nodemon index.js",
     "react": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

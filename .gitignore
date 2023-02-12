@@ -1,13 +1,14 @@
 # dependencies
 /website/node_modules
-/server/node_modules
+/website/production/node_modules
+/api/node_modules
 
 # production
 /website/build
-/server/build
+/api/build
 
 # authentication and private files
-/server/auth
+/api/auth
 
 # misc
 .DS_Store
