@@ -4,6 +4,6 @@ Dockerfile
 README.md
 build
 node_modules
-server/node_modules
+api/node_modules
 website/.env
 .env

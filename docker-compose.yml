@@ -9,12 +9,12 @@ services:
     ports:
       - 3000:3000
     command: npm run react
-  server:
-    container_name: gradeview-server
-    image: $CI_REGISTRY_IMAGE/server:$SERVER_VERSION
-    build: ./server
+  api:
+    container_name: gradeview-api
+    image: $CI_REGISTRY_IMAGE/server:$API_VERSION
+    build: ./api
     volumes:
-      - ./server:/server
+      - ./api:/api
     ports:
       - 8000:8000
     command: npm run server
