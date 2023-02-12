@@ -2,8 +2,7 @@ Dockerfile
 .dockerignore
 .gitignore
 README.md
-build
-node_modules
+website/node_modules
+website/build
+website/production/node_modules
 api/node_modules
-website/.env
-.env

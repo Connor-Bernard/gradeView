@@ -1,5 +1,6 @@
 # dependencies
 /website/node_modules
+/website/production/node_modules
 /api/node_modules
 
 # production
