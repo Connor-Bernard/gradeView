@@ -13,6 +13,7 @@ production:
 	git stash
 	cd website && npm run build
 	git add website/production/build
-	git stash pop --quiet
+	git stash pop --quiet || true
 	git commit -m "Build website for production" --quiet
 	git push $(PRODUCTION_REMOTE_NAME)
+	echo "Website built and pushed to production."
