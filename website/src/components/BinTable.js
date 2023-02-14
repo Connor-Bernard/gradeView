@@ -1,9 +1,9 @@
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 
 export default function BinTable({ col1, col2, rows, keys }){
     return(
         <>
-            <TableContainer component={Paper} sx={{width: 500, height:'fit-content'}}>
+            <TableContainer component={Paper} sx={{ maxWidth:500, height:'fit-content'}}>
                 <Table>
                     <TableHead>
                         <TableRow>
