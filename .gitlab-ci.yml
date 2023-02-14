@@ -12,11 +12,6 @@ build_job:
   - apk update && apk add jq
   - export API_VERSION=$(jq -r .version ./api/package.json)
   - export WEB_VERSION=$(jq -r .version ./website/production/package.json)
-  - cd website
-  - apk add --update nodejs npm
-  - npm install
-  - npm run build
-  - cd ..
   - docker-compose build
   - docker-compose push
   - docker logout
@@ -25,11 +20,6 @@ deploy_job:
   stage: deploy
   image: google/cloud-sdk:alpine
   script:
-  - cd website
-  - apk add --update nodejs npm
-  - npm install
-  - npm run build
-  - cd ..
   - echo $GCP_MANUAL_SERVICE_ACCOUNT_KEY > /tmp/gcp_service_account_key.json
   - gcloud auth activate-service-account --key-file /tmp/gcp_service_account_key.json
   - gcloud config set project $GCP_PROJECT_ID

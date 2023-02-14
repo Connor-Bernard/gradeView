@@ -3,9 +3,6 @@
 /website/production/node_modules
 /api/node_modules
 
-# production
-/website/production/build
-
 # misc
 .DS_Store
 */.DS_Store
