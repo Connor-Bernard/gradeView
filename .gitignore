@@ -6,9 +6,6 @@
 # production
 /website/production/build
 
-# authentication and private files
-/api/auth
-
 # misc
 .DS_Store
 */.DS_Store
