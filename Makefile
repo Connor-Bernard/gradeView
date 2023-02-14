@@ -1,16 +1,18 @@
+include .env
 .DEFAULT_GOAL := docker
 
 npm:
-	cd api
-	npm start
+	cd api && npm start
 
 docker:
-	cd website
-	npm run build
-	cd ..
+	cd website && npm run build
 	docker-compose build
 	docker-compose up
 
-build:
-	cd website
-	npm run build
+production:
+	git stash
+	cd website && npm run build
+	git add website/production/build
+	git stash pop --quiet
+	git commit -m "Build website for production" --quiet
+	git push $(PRODUCTION_REMOTE_NAME)

@@ -27,8 +27,6 @@ export default function Buckets(){
                 setBins(tempBins);
                 setLoadCount(i => i - 1);
             }
-        }).catch((err) => {
-            console.log(err);
         });
 
         if(localStorage.getItem('token')){
