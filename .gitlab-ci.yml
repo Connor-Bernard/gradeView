@@ -1,22 +1,27 @@
-image: docker:23.0.0
-services:
-  - docker:23.0.0-dind
-
 stages:
-  - Build
+  - build
+  - deploy
 
 build_job:
-  stage: Build
+  stage: build
+  image: docker:23.0.0
+  services:
+    - docker:dind
   script:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - apk update && apk add jq
   - export API_VERSION=$(jq -r .version ./api/package.json)
   - export WEB_VERSION=$(jq -r .version ./website/production/package.json)
-  - cd website
-  - apk add --update nodejs npm
-  - npm install
-  - npm run build
-  - cd ..
   - docker-compose build
   - docker-compose push
   - docker logout
+
+deploy_job:
+  stage: deploy
+  image: google/cloud-sdk:alpine
+  script:
+  - echo $GCP_MANUAL_SERVICE_ACCOUNT_KEY > /tmp/gcp_service_account_key.json
+  - gcloud auth activate-service-account --key-file /tmp/gcp_service_account_key.json
+  - gcloud config set project $GCP_PROJECT_ID
+  - gcloud builds submit . --config=.cloudbuild.yaml
+  - rm /tmp/gcp_service_account_key.json
