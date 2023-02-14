@@ -1,0 +1,13 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$GCP_PROJECT_ID/web:$WEB_VERSION', './website/production']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$GCP_PROJECT_ID/web:$WEB_VERSION']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', 'web:$WEB_VERSION', '--image', 'gcr.io/$GCP_PROJECT_ID/web:$WEB_VERSION', '--region', 'us-west1']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$GCP_PROJECT_ID/api:$API_VERSION', './api']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$GCP_PROJECT_ID/api:$API_VERSION']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', 'api:$API_VERSION', '--image', 'gcr.io/$GCP_PROJECT_ID/api:$API_VERSION', '--region', 'us-west1']
