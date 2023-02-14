@@ -29,7 +29,7 @@ deploy_job:
   - export API_VERSION=$(jq -r .version ./api/package.json)
   - export WEB_VERSION=$(jq -r .version ./website/production/package.json)
   - echo $GCP_SERVICE_ACCOUNT_KEY > /tmp/gcp_service_account_key.json
-  - gcloud auth activate-service-account $GCP_SERVICE_ACCOUNT --key-file /tmp/gcp_service_account_key.json
+  - gcloud auth activate-service-account --key-file /tmp/gcp_service_account_key.json
   - gcloud config set project $GCP_PROJECT_ID
   - gcloud builds submit . --config=.cloudbuild.yaml
   - rm /tmp/gcp_service_account_key.json
