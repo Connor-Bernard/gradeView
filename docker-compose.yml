@@ -3,12 +3,10 @@ services:
   web:
     container_name: gradeview-web
     image: $CI_REGISTRY_IMAGE/web:$WEB_VERSION
-    build: ./website
-    volumes:
-      - ./website:/website
+    build: ./website/production
     ports:
       - 3000:3000
-    command: npm run startCurrentBuild
+    command: npm start
   api:
     container_name: gradeview-api
     image: $CI_REGISTRY_IMAGE/server:$API_VERSION

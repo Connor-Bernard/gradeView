@@ -4,8 +4,7 @@
 /api/node_modules
 
 # production
-/website/build
-/api/build
+/website/production/build
 
 # authentication and private files
 /api/auth

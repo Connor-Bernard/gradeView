@@ -11,7 +11,12 @@ build_job:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   - apk update && apk add jq
   - export API_VERSION=$(jq -r .version ./api/package.json)
-  - export WEB_VERSION=$(jq -r .version ./website/package.json)
+  - export WEB_VERSION=$(jq -r .version ./website/production/package.json)
+  - cd website
+  - apk add --update nodejs npm
+  - npm install
+  - npm run build
+  - cd ..
   - docker-compose build
   - docker-compose push
   - docker logout

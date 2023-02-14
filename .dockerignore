@@ -1,8 +1,0 @@
-Dockerfile
-.dockerignore
-.gitignore
-README.md
-website/node_modules
-website/build
-website/production/node_modules
-api/node_modules
