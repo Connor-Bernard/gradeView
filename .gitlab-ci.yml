@@ -32,4 +32,4 @@ deploy_job:
   - gcloud builds submit . --config=.cloudbuild.yaml
 
 after_script:
-  - rm /tmp/gcloud-service-key.json
+  - rm /tmp/gcp_service_account_key.json
