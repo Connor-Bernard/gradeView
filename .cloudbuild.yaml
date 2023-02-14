@@ -11,3 +11,4 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/web']
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['run', 'deploy', 'web', '--image', 'gcr.io/$PROJECT_ID/web', '--region', 'us-west1', '--allow-unauthenticated']
+logsBucket: 'gs://gradeview-deploy-bucket'
