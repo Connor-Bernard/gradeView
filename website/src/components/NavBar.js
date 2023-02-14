@@ -1,27 +1,31 @@
-import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { AppBar, Box, Toolbar, Typography, Button, Link, Avatar, Menu, MenuItem, IconButton } from '@mui/material'
+import { AppBar, Box, Toolbar, Typography, Button, Link, Avatar, Menu, MenuItem, IconButton, useMediaQuery } from '@mui/material'
 import api from '../utils/api';
 import NavBarItem from './NavBarItem';
 
 export default function ButtonAppBar() {
 
+    const mobileView = useMediaQuery('(max-width:600px)');
+    const [loggedIn, setLoginStatus] = useState(localStorage.getItem('token') ? true : false);
+
     // Sets up the profile picture on element load by getting pfp url from api
     // This also serves as a auth verification
     const [profilePicture, updateProfilePicture] = useState('');
+    const [tabs, updateTabs] = useState([{name:'Buckets', href:'/buckets'}]);
     useEffect(() => {
         let mounted = true;
-        if(localStorage.getItem('token')){
+        if(loggedIn){
+            updateTabs((tabs) => [{name:'Profile', href:'/'}, ...tabs]);
             api.get('/profilepicture').then((res) => {
                 if(mounted){
                     updateProfilePicture(res.data);
                 }
             }).catch((e) => {
-                localStorage.setItem('token', '');
+                console.log(e);
             });
         }
         return () => mounted = false;
-    }, []);
+    }, [loggedIn]);
 
     // Set up handlers for user menu
     const [anchorEl, setAnchorEl] = useState(null);
@@ -33,6 +37,7 @@ export default function ButtonAppBar() {
     }
     function doLogout(){
         localStorage.setItem('token', '');
+        setLoginStatus(false);
         window.location.reload(false);
     }
 
@@ -44,12 +49,16 @@ export default function ButtonAppBar() {
                         <Typography variant='h6' component='div' display='inline-block'>
                             <a href='/' style={{textDecoration:'none',color:'inherit'}}>Grade Viewer</a>
                         </Typography>
-                        {localStorage.getItem('token') &&
-                            <NavBarItem href='/'>My Grades</NavBarItem>
+                        { !mobileView &&
+                            <>
+                            {loggedIn &&
+                                <NavBarItem href='/'>My Grades</NavBarItem>
+                            }
+                            <NavBarItem href='/buckets'>Buckets</NavBarItem>
+                            </>
                         }
-                        <NavBarItem href='/buckets'>Buckets</NavBarItem>
                     </Box>
-                    { localStorage.getItem('token') ?
+                    { loggedIn ?
                     (
                         <>
                             <IconButton onClick={handleMenu} >
@@ -64,6 +73,11 @@ export default function ButtonAppBar() {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
+                                { mobileView &&
+                                    tabs.map((tab) => (
+                                        <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>{tab.name}</MenuItem>
+                                    ))
+                                }
                                 <MenuItem onClick={doLogout}>Logout</MenuItem>
                             </Menu>
                         </>

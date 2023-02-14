@@ -1,10 +1,13 @@
-.DEFAULT_GOAL := node
+.DEFAULT_GOAL := docker
 
-node:
-	cd server
+npm:
+	cd api
 	npm start
 
 docker:
+	cd website
+	npm run build
+	cd ..
 	docker-compose build
 	docker-compose up
 

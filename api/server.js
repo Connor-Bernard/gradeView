@@ -177,7 +177,6 @@ async function getUserPoints(apiAuthClient, email){
     let points = 0;
     userPointData.forEach((assignment) => {
         const grade = assignment.grade;
-        console.log(grade);
         if(grade != null){
             points += +grade;
         }
@@ -200,9 +199,9 @@ async function getProjectedGrades(apiAuthClient, email){
     const maxPoints = +bins[bins.length - 1][0];
     const maxPointsSoFar = +await getUserPoints(apiAuthClient, MAXGRADEROW);
     const userPointsSoFar = +await getUserPoints(apiAuthClient, email);
-    projections.zeros = userPointsSoFar;
-    projections.pace = (userPointsSoFar / maxPointsSoFar) * maxPoints;
-    projections.perfect = userPointsSoFar + (maxPoints - maxPointsSoFar);
+    projections.zeros = Math.round(userPointsSoFar);
+    projections.pace = Math.round((userPointsSoFar / maxPointsSoFar) * maxPoints);
+    projections.perfect = Math.round(userPointsSoFar + (maxPoints - maxPointsSoFar));
     return projections;
 }
 
@@ -386,7 +385,7 @@ async function main(){
             req.headers.authorization.split(' ')[1]));
     });
 
-    app.get('/api/gradeprojections', async (req, res) => {
+    app.get('/api/projections', async (req, res) => {
         try{
             return res.status(200).json(await getProjectedGradesFromToken(apiAuthClient,
                 oauthClient, req.headers.authorization.split(' ')[1]));
