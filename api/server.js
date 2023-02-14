@@ -16,7 +16,7 @@ app.use(json());
 // Update below constants for individual implementation
 // Get keyfile and oauthclientid from google cloud project with an oauth2 client and a service account
 // For keyfile, add a key under the service account and add the json keyfile to the auth folder
-const PORT = config.get('server.port');
+const PORT = process.env.PORT || config.get('server.port');
 const SPREADSHEETID = config.get('spreadsheet.id'); // In spreadsheet URL
 const KEYFILE = config.get('googleconfig.service_account.keyfile');
 const SCOPES = config.get('spreadsheet.scopes'); // Keep the same for readOnly
