@@ -51,7 +51,7 @@ This application was created using Node, Express, and React by Connor Bernard at
 9. Copy the client ID in the top right to the config file
 10. Go back to the credentials tab and create a new service account credential
 11. Fill out the fields as necessary and create the account
-12. Click on the account email under service accounts on the credentials page
+12. Click on the account email under service accounts on the credentials page (no need to relegate roles)
 13. Share the google sheet with the displayed email
 14. Navigate to the keys section of the service account
 15. Click "Add Key" and create a JSON key
