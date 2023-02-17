@@ -3,6 +3,9 @@
 /website/production/node_modules
 /api/node_modules
 
+# Secrets
+/api/auth/dev_service_account.json
+
 # production
 /website/production/build
 
