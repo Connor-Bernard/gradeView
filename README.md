@@ -50,7 +50,7 @@ This application was created using Node, Express, and React by Connor Bernard at
 8. Add the web URL and port as well as the API url and port to both the Authorized Javascript origins as well as the Authorized redirect URIs
 9. Copy the client ID in the top right to the config file
 10. Go back to the credentials tab and create a new service account credential
-11. Fill out the fields as necessary and create the account
+11. Fill out the fields as necessary and create the account (no need to add additional roles)
 12. Click on the account email under service accounts on the credentials page
 13. Share the google sheet with the displayed email
 14. Navigate to the keys section of the service account
