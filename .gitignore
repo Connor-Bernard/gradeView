@@ -3,9 +3,6 @@
 /website/production/node_modules
 /api/node_modules
 
-# Secrets
-/api/auth
-
 # production
 /website/production/build
 
