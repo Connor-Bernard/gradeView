@@ -29,5 +29,5 @@
             "keyfile": "./auth/service_account.json"
         }
     },
-    "admins": [""]
+    "admins": ["connorbernard@berkeley.edu"]
 }
