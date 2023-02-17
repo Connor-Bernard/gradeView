@@ -18,6 +18,8 @@ build_job:
 
 deploy_job:
   stage: deploy
+  only:
+    - production
   image: google/cloud-sdk:alpine
   script:
   - echo $GCP_MANUAL_SERVICE_ACCOUNT_KEY > /tmp/gcp_service_account_key.json
