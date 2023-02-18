@@ -17,8 +17,11 @@ production:
 	if [ "$(CONFIRM)" != "y" ]; then echo "Aborting."; exit 1; fi
 	git stash
 	cd website && npm run build
+	git update-index --assume-unchanged website/production/build
 	git add website/production/build -f
 	git add api/auth/service_account.json -f
+	git status
+	read
 	if ! (git commit --allow-empty -m "Sending to production" --quiet); then git reset; git stash pop --quiet || true; exit 1; fi
 	git stash pop --quiet || true
 	if ! (git push $(PRODUCTION_REMOTE_NAME) -o ci.variable="PRODUCTION=true"); then git reset --hard HEAD~1; git stash pop; exit 1; fi
