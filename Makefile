@@ -12,7 +12,7 @@ docker:
 	docker-compose build
 	docker-compose up
 
-production:
+deploy:
 	clear
 	if [ "$(CONFIRM)" != "y" ]; then echo "Aborting."; exit 1; fi
 	git stash

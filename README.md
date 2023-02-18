@@ -21,26 +21,26 @@ This application was created using Node, Express, and React by Connor Bernard at
     2. The scopes (only change this if the API needs more than readonly access)
 4. Fill out the pages subsection of spreadsheet with:
     1. The gradepage (the page with the grade data on it) and:
-        1. pagename: The name of the sheet with the grade data
-        2. maxrow: The row with the maximum points for each assignment
-        3. startrow: The row where student information starts
-        4. startcol: The column where student information starts
+        1. `pagename`: The name of the sheet with the grade data
+        2. `maxrow`: The row with the maximum points for each assignment
+        3. `startrow`: The row where student information starts
+        4. `startcol`: The column where student information starts
     2. The binpage (the page with the bins on it) and:
-        1. pagename: the name of the page with the bins on it
-        2. startcell: the top left cell of the bins (point value for F)
-        3. endcell: the bottom right cell of the bins (letter value for A+)
+        1. `pagename`: the name of the page with the bins on it
+        2. `startcell`: the top left cell of the bins (point value for F)
+        3. `endcell`: the bottom right cell of the bins (letter value for A+)
 5. Fill out the googleconfig section in accordance with [Google API configuration instructions](#google-api-configuration) below
 6. Add all necessary admin emails to the admin whitelist
 
 ### SERVER CONFIG NOTES
 
-* __If your server address is different from your live website domain, you will have to update the proxy environment variable found in /website/.env named "REACT_APP_PROXY_SERVER" to reflect the correct proxy URL.__
+* __If your server address is different from your live website domain, you will have to update the `REACT_APP_PROXY_SERVER` environment variable found in /website/.env to reflect the correct proxy URL.__
 
 * __If you are running this using the default Dockerfiles and docker_compose file, you will also need to update the ports in the respective files for containerized deployment__
 
 ### Google API Configuration
 
-1. Go to [Google Cloud Console]("https://console.cloud.google.com/") and create a new project (top left)
+1. Go to [Google Cloud Console](https://console.cloud.google.com/) and create a new project (top left)
 2. Select the project and navigate to the "APIs & Services" section
 3. Go to the Library tab an search "sheets"
 4. Click on the "Google Sheets API" and enable the API
@@ -57,25 +57,51 @@ This application was created using Node, Express, and React by Connor Bernard at
 15. Click "Add Key" and create a JSON key
 16. Add this key to the credentials folder and update the link to the file in the config file
 
+### CI/CD Configuration (optional)
+
+1. Enable the [Cloud Build API](https://console.cloud.google.com/marketplace/product/google/cloudbuild.googleapis.com)
+2. Enable [Cloud Run](https://console.cloud.google.com/marketplace/product/google-cloud-platform/cloud-run)
+3. In the [Cloud Build Settings](https://console.cloud.google.com/cloud-build/settings/service-account?project) enable "Cloud Run Admin" and "Service Account User"
+4. Go to [the credentials page](https://console.cloud.google.com/apis/credentials) and create a new service account using the "Create Credentials" button at the top of the screen
+5. Fill out the basic information and give the service account access to the "Cloud Build Service Agent" role and the "Cloud Build Editor" role
+
+### GitLab Configuration (optional)
+
+1. Create a new __private__ repo
+2. Create a production branch off of the development branch (only necessary if development branch is public)
+3. Add the Google Sheets api service account keyfile to /api/auth/ naming it in coordination with `googleconfig.service_account.keyfile` in /api/config/default.json
+4. Forcefully add the keyfile
+5. Commit and push to the keyfile and project to the new remote
+6. Open your project on [GitLab](https://gitlab.com/) and navigate to settings > CI/CD
+7. Expand the "Variables" tab
+8. Click on "Add Variable" and set the key to `GCP_PROJECT_ID` and value to the project ID of the Google Cloud Project (can be found anywhere on [the google console dashboard](https://console.cloud.google.com/) by clicking the project name on the top).  This variable does not need to be protected or masked but must be able to be expanded
+9. Go through the steps for [CI/CD Configuration](cicd-configuration-optional) and in [the credentials](console.cloud.google.com/apis/credentials) for your CI/CD service account, create a new key
+10. Click on "Add Variable" and set the key to `GCP_SERVICE_ACCOUNT_KEY` and the value to the contents of the keyfle generated from the CI/CD service account
+
 ## Use
 
-### WITH DOCKER
+### LOCALLY WITH DOCKER
 
 1. Navigate to the root directory
-2. Build a dockerfile with "docker-compose build"
-3. Run the dockerfile with "docker-compose start" (or "docker-compose up" to see console output in console)
+2. Build a dockerfile with `docker-compose build`
+3. Run the dockerfile with `docker-compose start` (or `docker-compose up` to see console output in console)
 
-### LOCALLY
+### LOCALLY WITH NODE
+
+1. In the root directory run `make npm`
+
+OR
 
 1. Navigate to the server directory
-2. run "npm start"
+2. run `npm start`
 
-Note: Running these will start both a back-end node server as well as a front-end react website
+Note: Running these will start both an api server as well as a website
 
 ## CI/CD Deployment
 
 1. Create a GitLab project
-2. Add project remote to local git repository
-3. Push to the new remote
+2. Configure Google Cloud project as explained [here](#cicd-configuration-optional)
+3. Configure GitLab project as explained [here](#gitlab-configuration-optional)
+4. Push to the new remote from the production branch with the option `ci-variable="PRODUCTION=true"` or run `make deploy` in the root directory to deploy
 
 ### Note: The provided pipeline configuration relies on GitLab runners, so if a custom runner is preferred, it will have to be configured separately

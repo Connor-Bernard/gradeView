@@ -23,7 +23,7 @@ deploy_job:
       when: always
   image: google/cloud-sdk:alpine
   script:
-    - echo $GCP_MANUAL_SERVICE_ACCOUNT_KEY > /tmp/gcp_service_account_key.json
+    - echo $GCP_SERVICE_ACCOUNT_KEY > /tmp/gcp_service_account_key.json
     - gcloud auth activate-service-account --key-file /tmp/gcp_service_account_key.json
     - gcloud config set project $GCP_PROJECT_ID
     - gcloud builds submit . --config=.cloudbuild.yml
