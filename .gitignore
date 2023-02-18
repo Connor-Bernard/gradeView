@@ -4,7 +4,7 @@
 /api/node_modules
 
 # Secrets
-/api/auth
+/api/auth/*
 
 # production
 /website/production/build
