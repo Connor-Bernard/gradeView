@@ -12,4 +12,4 @@ api/node_modules/
 
 # website
 website/*
-\!production
+!production/
