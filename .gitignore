@@ -4,7 +4,7 @@
 /api/node_modules
 
 # Secrets
-/api/auth/dev_service_account.json
+/api/auth
 
 # production
 /website/production/build
