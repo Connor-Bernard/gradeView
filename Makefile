@@ -17,8 +17,7 @@ production:
 	if [ "$(CONFIRM)" != "y" ]; then echo "Aborting."; exit 1; fi
 	git stash
 	cd website && npm run build
-	git add website/production/build
+	if ! (git commit --allow-empty -m "Sending to production" --quiet); then git reset; git stash pop --quiet || true; exit 1; fi
 	git stash pop --quiet || true
-	git commit -m "Build website for production" --quiet
-	git push $(PRODUCTION_REMOTE_NAME)
-	echo "Website built and pushed to production."
+	if ! (git push $(PRODUCTION_REMOTE_NAME) -o ci.variable="PRODUCTION=true"); then git reset --hard HEAD~1; git stash pop; exit 1; fi
+	echo "Website successfully built and pushed to production."

@@ -8,22 +8,23 @@ build_job:
   services:
     - docker:dind
   script:
-  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  - apk update && apk add jq
-  - export API_VERSION=$(jq -r .version ./api/package.json)
-  - export WEB_VERSION=$(jq -r .version ./website/production/package.json)
-  - docker-compose build
-  - docker-compose push
-  - docker logout
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - apk update && apk add jq
+    - export API_VERSION=$(jq -r .version ./api/package.json)
+    - export WEB_VERSION=$(jq -r .version ./website/production/package.json)
+    - docker-compose build
+    - docker-compose push
+    - docker logout
 
 deploy_job:
   stage: deploy
-  only:
-    - production
+  rules:
+    - if: $PRODUCTION
+      when: always
   image: google/cloud-sdk:alpine
   script:
-  - echo $GCP_MANUAL_SERVICE_ACCOUNT_KEY > /tmp/gcp_service_account_key.json
-  - gcloud auth activate-service-account --key-file /tmp/gcp_service_account_key.json
-  - gcloud config set project $GCP_PROJECT_ID
-  - gcloud builds submit . --config=.cloudbuild.yaml
-  - rm /tmp/gcp_service_account_key.json
+    - echo $GCP_MANUAL_SERVICE_ACCOUNT_KEY > /tmp/gcp_service_account_key.json
+    - gcloud auth activate-service-account --key-file /tmp/gcp_service_account_key.json
+    - gcloud config set project $GCP_PROJECT_ID
+    - gcloud builds submit . --config=.cloudbuild.yml
+    - rm /tmp/gcp_service_account_key.json

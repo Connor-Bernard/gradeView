@@ -1,0 +1,15 @@
+# Root
+.cloudbuild.yml
+.gcloudignore
+.gitignore
+.gitlab-ci.yml
+docker-compose.yml
+Makefile
+README.md
+
+# api
+api/node_modules/
+
+# website
+website/*
+!production/
