@@ -19,6 +19,7 @@ production:
 	cd website && npm run build
 	git add website/production/build -f
 	git add api/auth/service_account.json -f
-	if ! (git commit -m "Build website for production" --quiet); then git reset; git stash pop --quiet || true; exit 1; fi
-	git push $(PRODUCTION_REMOTE_NAME) -o ci.variable="PRODUCTION=true"
+	if ! (git commit --allow-empty -m "Sending to production" --quiet); then git reset; git stash pop --quiet || true; exit 1; fi
+	git stash pop --quiet || true
+	if ! (git push $(PRODUCTION_REMOTE_NAME) -o ci.variable="PRODUCTION=true"); then git reset --hard HEAD~1; git stash pop; exit 1; fi
 	echo "Website built and pushed to production."
