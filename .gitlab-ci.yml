@@ -21,8 +21,6 @@ deploy_job:
   rules:
     - if: $PRODUCTION
       when: always
-  include:
-    - '/api/auth/'
   image: google/cloud-sdk:alpine
   script:
     - echo $GCP_MANUAL_SERVICE_ACCOUNT_KEY > /tmp/gcp_service_account_key.json
