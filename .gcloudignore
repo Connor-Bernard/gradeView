@@ -7,9 +7,6 @@ docker-compose.yml
 Makefile
 README.md
 
-# api
-api/node_modules/
-
 # website
 website/*
 !production/
