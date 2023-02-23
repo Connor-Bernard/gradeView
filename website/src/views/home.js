@@ -94,14 +94,14 @@ function Home() {
                             </FormControl>
                         </Box>
                     }
-                    <Box height='100%'>
-                        <DataGrid
-                        columns={columns}
-                        rows={gradeData}
-                        pageSize={100}
-                        disableSelectionOnClick
-                        />
-                    </Box>
+                        <Box height='100%'>
+                            <DataGrid
+                            columns={columns}
+                            rows={gradeData}
+                            pageSize={100}
+                            disableSelectionOnClick
+                            />
+                        </Box>
                     </Box>
                 )
             }
