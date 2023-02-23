@@ -70,8 +70,8 @@ export default function Buckets(){
                         {display:'flex', flexDirection:'column', alignItems:'center', gap:4} 
                     }
                 >
-                    <BinTable col1='Assignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
-                    <BinTable col1='Letter Grade' col2='Range' rows={binRows} keys={['grade', 'range']} />
+                    <BinTable title='Assignment Breakdown' col1='Assignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
+                    <BinTable title='Buckets' col1='Letter Grade' col2='Range' rows={binRows} keys={['grade', 'range']} />
                 </Box>
                 { localStorage.getItem('token') &&
                     <>
