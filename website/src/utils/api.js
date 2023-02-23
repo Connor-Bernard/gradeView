@@ -8,18 +8,15 @@ const api = axios.create({
 });
 
 api.interceptors.response.use(undefined, (err) => {
-    console.log(err);
     try {
-        switch (err.response.status) {
-            case 401:
+        const errorCode = err.response.status;
+        switch (true) {
+            case errorCode === 401:
                 localStorage.setItem('token', '');
-                console.log(err);
                 window.location.href = `${URL}/login`;
                 break;
             default:
-                case 404:
-                    window.location.href = `${URL}/notfound`;
-                break;
+                return Promise.reject(err);
         }
     } catch (axiosErr) {
         console.log(axiosErr);
