@@ -23,26 +23,22 @@ export default function Login(){
     }, []);
 
     // Updates OAuth2 token to be the local token value
-    async function handleGoogleLogin(response) {
-        axios.get(`${window.location.origin}/api/verifyaccess`, {
-            headers: {'Authorization': `Bearer ${response.credential}`}
-        }).then(() => {
-            localStorage.setItem("token", response.credential);
-            window.location.reload(false);
-        }).catch((err) => {
-            try{
-                switch(err.response.status){
-                    case 401:
-                        setError('Account is not authorized.');
-                        break;
-                    default:
-                        setError('An error occured.  Please try again later.')
-                }
-            } catch (e){
-                // Axios error occured
-                setError(400);
+    async function handleGoogleLogin(authData) {
+        const token = `Bearer ${authData.credential}`;
+        axios.get(`/api/verifyaccess`, {
+            headers: { 'Authorization': token }
+        }).then((loginRes) => {
+            console.log(loginRes);
+            if(loginRes.data === false){
+                setError('Account is not authorized.');
+                return;
+            } else {
+                localStorage.setItem('token', token);
+                window.location.reload(false);
             }
-        })
+        }).catch(() => {
+            setError('An error occured.  Please try again later.');
+        });
     }
 
     // Formatting for the input fields
