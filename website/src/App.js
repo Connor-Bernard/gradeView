@@ -29,6 +29,9 @@ const theme = createTheme({
 	},
 });
 
+console.log("%cGradeView", "color: #e3a83b; -webkit-text-stroke: 2px black; font-size: 72px; font-weight: bold; font-family: monospace;");
+console.log("%cDeveloped by Connor Bernard at UC Berkeley under professor Daniel Garcia for use by CS10 and CS61C.", "color:#2299bb; font-size: 12px; font-family: monospace");
+
 export default function App() {
 	return (
 		<ThemeProvider theme={theme}>
