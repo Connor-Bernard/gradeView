@@ -8,6 +8,8 @@ export default function PrivateRoutes(){
     const [authorized, setAuthorized] = useState(false);
     useEffect(() => {
         if(localStorage.getItem('token') === ''){
+            setAuthorized(false);
+            setLoaded(true);
             return;
         }
         let mounted = true;
