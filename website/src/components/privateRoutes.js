@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import api from '../utils/api';
+import Loader from './Loader';
 
 export default function PrivateRoutes(){
-    const [authorized, setAuthorized] = useState('false');
+    const [loaded, setLoaded] = useState(false);
+    const [authorized, setAuthorized] = useState(false);
     useEffect(() => {
+        if(localStorage.getItem('token') === ''){
+            return;
+        }
         let mounted = true;
-        api.get('/verifyaccess').then(() => {
+        api.get('/verifyaccess').then((res) => {
             if(mounted){
-                setAuthorized(true);
+                setAuthorized(res.data);
             }
+            setLoaded(true);
         });
         return () => mounted = false;
     }, []);
 
     return (
-        authorized ? <Outlet /> : <Navigate to='/login/' />
+        loaded ? authorized ? <Outlet /> : <Navigate to='/login'/> : <Loader />
+        
     )
 }
