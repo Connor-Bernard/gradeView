@@ -3,7 +3,7 @@ import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper
 export default function GradeTable({ assignments }) {
     return (
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label='simple table'>
+            <Table aria-label='Grade Table'>
                 <TableHead>
                     <TableRow>
                         <TableCell>Assignment</TableCell>
