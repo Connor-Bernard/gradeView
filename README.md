@@ -82,18 +82,18 @@ This application was created using Node, Express, and React by Connor Bernard at
 
 ### LOCALLY WITH DOCKER
 
+1. In the root directory run `make docker`
+
+OR
+
 1. Navigate to the root directory
 2. Build a dockerfile with `docker-compose build`
 3. Run the dockerfile with `docker-compose start` (or `docker-compose up` to see console output in console)
 
 ### LOCALLY WITH NODE
 
-1. In the root directory run `make npm`
-
-OR
-
-1. Navigate to the server directory
-2. run `npm start`
+1. __[First use only]__ In the root directory run `make init`
+2. In the root directory run `make npm` to start the service
 
 Note: Running these will start both an api server as well as a website
 
