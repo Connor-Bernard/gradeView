@@ -7,7 +7,12 @@ import GradeAccordion from '../components/GradeAccordion';
 
 function Home() {
 
-    const accordionMeta = [{tab: 'Homework', filter: 'Homework'}, {tab: 'Projects', filter: 'Project'}, {tab: 'Exams', filter: 'i'}, {tab: 'Extra Credit', filter: 'EC:'}]
+    const accordionMeta = [
+        {tab: 'Homework', filter: 'Homework'},
+        {tab: 'Projects', filter: 'Project'},
+        {tab: 'Exams', filter: 'i'},
+        {tab: 'Extra Credit', filter: 'EC:'}
+    ];
 
     const [isLoading, setLoading] = useState(true);
 
@@ -67,6 +72,15 @@ function Home() {
         });
     }
 
+    /**
+     * Filters the input grade data by the filter string.
+     * @param {String} filter 
+     * @returns {Array} filtered gradeData
+     */
+    function filterData(filter){
+        return gradeData.filter((row) => row.assignment.includes(filter));
+    }
+
     return (
         <>
             { isLoading ? ( <Loader /> ) : (
@@ -97,7 +111,7 @@ function Home() {
                             <GradeAccordion
                                 key={item.tab}
                                 category={item.tab}
-                                assignments={gradeData.filter((row) => row.assignment.includes(item.filter))}
+                                assignments={filterData(item.filter)}
                             />
                         ))
                     }
