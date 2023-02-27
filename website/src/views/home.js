@@ -5,6 +5,13 @@ import api from '../utils/api';
 import Loader from '../components/Loader';
 import GradeAccordion from '../components/GradeAccordion';
 
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+
 function Home() {
 
     const accordionMeta = [
