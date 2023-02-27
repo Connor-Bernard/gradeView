@@ -62,7 +62,7 @@ export default function ButtonAppBar() {
                     (
                         <>
                             <IconButton onClick={handleMenu} >
-                                <Avatar src={profilePicture} />
+                                <Avatar src={profilePicture} imgProps={{referrerPolicy:'no-referrer'}} />
                             </IconButton>
                             <Menu
                                 id='loggedInMenu'

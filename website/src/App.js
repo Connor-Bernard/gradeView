@@ -5,13 +5,13 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './css/app.css';
-import { Route, BrowserRouter as Router, Routes, Navigate } from 'react-router-dom';
+import { Route, BrowserRouter, Routes, Navigate } from 'react-router-dom';
 import PrivateRoutes from './components/privateRoutes';
 import NavBar from './components/NavBar';
 import Home from './views/home';
 import Login from './views/login';
 import Buckets from './views/buckets';
-import NotFound from './views/notFound';
+import HTTPError from './views/httpError';
 
 const theme = createTheme({
 	palette: {
@@ -29,6 +29,9 @@ const theme = createTheme({
 	},
 });
 
+console.log("%cGradeView", "color: #e3a83b; -webkit-text-stroke: 2px black; font-size: 72px; font-weight: bold; font-family: monospace;");
+console.log("%cDeveloped by Connor Bernard at UC Berkeley under professor Daniel Garcia for use by CS10 and CS61C.", "color:#2299bb; font-size: 12px; font-family: monospace");
+
 export default function App() {
 	return (
 		<ThemeProvider theme={theme}>
@@ -37,16 +40,18 @@ export default function App() {
 					<NavBar />
 				</div>
 				<div className="content">
-					<Router>
+					<BrowserRouter>
 						<Routes>
 							<Route exact path='/login' element={localStorage.getItem('token') ? <Navigate to='/' /> : <Login />} />
 							<Route exact path='/buckets' element={<Buckets />} />
 							<Route element={<PrivateRoutes />}>
 								<Route exact path='/' element={<Home />} />
 							</Route>
-							<Route exact path='*' element={<NotFound />}/> 
+							<Route exact path='/serverError' element={<HTTPError errorCode={500}/>} />
+							<Route exact path='/clientError' element={<HTTPError errorCode={400}/>} />
+							<Route exact path='*' element={<HTTPError errorCode={404} />} />
 						</Routes>
-					</Router>
+					</BrowserRouter>
 				</div>
 			</div>
 		</ThemeProvider>

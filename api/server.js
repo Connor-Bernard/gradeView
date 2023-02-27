@@ -298,9 +298,9 @@ async function main(){
      * @param {Function} middleware 
      * @returns Function
      */
-    function unless(path, middleware){
+    function unless(paths, middleware){
         return function(req, res, next){
-            if(path === req.path){
+            if(paths.includes(req.path)){
                 return next();
             } else {
                 return middleware(req, res, next);
@@ -361,7 +361,7 @@ async function main(){
     }
 
     // Initialize middleware
-    app.use(unless('/api/bins', verificationMiddleWare));
+    app.use(unless(['/api/bins', '/api/verifyaccess'], verificationMiddleWare));
     app.use('/api/admin', adminVerificationMiddleWare);
 
     app.get('/api/bins', async (req, res) => {
@@ -369,8 +369,19 @@ async function main(){
     });
 
     // Use the auth checking of middleware to verify proper auth
-    app.get('/api/verifyaccess', (req, res) => {
-        return res.status(200).send(true);
+    app.get('/api/verifyaccess', async (req, res) => {
+        let auth = req.headers['authorization'];
+        if (!auth) {
+            return res.status(401).send(false);
+        }
+        auth = auth.split(' ');
+        try {
+            await getUserRow(apiAuthClient, await getEmailFromIdToken(oauthClient, auth[1]));
+            return res.status(200).send(true);
+        } catch (e) {
+            console.log(e);
+            return res.status(401).send(false);
+        }
     });
 
     // Responds with json dictionary caller's grade data
