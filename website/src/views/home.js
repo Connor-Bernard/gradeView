@@ -5,6 +5,13 @@ import { DataGrid } from '@mui/x-data-grid';
 import api from '../utils/api';
 import Loader from '../components/Loader';
 
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+
 function Home() {
 
     const [isLoading, setLoading] = useState(true);
@@ -70,6 +77,45 @@ function Home() {
         });
     }
 
+    function SimpleAccordion(props) {
+        const filter = props.filter;
+        const category = props.category;
+        
+        return (
+          // all enclosed in a single div
+          <div>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography>{category}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {/* <div> */}
+                {/* TODO: only works when do this */}
+                    <Box height={800}>
+                        <DataGrid
+                            columns={columns}
+                            rows={gradeData}
+                            pageSize={100}
+                            disableSelectionOnClick
+                            filterModel={{
+                                items: [
+                                { columnField: 'assignment', operatorValue: 'contains', value: filter },
+                                ],
+                            }}         
+                        />
+                     </Box>
+                {/* </div> */}
+                
+              </AccordionDetails>
+            </Accordion>
+          </div>
+        );
+      }
+
     return (
         <>
             { isLoading ? ( <Loader /> ) : (
@@ -94,14 +140,11 @@ function Home() {
                             </FormControl>
                         </Box>
                     }
-                        <Box height='100%'>
-                            <DataGrid
-                            columns={columns}
-                            rows={gradeData}
-                            pageSize={100}
-                            disableSelectionOnClick
-                            />
-                        </Box>
+                        {/* TODO: exams and midterms */}
+                        <SimpleAccordion category="Homework" filter="homework" />
+                        <SimpleAccordion category="Projects" filter="project" />
+                        <SimpleAccordion category="Exams" filter="idk" />
+                        <SimpleAccordion category="Extra Credit" filter="EC:" />
                     </Box>
                 )
             }
