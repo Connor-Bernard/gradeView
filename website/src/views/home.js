@@ -1,17 +1,13 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
 import api from '../utils/api';
 import Loader from '../components/Loader';
-
-
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -21,15 +17,11 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 
-
 function Home() {
 
     const [isLoading, setLoading] = useState(true);
 
-    // Hook for updating grades
-    // gradeData = state variable
-    // updateGradeData = function that updates gradeData
-    // calling updateGradeData(var) will make gradeDate = var
+    // Hook for updating grades, calling updateGradeData(var) will make gradeDate = var
     const [gradeData, updateGradeData] = useState([]);
 
     // User admin status
@@ -97,50 +89,10 @@ function Home() {
         });
     }
 
-    function SimpleAccordion(props) {
-        const filter = props.filter;
-        const category = props.category;
-        
-        return (
-          // all enclosed in a single div
-          <div>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography>{category}</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-               
-                {/* TODO: only works when do this */}
-                    {/* height={800} */}
-                    <Box height={800}>
-                        <DataGrid
-                            columns={columns}
-                            rows={gradeData}
-                            pageSize={100}
-                            disableSelectionOnClick
-                            filterModel={{
-                                items: [
-                                { columnField: 'assignment', operatorValue: 'contains', value: filter },
-                                ],
-                            }}         
-                        />
-                     </Box>
-              
-                
-              </AccordionDetails>
-            </Accordion>
-          </div>
-        );
-      }
-
       function BasicTable(props) {
-        // this had to be declared before the return statement
         const rows = gradeData;
         const filter = props.filter;
+        // filter student grades based off assignment type
         const newRows = rows.filter(item=>item.assignment.includes(filter));
         return (
           <TableContainer component={Paper}>
@@ -148,7 +100,6 @@ function Home() {
               <TableHead>
                 <TableRow>
                   <TableCell>Assignment</TableCell>
-                  {/* TODO: fix allignment */}
                   <TableCell align="right">Grade</TableCell>
                 </TableRow>
               </TableHead>
@@ -162,7 +113,6 @@ function Home() {
                       {row.assignment}
                     </TableCell>
                     <TableCell align="right">{row.grade}</TableCell>
-                   
                   </TableRow>
                 ))}
               </TableBody>
@@ -175,7 +125,6 @@ function Home() {
         const category = props.category;
         const filter = props.filter;
         return (
-          // all enclosed in a single div
           <div>
             <Accordion>
               <AccordionSummary
@@ -230,6 +179,5 @@ function Home() {
         </>
     );
 }
-
 
 export default Home;
