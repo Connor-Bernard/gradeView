@@ -5,28 +5,9 @@ import api from '../utils/api';
 import Loader from '../components/Loader';
 import GradeAccordion from '../components/GradeAccordion';
 
-
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-
-
 function Home() {
 
-    const accordionMeta = [
-        {tab: 'Homework', filter: 'Homework'},
-        {tab: 'Projects', filter: 'Project'},
-        {tab: 'Exams', filter: 'i'}
-    ];
+    const accordionMeta = [{tab: 'Homework', filter: 'Homework'}, {tab: 'Projects', filter: 'Project'}, {tab: 'Exams', filter: 'i'}, {tab: 'Extra Credit', filter: 'EC:'}]
 
     const [isLoading, setLoading] = useState(true);
 
@@ -93,65 +74,6 @@ function Home() {
         });
     }
 
-    /**
-     * Filters the input grade data by the filter string.
-     * @param {String} filter 
-     * @returns {Array} filtered gradeData
-     */
-    function filterData(filter){
-        return gradeData.filter((row) => row.assignment.includes(filter));
-    }
-
-      function BasicTable(props) {
-        const rows = gradeData;
-        const filter = props.filter;
-        // filter student grades based off assignment type
-        const newRows = rows.filter(item=>item.assignment.includes(filter));
-        return (
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Assignment</TableCell>
-                            <TableCell align="right">Grade</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {newRows.map((row) => (
-                        <TableRow
-                        key={row}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                            <TableCell component="th" scope="row">{row.assignment}</TableCell>
-                            <TableCell align="right">{row.grade}</TableCell>
-                        </TableRow>
-                    ))}
-                    </TableBody>
-                </Table>
-        </TableContainer>
-        );
-    }
-
-    function SimpleTableAccordion(props) {
-        const category = props.category;
-        const filter = props.filter;
-        return (
-            <>
-                <Accordion>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header">
-                        <Typography>{category}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <BasicTable filter={filter}/>
-                    </AccordionDetails>
-                </Accordion>
-            </>
-        );
-    }
-
-
     return (
         <>
             { isLoading ? ( <Loader /> ) : (
@@ -182,7 +104,7 @@ function Home() {
                             <GradeAccordion
                                 key={item.tab}
                                 category={item.tab}
-                                assignments={filterData(item.filter)}
+                                assignments={gradeData.filter((row) => row.assignment.includes(item.filter))}
                             />
                         ))
                     }

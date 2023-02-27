@@ -1,6 +1,6 @@
-import { Accordion, AccordionSummary, Typography, AccordionDetails } from '@mui/material';
+import { Accordion, AccordionSummary, Typography, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import GradeTable from './GradeTable';
+import GradeTable from "./GradeTable";
 
 export default function GradeAccordion({ category, assignments }) {
     return (
@@ -8,8 +8,8 @@ export default function GradeAccordion({ category, assignments }) {
             <Accordion>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
-                    aria-controls='panel1a-content'
-                    id='panel1a-header'>
+                    aria-controls="panel1a-content"
+                    id="panel1a-header">
                     <Typography>{category}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
