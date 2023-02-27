@@ -11,7 +11,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -19,7 +18,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
 
 
 function Home() {
@@ -105,9 +103,9 @@ function Home() {
     }
 
       function BasicTable(props) {
-        // this had to be declared before the return statement
         const rows = gradeData;
         const filter = props.filter;
+        // filter student grades based off assignment type
         const newRows = rows.filter(item=>item.assignment.includes(filter));
         return (
           <TableContainer component={Paper}>
@@ -115,7 +113,6 @@ function Home() {
               <TableHead>
                 <TableRow>
                   <TableCell>Assignment</TableCell>
-                  {/* TODO: fix allignment */}
                   <TableCell align="right">Grade</TableCell>
                 </TableRow>
               </TableHead>
@@ -129,7 +126,6 @@ function Home() {
                       {row.assignment}
                     </TableCell>
                     <TableCell align="right">{row.grade}</TableCell>
-                   
                   </TableRow>
                 ))}
               </TableBody>
@@ -142,7 +138,6 @@ function Home() {
         const category = props.category;
         const filter = props.filter;
         return (
-          // all enclosed in a single div
           <div>
             <Accordion>
               <AccordionSummary
@@ -202,6 +197,5 @@ function Home() {
         </>
     );
 }
-
 
 export default Home;
