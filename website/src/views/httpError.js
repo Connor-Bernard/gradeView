@@ -19,7 +19,7 @@ export default function HTTPError({ errorCode, errorText }) {
     return (
         <>
             <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'absolute', top: '50%', transform: 'translate(0, -50%)' }}>
-                <Typography variant='h1' component={Box} sx={{ fontWeight: '600' }}>{state.errorCode ? state.errorCode : errorCode ? errorCode : 500}</Typography>
+                <Typography variant='h1' component={Box} sx={{ fontWeight: '600' }}>{state?.errorCode ? state.errorCode : errorCode ? errorCode : 500}</Typography>
                 <Typography variant='h4' component={Box} sx={{ marginBottom: '10px', textAlign: 'center' }}>
                     {errorText ? errorText : errorTextOptions[errorCode] ? errorTextOptions[errorCode] : 'Oops!  Looks like something went wrong!'}
                 </Typography>
