@@ -10,8 +10,7 @@ function Home() {
     const accordionMeta = [
         {tab: 'Homework', filter: 'Homework'},
         {tab: 'Projects', filter: 'Project'},
-        {tab: 'Exams', filter: 'i'},
-        {tab: 'Extra Credit', filter: 'EC:'}
+        {tab: 'Exams', filter: 'i'}
     ];
 
     const [isLoading, setLoading] = useState(true);
