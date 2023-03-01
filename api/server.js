@@ -131,24 +131,14 @@ async function getUserGrades(apiAuthClient, email){
 
     let assignments = []
 
-    // Populate assignments dictionary with grades so far
-    for(let i = 0; i < gradesRows[0].length; i++){
+    // Populate assignments dictionary with grades
+    for(let i = 0; i < assignmentsRows[0].length; i++){
         assignments.push({
-            'id': i,
-            'assignment': assignmentsRows[0][i],
-            'grade': gradesRows[0][i]
+            id: i,
+            assignment: assignmentsRows[0][i],
+            grade: gradesRows[0][i]
         });
     }
-    
-    // Populate rest of dictionary ungraded (comment to only show graded assignments)
-    for(let i = gradesRows[0].length; i < assignmentsRows[0].length; i++){
-        assignments.push({
-            'id': i,
-            'assignment': assignmentsRows[0][i],
-            'grade': gradesRows[0][i]
-        });
-    }
-
     return assignments;
 }
 
@@ -161,6 +151,35 @@ async function getUserGrades(apiAuthClient, email){
  */
 async function getUserGradesFromToken(apiAuthClient, oauthClient, token){
     return await getUserGrades(apiAuthClient, await getEmailFromIdToken(oauthClient, token));
+}
+
+/**
+ * Gets the user's grades with fractional component associated with the provided email.
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
+ * @param {String} email 
+ * @returns {Promise<Object>} dictionary of user's grades
+ */
+async function getUserGradesAsFraction(apiAuthClient, email){
+    const userGrades = await getUserGrades(apiAuthClient, email);
+    const gradeMeta = await getUserGrades(apiAuthClient, MAXGRADEROW);
+    gradeMeta.map((assignment) => {
+        if (!assignment.grade){
+            return assignment.assignment = null;
+        }
+        return assignment.grade = {studentGrade: userGrades[assignment.id]?.grade, maxGrade: assignment.grade}
+    });
+    return gradeMeta.filter((assignment) => assignment.assignment);
+}
+
+/**
+ * Gets the user's grades with fractional component from the user's token.
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
+ * @param {String} oauthClient 
+ * @param {String} token 
+ * @returns {Promise<Object>} dictionary of user's grades
+ */
+async function getUserGradesFromTokenAsFraction(apiAuthClient, oauthClient, token){
+    return await getUserGradesAsFraction(apiAuthClient, await getEmailFromIdToken(oauthClient, token));
 }
 
 /**
@@ -383,7 +402,7 @@ async function main(){
 
     // Responds with json dictionary caller's grade data
     app.get('/api/grades', async (req, res) => {
-        return res.status(200).json(await getUserGradesFromToken(apiAuthClient,
+        return res.status(200).json(await getUserGradesFromTokenAsFraction(apiAuthClient,
             oauthClient, req.headers.authorization.split(' ')[1]));
     });
 
