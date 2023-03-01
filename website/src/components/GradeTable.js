@@ -14,7 +14,7 @@ export default function GradeTable({ assignments }) {
                     {
                         assignments.map((row) => (
                             <TableRow
-                                key={row}
+                                key={row.id}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                 <TableCell component='th' scope='row'>{row.assignment}</TableCell>
                                 <TableCell align='right'>{row.grade}</TableCell>
