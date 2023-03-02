@@ -437,7 +437,7 @@ async function main(){
 
     // Responds with the grades for the specified student
     app.post('/api/admin/getStudent', async (req, res) => {
-        res.status(200).json(await getUserGrades(apiAuthClient, req.body.email));
+        res.status(200).json(await getUserGradesAsFraction(apiAuthClient, req.body.email));
     });
 
     app.listen(PORT, () => {

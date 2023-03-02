@@ -77,8 +77,8 @@ function Home() {
      * @param {String} filter 
      * @returns {Array} filtered gradeData
      */
-    function filterData(filter){
-        return gradeData.filter((row) => row.assignment.includes(filter));
+    function filterData(data, filter){
+        return data.filter((row) => row.assignment.includes(filter));
     }
 
     return (
@@ -111,7 +111,7 @@ function Home() {
                             <GradeAccordion
                                 key={item.tab}
                                 category={item.tab}
-                                assignments={filterData(item.filter)}
+                                assignments={filterData(gradeData, item.filter)}
                             />
                         ))
                     }
