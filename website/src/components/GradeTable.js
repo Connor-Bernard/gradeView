@@ -28,7 +28,7 @@ export default function GradeTable({ assignments }) {
                     {
                         assignments.map((assignment) => (
                             <TableRow
-                                key={assignment.id}
+                                key={assignment.id + assignment.assignment}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                 <TableCell component='th' scope='assignment'>{assignment.assignment}</TableCell>
                                 <TableCell align='right' sx={{fontWeight: isBold(assignment.grade?.studentGrade, assignment.grade?.maxGrade)}}>

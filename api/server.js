@@ -9,10 +9,6 @@ class AuthenticationError extends Error{}
 class UnauthorizedAccessError extends Error{}
 class BadSheetDataError extends Error{}
 
-const app = express();
-app.use(cors());
-app.use(json());
-
 const PORT = process.env.PORT || config.get('server.port');
 const SPREADSHEETID = config.get('spreadsheet.id'); // In spreadsheet URL
 const KEYFILE = config.get('googleconfig.service_account.keyfile');
@@ -302,6 +298,10 @@ async function getBins(apiAuthClient){
 }
 
 async function main(){
+    const app = express();
+    app.use(cors());
+    app.use(json());
+    
     const apiAuthClient = await new google.auth.GoogleAuth({
         keyFile: KEYFILE,
         scopes: SCOPES
