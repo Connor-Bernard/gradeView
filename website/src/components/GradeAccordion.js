@@ -7,7 +7,6 @@ export default function GradeAccordion({ category, assignments }) {
 
     const [cumGrade, setCumGrade] = useState(0);
     const [cumMaxGrade, setCumMaxGrade] = useState(0);
-    const [updatedAssignments, setUpdatedAssignments] = useState([]);
 
     useEffect(() => {
         let cg = 0;
@@ -15,13 +14,17 @@ export default function GradeAccordion({ category, assignments }) {
         assignments.forEach((assignment) => {
             cg += +(assignment.grade?.studentGrade || 0);
             cmg += +(assignment.grade?.maxGrade || 0);
-            assignment.grade = `${assignment.grade?.studentGrade || 'N/A'} / ${assignment.grade?.maxGrade || 'N/A'}`;
         });
-        setCumGrade(cg);
-        setCumMaxGrade(cmg);
-        setUpdatedAssignments(assignments);
+        setCumGrade(Math.round(cg * 100) / 100);
+        setCumMaxGrade(Math.round(cmg * 100) / 100);
     }, [assignments]);
 
+    /**
+     * Returns the formatting for the font-weight.
+     * @param {Float} student 
+     * @param {Float} max 
+     * @returns {String} 'bold' or 'normal'
+     */
     function isBold(student, max){
         if(student === max){
             return 'bold';
@@ -37,10 +40,12 @@ export default function GradeAccordion({ category, assignments }) {
                     aria-controls='panel1a-content'
                     id='panel1a-header'>
                     <Typography>{category}</Typography>
-                    <Typography sx={{ marginLeft: 'auto', pr: 1, fontWeight: isBold(cumGrade, cumMaxGrade) }}>{cumGrade} / {cumMaxGrade}</Typography>
+                    <Typography sx={{ marginLeft: 'auto', pr: 1, fontWeight: isBold(cumGrade, cumMaxGrade)}}>
+                        {cumGrade} / {cumMaxGrade}
+                    </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <GradeTable assignments={updatedAssignments} />
+                    <GradeTable assignments={assignments} />
                 </AccordionDetails>
             </Accordion>
         </>
