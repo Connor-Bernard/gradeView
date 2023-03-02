@@ -25,8 +25,10 @@ export default function Buckets(){
                     tempBins = [...tempBins, { grade, range }];
                 }
                 setBins(tempBins);
-                setLoadCount(i => i - 1);
             }
+        }).finally(() => {
+            console.log("test")
+            setLoadCount(i => i - 1);
         });
 
         if(localStorage.getItem('token')){
@@ -34,8 +36,9 @@ export default function Buckets(){
             api.get('/projections').then((res) => {
                 if(mounted){
                     setProjections(res.data);
-                    setLoadCount(i => i - 1);
                 }
+            }).finally(() => {
+                setLoadCount(i => i - 1);
             });
         }
         return () => mounted = false;
