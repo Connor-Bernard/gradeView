@@ -26,12 +26,6 @@ function Home() {
         // Initialize grade data
         api.get('/grades').then((res) => {
             if(mounted){
-                res.data.map((assignment) => {
-                    if(!assignment.grade?.studentGrade){
-                        return assignment.grade = 'N/A'
-                    }
-                    return assignment.grade = `${assignment.grade.studentGrade} / ${assignment.grade.maxGrade}`;
-                });
                 updateGradeData(res.data);
                 setLoading(false);
             }
