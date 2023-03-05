@@ -117,6 +117,13 @@ async function getUserGrades(apiAuthClient, email){
     });
     let gradesRows = gradesRes.data.values;
 
+    const typeRes = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEETID,
+        range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}2:2`
+    });
+    let typeRows = typeRes.data.values;
+
+
     // Updates values to empty lists of lists in case there are no entries
     if(!assignmentsRows){
         assignmentsRows = [[]];
@@ -125,14 +132,18 @@ async function getUserGrades(apiAuthClient, email){
         gradesRows = [[]];
     }
 
-    let assignments = []
+    if(!typeRows){
+        typeRows = [[]];
+    }
 
+    let assignments = []
     // Populate assignments dictionary with grades
     for(let i = 0; i < assignmentsRows[0].length; i++){
         assignments.push({
             id: i,
             assignment: assignmentsRows[0][i],
-            grade: gradesRows[0][i]
+            grade: gradesRows[0][i],
+            type: typeRows[0][i]
         });
     }
     return assignments;
