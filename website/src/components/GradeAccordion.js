@@ -32,9 +32,15 @@ export default function GradeAccordion({ category, assignments }) {
         return 'normal';
     }
 
+    // Code for keeping accordion unhidden
+    const [expanded, setExpanded] = useState(false);
+    const handleChange = (panel) => (event, newExpanded) => {
+        setExpanded(newExpanded ? panel : false);
+    };
+
     return (
         <>
-            <Accordion>
+            <Accordion expanded={expanded} onChange={handleChange(true)}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls='panel1a-content'

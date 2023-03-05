@@ -1,5 +1,6 @@
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
 
+
 export default function GradeTable({ assignments }) {
 
     /**
@@ -16,7 +17,7 @@ export default function GradeTable({ assignments }) {
     }
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer sx={{maxWidth: 'md', margin:'auto' }} component={Paper}>
             <Table aria-label='Grade Table'>
                 <TableHead>
                     <TableRow>

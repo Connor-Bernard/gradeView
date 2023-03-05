@@ -6,11 +6,11 @@ import Loader from '../components/Loader';
 import GradeAccordion from '../components/GradeAccordion';
 
 function Home() {
-
     const accordionMeta = [
         {tab: 'Homework', filter: 'Homework'},
+        {tab: 'Labs', filter: 'Lab'},
         {tab: 'Projects', filter: 'Project'},
-        {tab: 'Exams', filter: 'i'}
+        {tab: 'Exams', filter: 'Exam'}
     ];
 
     const [isLoading, setLoading] = useState(true);
@@ -78,7 +78,7 @@ function Home() {
      * @returns {Array} filtered gradeData
      */
     function filterData(data, filter){
-        return data.filter((row) => row.assignment.includes(filter));
+        return data.filter((row) => row.type.includes(filter));
     }
 
     return (
@@ -86,7 +86,7 @@ function Home() {
             { isLoading ? ( <Loader /> ) : (
                     <Box sx={{ display: 'flex', flexFlow: 'column', height: '100%' }}>
                     {isAdmin &&
-                        // student drop-down selection
+                        // Student drop-down selection
                         <Box>
                             <FormControl size='small' sx={{m: 1, minWidth:100}}>
                                 <InputLabel id='student-dropdown-label'>Student</InputLabel>
