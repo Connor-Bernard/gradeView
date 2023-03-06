@@ -6,9 +6,14 @@ This application was created using Node, Express, and React by Connor Bernard at
 
 ## SPREADSHEET SETUP
 
-1. The first two columns should be Name and Email
-2. The first row of the spreadsheet should be the titles of the homework assignemnts for that column
-3. The bin page should have two columns and be ascending with the leftmost column bein points and the rightmost being letter grade
+- The first column should be the student's name
+- The second column should be the student's email
+- The first row should be the titles of the homework assignemnts for that column
+- The second row should be the type of assignment
+- The third row should be the maximum amount of points the assignment is out of
+- The bin page should have two columns and be ascending with the leftmost column being points and the rightmost being letter grade as shown below
+
+![Picture of proper readme configuration](./readmeImages/binsFormat.png)
 
 ## Configuration
 
@@ -22,7 +27,7 @@ This application was created using Node, Express, and React by Connor Bernard at
 4. Fill out the pages subsection of spreadsheet with:
     1. The gradepage (the page with the grade data on it) and:
         1. `pagename`: The name of the sheet with the grade data
-        2. `maxrow`: The row with the maximum points for each assignment
+        2. `assignmentMetaRow`: The row that the assignment metadata starts on
         3. `startrow`: The row where student information starts
         4. `startcol`: The column where student information starts
     2. The binpage (the page with the bins on it) and:
