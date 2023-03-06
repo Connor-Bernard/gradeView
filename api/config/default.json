@@ -10,8 +10,8 @@
         "pages": {
             "gradepage": {
                 "pagename": "HAID",
-                "maxrow": "3",
-                "startrow": "4",
+                "assignmentMetaRow": 2,
+                "startrow": 4,
                 "startcol": "C"
             },
             "binpage": {
