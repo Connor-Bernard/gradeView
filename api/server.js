@@ -9,13 +9,6 @@ class AuthenticationError extends Error{}
 class UnauthorizedAccessError extends Error{}
 class BadSheetDataError extends Error{}
 
-const app = express();
-app.use(cors());
-app.use(json());
-
-// Update below constants for individual implementation
-// Get keyfile and oauthclientid from google cloud project with an oauth2 client and a service account
-// For keyfile, add a key under the service account and add the json keyfile to the auth folder
 const PORT = process.env.PORT || config.get('server.port');
 const SPREADSHEETID = config.get('spreadsheet.id'); // In spreadsheet URL
 const KEYFILE = config.get('googleconfig.service_account.keyfile');
@@ -23,7 +16,8 @@ const SCOPES = config.get('spreadsheet.scopes'); // Keep the same for readOnly
 const OAUTHCLIENTID = config.get('googleconfig.oauth.clientid');
 const ADMINS = config.get('admins');
 const GRADINGPAGENAME = config.get('spreadsheet.pages.gradepage.pagename'); // The page in the spreadsheet that the grades are on
-const MAXGRADEROW = +config.get('spreadsheet.pages.gradepage.maxrow'); // The row with the total amount of points possible for the assignment
+const ASSIGNMENTTYPEROW = config.get('spreadsheet.pages.gradepage.assignmentMetaRow'); // The row with the assignment type
+const MAXGRADEROW = config.get('spreadsheet.pages.gradepage.assignmentMetaRow') + 1; // The row with the total amount of points possible for the assignment
 const STARTGRADEROW = +config.get('spreadsheet.pages.gradepage.startrow'); // The row that the student grade data starts on
 const STARTGRADECOLNAME = config.get('spreadsheet.pages.gradepage.startcol'); // Starting column of the spreadsheet where grade data should be read
 const BINSPAGE = config.get('spreadsheet.pages.binpage.pagename'); // The page in the spreadsheet that the bin are on
@@ -114,7 +108,7 @@ async function getUserGrades(apiAuthClient, email){
 
     const assignmentsRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
-        range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}1:1`
+        range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}1:${ASSIGNMENTTYPEROW}`
     });
     let assignmentsRows = assignmentsRes.data.values;
 
@@ -133,25 +127,15 @@ async function getUserGrades(apiAuthClient, email){
     }
 
     let assignments = []
-
-    // Populate assignments dictionary with grades so far
-    for(let i = 0; i < gradesRows[0].length; i++){
+    // Populate assignments dictionary with grades
+    for(let i = 0; i < assignmentsRows[0].length; i++){
         assignments.push({
-            'id': i,
-            'assignment': assignmentsRows[0][i],
-            'grade': gradesRows[0][i]
+            id: i,
+            assignment: assignmentsRows[0][i],
+            grade: gradesRows[0][i],
+            type: assignmentsRows[ASSIGNMENTTYPEROW - 1][i]
         });
     }
-    
-    // Populate rest of dictionary ungraded (comment to only show graded assignments)
-    for(let i = gradesRows[0].length; i < assignmentsRows[0].length; i++){
-        assignments.push({
-            'id': i,
-            'assignment': assignmentsRows[0][i],
-            'grade': gradesRows[0][i]
-        });
-    }
-
     return assignments;
 }
 
@@ -164,6 +148,35 @@ async function getUserGrades(apiAuthClient, email){
  */
 async function getUserGradesFromToken(apiAuthClient, oauthClient, token){
     return await getUserGrades(apiAuthClient, await getEmailFromIdToken(oauthClient, token));
+}
+
+/**
+ * Gets the user's grades with fractional component associated with the provided email.
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
+ * @param {String} email 
+ * @returns {Promise<Object>} dictionary of user's grades
+ */
+async function getUserGradesAsFraction(apiAuthClient, email){
+    const userGrades = await getUserGrades(apiAuthClient, email);
+    const gradeMeta = await getUserGrades(apiAuthClient, MAXGRADEROW);
+    gradeMeta.map((assignment) => {
+        if (!assignment.grade){
+            return assignment.assignment = null;
+        }
+        return assignment.grade = {studentGrade: userGrades[assignment.id]?.grade, maxGrade: assignment.grade}
+    });
+    return gradeMeta.filter((assignment) => assignment.assignment);
+}
+
+/**
+ * Gets the user's grades with fractional component from the user's token.
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
+ * @param {String} oauthClient 
+ * @param {String} token 
+ * @returns {Promise<Object>} dictionary of user's grades
+ */
+async function getUserGradesFromTokenAsFraction(apiAuthClient, oauthClient, token){
+    return await getUserGradesAsFraction(apiAuthClient, await getEmailFromIdToken(oauthClient, token));
 }
 
 /**
@@ -286,6 +299,10 @@ async function getBins(apiAuthClient){
 }
 
 async function main(){
+    const app = express();
+    app.use(cors());
+    app.use(json());
+    
     const apiAuthClient = await new google.auth.GoogleAuth({
         keyFile: KEYFILE,
         scopes: SCOPES
@@ -386,7 +403,7 @@ async function main(){
 
     // Responds with json dictionary caller's grade data
     app.get('/api/grades', async (req, res) => {
-        return res.status(200).json(await getUserGradesFromToken(apiAuthClient,
+        return res.status(200).json(await getUserGradesFromTokenAsFraction(apiAuthClient,
             oauthClient, req.headers.authorization.split(' ')[1]));
     });
 
@@ -421,7 +438,7 @@ async function main(){
 
     // Responds with the grades for the specified student
     app.post('/api/admin/getStudent', async (req, res) => {
-        res.status(200).json(await getUserGrades(apiAuthClient, req.body.email));
+        res.status(200).json(await getUserGradesAsFraction(apiAuthClient, req.body.email));
     });
 
     app.listen(PORT, () => {

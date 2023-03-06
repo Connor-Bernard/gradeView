@@ -10,8 +10,8 @@
         "pages": {
             "gradepage": {
                 "pagename": "HAID",
-                "maxrow": "2",
-                "startrow": "3",
+                "assignmentMetaRow": 2,
+                "startrow": 4,
                 "startcol": "C"
             },
             "binpage": {
@@ -29,5 +29,5 @@
             "keyfile": "./auth/service_account.json"
         }
     },
-    "admins": ["connorbernard@berkeley.edu"]
+    "admins": ["connorbernard@berkeley.edu", "madelenf143@berkeley.edu"]
 }

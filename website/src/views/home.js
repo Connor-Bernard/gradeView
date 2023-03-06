@@ -1,15 +1,21 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
 import api from '../utils/api';
 import Loader from '../components/Loader';
+import GradeAccordion from '../components/GradeAccordion';
 
 function Home() {
+    const accordionMeta = [
+        {tab: 'Homework', filter: 'Homework'},
+        {tab: 'Labs', filter: 'Lab'},
+        {tab: 'Projects', filter: 'Project'},
+        {tab: 'Exams', filter: 'Exam'}
+    ];
 
     const [isLoading, setLoading] = useState(true);
 
-    // Hook for updating grades
+    // Hook for updating grades, calling updateGradeData(var) will make gradeDate = var
     const [gradeData, updateGradeData] = useState([]);
 
     // User admin status
@@ -23,6 +29,7 @@ function Home() {
                 updateGradeData(res.data);
                 setLoading(false);
             }
+            return () => mounted = false;
         });
 
         // Update user admin status
@@ -50,11 +57,6 @@ function Home() {
         return () => mounted = false;
     }, [isAdmin]);
 
-    const columns = [
-        { field: 'assignment', headerName: 'Assignment', width: 400 },
-        { field: 'grade', headerName: 'Grade', width: 100 }
-    ];
-
     /**
      * Updates the grades shown to that of the selected student.
      * @param {Event} e 
@@ -70,11 +72,21 @@ function Home() {
         });
     }
 
+    /**
+     * Filters the input grade data by the filter string.
+     * @param {String} filter 
+     * @returns {Array} filtered gradeData
+     */
+    function filterData(data, filter){
+        return data.filter((row) => row.type?.includes(filter)) || false;
+    }
+
     return (
         <>
             { isLoading ? ( <Loader /> ) : (
                     <Box sx={{ display: 'flex', flexFlow: 'column', height: '100%' }}>
                     {isAdmin &&
+                        // Student drop-down selection
                         <Box>
                             <FormControl size='small' sx={{m: 1, minWidth:100}}>
                                 <InputLabel id='student-dropdown-label'>Student</InputLabel>
@@ -90,20 +102,21 @@ function Home() {
                                                 <MenuItem key={student[1]} value={student[1]}>{student[0]}</MenuItem>
                                             ))
                                         }
-                                    </Select>
+                                </Select>
                             </FormControl>
                         </Box>
                     }
-                        <Box height='100%'>
-                            <DataGrid
-                            columns={columns}
-                            rows={gradeData}
-                            pageSize={100}
-                            disableSelectionOnClick
+                    {
+                        accordionMeta.map((item) => (
+                            <GradeAccordion
+                                key={item.tab}
+                                category={item.tab}
+                                assignments={filterData(gradeData, item.filter)}
                             />
-                        </Box>
+                        ))
+                    }
                     </Box>
-                )
+                )   
             }
         </>
     );
