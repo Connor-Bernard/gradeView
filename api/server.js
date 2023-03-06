@@ -16,7 +16,8 @@ const SCOPES = config.get('spreadsheet.scopes'); // Keep the same for readOnly
 const OAUTHCLIENTID = config.get('googleconfig.oauth.clientid');
 const ADMINS = config.get('admins');
 const GRADINGPAGENAME = config.get('spreadsheet.pages.gradepage.pagename'); // The page in the spreadsheet that the grades are on
-const MAXGRADEROW = +config.get('spreadsheet.pages.gradepage.maxrow'); // The row with the total amount of points possible for the assignment
+const ASSIGNMENTTYPEROW = config.get('spreadsheet.pages.gradepage.assignmentMetaRow'); // The row with the assignment type
+const MAXGRADEROW = config.get('spreadsheet.pages.gradepage.assignmentMetaRow') + 1; // The row with the total amount of points possible for the assignment
 const STARTGRADEROW = +config.get('spreadsheet.pages.gradepage.startrow'); // The row that the student grade data starts on
 const STARTGRADECOLNAME = config.get('spreadsheet.pages.gradepage.startcol'); // Starting column of the spreadsheet where grade data should be read
 const BINSPAGE = config.get('spreadsheet.pages.binpage.pagename'); // The page in the spreadsheet that the bin are on
@@ -107,7 +108,7 @@ async function getUserGrades(apiAuthClient, email){
 
     const assignmentsRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
-        range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}1:1`
+        range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}1:${ASSIGNMENTTYPEROW}`
     });
     let assignmentsRows = assignmentsRes.data.values;
 
@@ -117,23 +118,12 @@ async function getUserGrades(apiAuthClient, email){
     });
     let gradesRows = gradesRes.data.values;
 
-    const typeRes = await sheets.spreadsheets.values.get({
-        spreadsheetId: SPREADSHEETID,
-        range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}2:2`
-    });
-    let typeRows = typeRes.data.values;
-
-
     // Updates values to empty lists of lists in case there are no entries
     if(!assignmentsRows){
         assignmentsRows = [[]];
     }
     if(!gradesRows){
         gradesRows = [[]];
-    }
-
-    if(!typeRows){
-        typeRows = [[]];
     }
 
     let assignments = []
@@ -143,7 +133,7 @@ async function getUserGrades(apiAuthClient, email){
             id: i,
             assignment: assignmentsRows[0][i],
             grade: gradesRows[0][i],
-            type: typeRows[0][i]
+            type: assignmentsRows[ASSIGNMENTTYPEROW - 1][i]
         });
     }
     return assignments;

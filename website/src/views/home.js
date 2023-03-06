@@ -78,7 +78,7 @@ function Home() {
      * @returns {Array} filtered gradeData
      */
     function filterData(data, filter){
-        return data.filter((row) => row.type.includes(filter));
+        return data.filter((row) => row.type?.includes(filter)) || false;
     }
 
     return (

@@ -35,6 +35,7 @@ export default function GradeAccordion({ category, assignments }) {
     // Code for keeping accordion unhidden
     const [expanded, setExpanded] = useState(true);
     const handleChange = (panel) => (event, newExpanded) => {
+        console.log(event.target);
         setExpanded(newExpanded ? panel : false);
     };
 
