@@ -2,14 +2,14 @@ version: '3.8'
 services:
   web:
     container_name: gradeview-web
-    image: $CI_REGISTRY_IMAGE/web:$WEB_VERSION
+    image: ${CI_REGISTRY_IMAGE:-gradeview}/web:${WEB_VERSION:-development}
     build: ./website/production
     ports:
       - 3000:3000
     command: npm start
   api:
     container_name: gradeview-api
-    image: $CI_REGISTRY_IMAGE/server:$API_VERSION
+    image: ${CI_REGISTRY_IMAGE:-gradeview}/server:${API_VERSION:-development}
     build: ./api
     volumes:
       - ./api:/api

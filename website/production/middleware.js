@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 // API proxy middleware
-exports.proxy = createProxyMiddleware({ target: process.env.REACT_APP_PROXY_SERVER, changeOrigin: true });
+exports.proxy = createProxyMiddleware({ target: process.env.REACT_APP_PROXY_SERVER || `http://localhost:${process.env.PORT || 8000}`, changeOrigin: true });
 
 /**
  * Use to exclude a route from being verified with middleware.

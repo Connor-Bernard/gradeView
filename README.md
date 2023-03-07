@@ -37,11 +37,7 @@ This application was created using Node, Express, and React by Connor Bernard at
 5. Fill out the googleconfig section in accordance with [Google API configuration instructions](#google-api-configuration) below
 6. Add all necessary admin emails to the admin whitelist
 
-### SERVER CONFIG NOTES
-
-* __If your server address is different from your live website domain, you will have to update the `REACT_APP_PROXY_SERVER` environment variable found in /website/.env to reflect the correct proxy URL.__
-
-* __If you are running this using the default Dockerfiles and docker_compose file, you will also need to update the ports in the respective files for containerized deployment__
+__NOTE: If your API server's origin is different from your live website's origin, you will have to set the `REACT_APP_PROXY_SERVER` environment variable equal to the respective URL in /website/.env.__
 
 ### Google API Configuration
 
@@ -97,16 +93,27 @@ OR
 
 ### LOCALLY WITH NODE
 
-1. __[First use only]__ In the root directory run `make init`
+1. __[First use only]:__ In the root directory run `make init`
 2. In the root directory run `make npm` to start the service
 
 Note: Running these will start both an api server as well as a website
 
 ## CI/CD Deployment
 
+### Setup
+
 1. Create a GitLab project
 2. Configure Google Cloud project as explained [here](#cicd-configuration-optional)
 3. Configure GitLab project as explained [here](#gitlab-configuration-optional)
-4. Push to the new remote from the production branch with the option `ci-variable="PRODUCTION=true"` or run `make deploy` in the root directory to deploy
+
+### Manual Deployment
+
+1. Push to the new remote from the production branch with the option `ci-variable="PRODUCTION=true"`
+eg: `git push production -o ci.variable="PRODUCTION=true"`
+
+### Deployment with Make
+
+1. Set the environment variable `PRODUCTION_REMOTE_NAME` equal to the name of the production remote (you can do this locally or in /.env)
+2. Run `make deploy`
 
 ### Note: The provided pipeline configuration relies on GitLab runners, so if a custom runner is preferred, it will have to be configured separately
