@@ -106,11 +106,11 @@ async function getUserGrades(apiAuthClient, email){
     const userRow = await getUserRow(apiAuthClient, email);
     const sheets = google.sheets({version: 'v4', auth: apiAuthClient});
 
-    const assignmentsRes = await sheets.spreadsheets.values.get({
+    const assignmentMetaRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}1:${ASSIGNMENTTYPEROW}`
     });
-    let assignmentsRows = assignmentsRes.data.values;
+    let assignmentMeta = assignmentMetaRes.data.values;
 
     const gradesRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
@@ -119,8 +119,8 @@ async function getUserGrades(apiAuthClient, email){
     let gradesRows = gradesRes.data.values;
 
     // Updates values to empty lists of lists in case there are no entries
-    if(!assignmentsRows){
-        assignmentsRows = [[]];
+    if(!assignmentMeta){
+        assignmentMeta = [[]];
     }
     if(!gradesRows){
         gradesRows = [[]];
@@ -128,12 +128,12 @@ async function getUserGrades(apiAuthClient, email){
 
     let assignments = []
     // Populate assignments dictionary with grades
-    for(let i = 0; i < assignmentsRows[0].length; i++){
+    for(let i = 0; i < assignmentMeta[0].length; i++){
         assignments.push({
             id: i,
-            assignment: assignmentsRows[0][i],
+            assignment: assignmentMeta[0][i],
             grade: gradesRows[0][i],
-            type: assignmentsRows[ASSIGNMENTTYPEROW - 1][i]
+            type: assignmentMeta[ASSIGNMENTTYPEROW - 1][i]
         });
     }
     return assignments;
