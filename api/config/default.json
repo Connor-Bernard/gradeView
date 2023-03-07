@@ -24,9 +24,6 @@
     "googleconfig": {
         "oauth": {
             "clientid": "435032403387-5sph719eh205fc6ks0taft7ojvgipdji.apps.googleusercontent.com"
-        },
-        "service_account": {
-            "keyfile": "./auth/service_account.json"
         }
     },
     "admins": ["connorbernard@berkeley.edu", "madelenf143@berkeley.edu"]

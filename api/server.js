@@ -4,14 +4,15 @@ import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import esMain from 'es-main';
 import config from 'config';
+import dotenv from 'dotenv';
 
 class AuthenticationError extends Error{}
 class UnauthorizedAccessError extends Error{}
 class BadSheetDataError extends Error{}
 
+dotenv.config(); // Load environment variables from .env file
 const PORT = process.env.PORT || config.get('server.port');
 const SPREADSHEETID = config.get('spreadsheet.id'); // In spreadsheet URL
-const KEYFILE = config.get('googleconfig.service_account.keyfile');
 const SCOPES = config.get('spreadsheet.scopes'); // Keep the same for readOnly
 const OAUTHCLIENTID = config.get('googleconfig.oauth.clientid');
 const ADMINS = config.get('admins');
@@ -302,9 +303,9 @@ async function main(){
     const app = express();
     app.use(cors());
     app.use(json());
-    
+       
     const apiAuthClient = await new google.auth.GoogleAuth({
-        keyFile: KEYFILE,
+        credentials: JSON.parse(process.env.SERVICE_ACCOUNT_CREDENTIALS),
         scopes: SCOPES
     }).getClient();
     const oauthClient = new OAuth2Client(OAUTHCLIENTID);

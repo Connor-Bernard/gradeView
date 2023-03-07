@@ -3,8 +3,8 @@
 /website/production/node_modules
 /api/node_modules
 
-# Secrets
-/api/auth/*
+# Environment variables
+*.env
 
 # production
 /website/production/build
