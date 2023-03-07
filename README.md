@@ -56,7 +56,8 @@ __NOTE: If your API server's origin is different from your live website's origin
 13. Share the google sheet with the displayed email
 14. Navigate to the keys section of the service account
 15. Click "Add Key" and create a JSON key
-16. Add this key to the credentials folder and update the link to the file in the config file
+16. Create a .env file in /api/ if one doesn't already exist
+17. Set the environment variable `SERVICE_ACCOUNT_CREDENTIALS` equal to the contents of this downloaded keyfile __SURROUNDED IN SINGLE QUOTES__
 
 ### CI/CD Configuration (optional)
 
@@ -65,6 +66,16 @@ __NOTE: If your API server's origin is different from your live website's origin
 3. In the [Cloud Build Settings](https://console.cloud.google.com/cloud-build/settings/service-account?project) enable "Cloud Run Admin" and "Service Account User"
 4. Go to [the credentials page](https://console.cloud.google.com/apis/credentials) and create a new service account using the "Create Credentials" button at the top of the screen
 5. Fill out the basic information and give the service account access to the "Cloud Build Service Agent" role and the "Cloud Build Editor" role
+6. Deploy the first build as explained [here](#manual-deployment) (this will succeed but will not properly load elements without correctly configuring the environment variables)
+7. Enable the [Google Secret Manager API](https://console.cloud.google.com/security/secret-manager)
+8. Create a new secret with the name "API_SERVICE_ACCOUNT" with the secret value of the API service account credentials downloaded in the keyfile during the [Google API Configuration step](#google-api-configuration) __SOURROUNDED IN SINGLE QUOTES__
+9. Click on the API deployment in [Google Cloud Run](https://console.cloud.google.com/run) and then on the "EDIT & DEPLOY NEW REVISION" tab
+10. Under Secrets, create a new secret and select the secret created above
+11. Change the reference method from "Mounted as volume" to "Exposed as environment variable" and click Done
+12. Deploy the change
+13. Clop the URL from the deployment pannel of the API service
+14. Click on the Web deployment in [Google Cloud Run](https://console.cloud.google.com/run) and then on the "EDIT & DEPLOY NEW REVISION" tab
+15. Under "Environment variables" create a new variable with the name "REACT_APP_PROXY_SERVER" and value equal to the deployment URL found in step 12 and deploy this version
 
 ### GitLab Configuration (optional)
 
