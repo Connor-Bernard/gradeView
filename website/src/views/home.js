@@ -6,12 +6,7 @@ import Loader from '../components/Loader';
 import GradeAccordion from '../components/GradeAccordion';
 
 function Home() {
-    const accordionMeta = [
-        {tab: 'Homework', filter: 'Homework'},
-        {tab: 'Labs', filter: 'Lab'},
-        {tab: 'Projects', filter: 'Project'},
-        {tab: 'Exams', filter: 'Exam'}
-    ];
+    const [accordionTabs, setAccordionTabs] = useState([]);
 
     const [isLoading, setLoading] = useState(true);
 
@@ -27,6 +22,13 @@ function Home() {
         api.get('/grades').then((res) => {
             if(mounted){
                 updateGradeData(res.data);
+                let assignmentCategories = [];
+                for(let assignment in res.data){
+                    if(!assignmentCategories.includes(res.data[assignment].type)){
+                        assignmentCategories.push(res.data[assignment].type);
+                    }
+                }
+                setAccordionTabs(assignmentCategories);
                 setLoading(false);
             }
             return () => mounted = false;
@@ -107,11 +109,11 @@ function Home() {
                         </Box>
                     }
                     {
-                        accordionMeta.map((item) => (
+                        accordionTabs.map((assignmentType) => (
                             <GradeAccordion
-                                key={item.tab}
-                                category={item.tab}
-                                assignments={filterData(gradeData, item.filter)}
+                                key={assignmentType}
+                                category={assignmentType}
+                                assignments={filterData(gradeData, assignmentType)}
                             />
                         ))
                     }
