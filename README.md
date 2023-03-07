@@ -37,11 +37,7 @@ This application was created using Node, Express, and React by Connor Bernard at
 5. Fill out the googleconfig section in accordance with [Google API configuration instructions](#google-api-configuration) below
 6. Add all necessary admin emails to the admin whitelist
 
-### SERVER CONFIG NOTES
-
-* __If your server address is different from your live website domain, you will have to update the `REACT_APP_PROXY_SERVER` environment variable found in /website/.env to reflect the correct proxy URL.__
-
-* __If you are running this using the default Dockerfiles and docker_compose file, you will also need to update the ports in the respective files for containerized deployment__
+__NOTE: If your API server's origin is different from your live website's origin, you will have to set the `REACT_APP_PROXY_SERVER` environment variable equal to the respective URL in /website/.env.__
 
 ### Google API Configuration
 
@@ -60,7 +56,8 @@ This application was created using Node, Express, and React by Connor Bernard at
 13. Share the google sheet with the displayed email
 14. Navigate to the keys section of the service account
 15. Click "Add Key" and create a JSON key
-16. Add this key to the credentials folder and update the link to the file in the config file
+16. Create a .env file in /api/ if one doesn't already exist
+17. Set the environment variable `SERVICE_ACCOUNT_CREDENTIALS` equal to the contents of this downloaded keyfile __SURROUNDED IN SINGLE QUOTES__
 
 ### CI/CD Configuration (optional)
 
@@ -69,6 +66,16 @@ This application was created using Node, Express, and React by Connor Bernard at
 3. In the [Cloud Build Settings](https://console.cloud.google.com/cloud-build/settings/service-account?project) enable "Cloud Run Admin" and "Service Account User"
 4. Go to [the credentials page](https://console.cloud.google.com/apis/credentials) and create a new service account using the "Create Credentials" button at the top of the screen
 5. Fill out the basic information and give the service account access to the "Cloud Build Service Agent" role and the "Cloud Build Editor" role
+6. Deploy the first build as explained [here](#manual-deployment) (this will succeed but will not properly load elements without correctly configuring the environment variables)
+7. Enable the [Google Secret Manager API](https://console.cloud.google.com/security/secret-manager)
+8. Create a new secret with the name "API_SERVICE_ACCOUNT" with the secret value of the API service account credentials downloaded in the keyfile during the [Google API Configuration step](#google-api-configuration) __SOURROUNDED IN SINGLE QUOTES__
+9. Click on the API deployment in [Google Cloud Run](https://console.cloud.google.com/run) and then on the "EDIT & DEPLOY NEW REVISION" tab
+10. Under Secrets, create a new secret and select the secret created above
+11. Change the reference method from "Mounted as volume" to "Exposed as environment variable" and click Done
+12. Deploy the change
+13. Clop the URL from the deployment pannel of the API service
+14. Click on the Web deployment in [Google Cloud Run](https://console.cloud.google.com/run) and then on the "EDIT & DEPLOY NEW REVISION" tab
+15. Under "Environment variables" create a new variable with the name "REACT_APP_PROXY_SERVER" and value equal to the deployment URL found in step 12 and deploy this version
 
 ### GitLab Configuration (optional)
 
@@ -97,16 +104,27 @@ OR
 
 ### LOCALLY WITH NODE
 
-1. __[First use only]__ In the root directory run `make init`
+1. __[First use only]:__ In the root directory run `make init`
 2. In the root directory run `make npm` to start the service
 
 Note: Running these will start both an api server as well as a website
 
 ## CI/CD Deployment
 
+### Setup
+
 1. Create a GitLab project
 2. Configure Google Cloud project as explained [here](#cicd-configuration-optional)
 3. Configure GitLab project as explained [here](#gitlab-configuration-optional)
-4. Push to the new remote from the production branch with the option `ci-variable="PRODUCTION=true"` or run `make deploy` in the root directory to deploy
+
+### Manual Deployment
+
+1. Push to the new remote from the production branch with the option `ci-variable="PRODUCTION=true"`
+eg: `git push production -o ci.variable="PRODUCTION=true"`
+
+### Deployment with Make
+
+1. Set the environment variable `PRODUCTION_REMOTE_NAME` equal to the name of the production remote (you can do this locally or in /.env)
+2. Run `make deploy`
 
 ### Note: The provided pipeline configuration relies on GitLab runners, so if a custom runner is preferred, it will have to be configured separately
