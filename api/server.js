@@ -106,11 +106,11 @@ async function getUserGrades(apiAuthClient, email){
     const userRow = await getUserRow(apiAuthClient, email);
     const sheets = google.sheets({version: 'v4', auth: apiAuthClient});
 
-    const taskMeta = await sheets.spreadsheets.values.get({
+    const assignmentMetaRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}1:${ASSIGNMENTTYPEROW}`
     });
-    let assignmentMeta = taskMeta.data.values;
+    let assignmentMeta = assignmentMetaRes.data.values;
 
     const gradesRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
