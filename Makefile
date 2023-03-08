@@ -18,7 +18,7 @@ docker:
 	docker-compose build
 	docker-compose up || true
 
-deployFromProduction:
+deployFromCurrentBranch:
 	clear
 	if [ "$(CONFIRM)" != "y" ]; then echo "Aborting."; exit 1; fi
 	git stash
@@ -37,7 +37,8 @@ deployFromMain:
 	cd website && npm run build
 	git add website/production/build -f
 	if ! (git commit --allow-empty -m "Sending to production" --quiet); then git reset; git checkout main; git stash pop --quiet || true; exit 2; fi
-	if ! (git push $(PRODUCTION_REMOTE_NAME) -o ci.variable="PRODUCTION=true"); then git reset --hard $(shell git rev-parse --abbrev-ref HEAD)~1; git checkout main; git stash pop --quiet || true; exit 3; fi
+	if ! (git push $(PRODUCTION_REMOTE_NAME) -o ci.variable="PRODUCTION=true"); then git reset --hard main~1; git checkout main; git stash pop --quiet || true; exit 3; fi
 	git checkout main;
+	git reset main~1;
 	git stash pop --quiet || true
 	echo "Website successfully built and pushed to production."

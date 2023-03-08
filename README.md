@@ -127,7 +127,7 @@ eg: `git push production -o ci.variable="PRODUCTION=true"`
 1. Set the environment variable `PRODUCTION_REMOTE_NAME` equal to the name of the production remote (you can do this locally or in /.env)
 2. Run the applicable command below:
 
-    - Deploying from production branch: `make deployFromProduction`
+    - Deploying from current branch: `make deployFromCurrentBranch`
     - Deploying from main branch: `make deployFromMain` (__WARNING:__ This command resets the production branch to the main branch; use with care)
 
 ### Note: The provided pipeline configuration relies on GitLab runners, so if a custom runner is preferred, it will have to be configured separately
