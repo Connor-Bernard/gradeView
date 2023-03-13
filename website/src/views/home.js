@@ -61,7 +61,7 @@ function Home() {
 
     /**
      * Updates the grades shown to that of the selected student.
-     * @param {Event} e 
+     * @param {Event} e
      */
     function loadStudentData(e){
         setLoading(true);

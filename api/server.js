@@ -30,6 +30,7 @@ const ENDBIN = config.get('spreadsheet.pages.binpage.endcell'); // The cell that
  * @param {OAuth2Client} oauthClient 
  * @param {String} token 
  * @returns {Promise<String>} user's email
+ * @throws {AuthenticationError} if token is invalid
  */
 async function getEmailFromIdToken(oauthClient, token){
     try {
@@ -51,7 +52,8 @@ async function getEmailFromIdToken(oauthClient, token){
  * Gets the current user's profile picture.
  * @param {OAuth2Client} oauthClient 
  * @param {String} token 
- * @returns url of current user profile picture
+ * @returns {String} url of current user profile picture
+ * @throws {AuthenticationError} if token is invalid
  */
 async function getProfilePictureFromIdToken(oauthClient, token){
     try {
@@ -102,6 +104,7 @@ async function getUserRow(apiAuthClient, email){
  * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
  * @param {String} email 
  * @returns {Promise<Object>} dictionary of user's grades
+ * @throws {AuthenticationError} if user is not found
  */
 async function getUserGrades(apiAuthClient, email){
     const userRow = await getUserRow(apiAuthClient, email);
