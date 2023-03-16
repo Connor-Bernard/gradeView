@@ -77,15 +77,15 @@ async function getProfilePictureFromIdToken(oauthClient, token){
  * @param {String} email 
  * @returns {Promise<Boolean>} the user's row, null if invalid
  */
-async function getUserRow(apiAuthClient, email){
+async function getUserRow(sheetsClient, email){
     if(email === MAXGRADEROW){
         return MAXGRADEROW;
     }
     if(ADMINS.includes(email)){
         return STARTGRADEROW;
     }
-    const sheets = google.sheets({version: 'v4', auth: apiAuthClient});
-    const res = await sheets.spreadsheets.values.get({
+    //const sheetsClient = google.sheets({version: 'v4', auth: apiAuthClient});
+    const res = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!B${STARTGRADEROW}:B`
     });
@@ -106,17 +106,17 @@ async function getUserRow(apiAuthClient, email){
  * @returns {Promise<Object>} dictionary of user's grades
  * @throws {AuthenticationError} if user is not found
  */
-async function getUserGrades(apiAuthClient, email){
-    const userRow = await getUserRow(apiAuthClient, email);
-    const sheets = google.sheets({version: 'v4', auth: apiAuthClient});
+async function getUserGrades(sheetsClient, email){
+    const userRow = await getUserRow(sheetsClient, email);
+    //const sheets = google.sheets({version: 'v4', auth: apiAuthClient});
 
-    const assignmentMetaRes = await sheets.spreadsheets.values.get({
+    const assignmentMetaRes = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}1:${ASSIGNMENTTYPEROW}`
     });
     let assignmentMeta = assignmentMetaRes.data.values;
 
-    const gradesRes = await sheets.spreadsheets.values.get({
+    const gradesRes = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}${userRow}:${userRow}`
     });
@@ -150,8 +150,8 @@ async function getUserGrades(apiAuthClient, email){
  * @param {String} token 
  * @returns {Promise<Object>} of user's grades
  */
-async function getUserGradesFromToken(apiAuthClient, oauthClient, token){
-    return await getUserGrades(apiAuthClient, await getEmailFromIdToken(oauthClient, token));
+async function getUserGradesFromToken(sheetsClient, oauthClient, token){
+    return await getUserGrades(sheetsClient, await getEmailFromIdToken(oauthClient, token));
 }
 
 /**
@@ -160,9 +160,9 @@ async function getUserGradesFromToken(apiAuthClient, oauthClient, token){
  * @param {String} email 
  * @returns {Promise<Object>} dictionary of user's grades
  */
-async function getUserGradesAsFraction(apiAuthClient, email){
-    const userGrades = await getUserGrades(apiAuthClient, email);
-    const gradeMeta = await getUserGrades(apiAuthClient, MAXGRADEROW);
+async function getUserGradesAsFraction(sheetsClient, email){
+    const userGrades = await getUserGrades(sheetsClient, email);
+    const gradeMeta = await getUserGrades(sheetsClient, MAXGRADEROW);
     gradeMeta.map((assignment) => {
         if (!assignment.grade){
             return assignment.assignment = null;
@@ -179,8 +179,8 @@ async function getUserGradesAsFraction(apiAuthClient, email){
  * @param {String} token 
  * @returns {Promise<Object>} dictionary of user's grades
  */
-async function getUserGradesFromTokenAsFraction(apiAuthClient, oauthClient, token){
-    return await getUserGradesAsFraction(apiAuthClient, await getEmailFromIdToken(oauthClient, token));
+async function getUserGradesFromTokenAsFraction(sheetsClient, oauthClient, token){
+    return await getUserGradesAsFraction(sheetsClient, await getEmailFromIdToken(oauthClient, token));
 }
 
 /**
@@ -189,8 +189,8 @@ async function getUserGradesFromTokenAsFraction(apiAuthClient, oauthClient, toke
  * @param {String} email 
  * @returns {Promise<boolean>} user's total points
  */
-async function getUserPoints(apiAuthClient, email){
-    const userPointData = await getUserGrades(apiAuthClient, email);
+async function getUserPoints(sheetsClient, email){
+    const userPointData = await getUserGrades(sheetsClient, email);
     let points = 0;
     userPointData.forEach((assignment) => {
         const grade = assignment.grade;
@@ -210,12 +210,12 @@ async function getUserPoints(apiAuthClient, email){
  * @param {String} email 
  * @returns {Promise<Object>} projections for users grades
  */
-async function getProjectedGrades(apiAuthClient, email){
+async function getProjectedGrades(sheetsClient, email){
     let projections = { 'zeros': null, 'pace': null, 'perfect': null };
-    const bins = await getBins(apiAuthClient);
+    const bins = await getBins(sheetsClient);
     const maxPoints = +bins[bins.length - 1][0];
-    const maxPointsSoFar = +await getUserPoints(apiAuthClient, MAXGRADEROW);
-    const userPointsSoFar = +await getUserPoints(apiAuthClient, email);
+    const maxPointsSoFar = +await getUserPoints(sheetsClient, MAXGRADEROW);
+    const userPointsSoFar = +await getUserPoints(sheetsClient, email);
     projections.zeros = Math.round(userPointsSoFar);
     projections.pace = Math.round((userPointsSoFar / maxPointsSoFar) * maxPoints);
     projections.perfect = Math.round(userPointsSoFar + (maxPoints - maxPointsSoFar));
@@ -229,8 +229,8 @@ async function getProjectedGrades(apiAuthClient, email){
  * @param {String} token 
  * @returns {Promise<Object>} projections for users grades
  */
-async function getProjectedGradesFromToken(apiAuthClient, oauthClient, token){
-    return await getProjectedGrades(apiAuthClient, await getEmailFromIdToken(oauthClient, token));
+async function getProjectedGradesFromToken(sheetsClient, oauthClient, token){
+    return await getProjectedGrades(sheetsClient, await getEmailFromIdToken(oauthClient, token));
 }
 
 /**
@@ -279,9 +279,9 @@ async function confirmAdminAccount(oauthClient, token){
  * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
  * @returns list of lists with the first value of legal name and second of email
  */
-async function getStudents(apiAuthClient) {
-    const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
-    const res = await sheets.spreadsheets.values.get({
+async function getStudents(sheetsClient) {
+    //const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
+    const res = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!A${STARTGRADEROW}:B`
     });
@@ -293,9 +293,9 @@ async function getStudents(apiAuthClient) {
  * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
  * @returns list of lists with the first value being the low end bucket val and the second being the grade
  */
-async function getBins(apiAuthClient){
-    const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
-    const res = await sheets.spreadsheets.values.get({
+async function getBins(sheetsClient){
+    //const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
+    const res = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${BINSPAGE}!${STARTBIN}:${ENDBIN}`
     });
@@ -311,6 +311,7 @@ async function main(){
         credentials: JSON.parse(process.env.SERVICE_ACCOUNT_CREDENTIALS),
         scopes: SCOPES
     }).getClient();
+    const sheetsClient = google.sheets({version:'v4', auth: apiAuthClient});
     const oauthClient = new OAuth2Client(OAUTHCLIENTID);
 
     /**
@@ -344,7 +345,7 @@ async function main(){
         auth = auth.split(' ');
         // Make sure the user's email is in the google sheet
         try{
-            await getUserRow(apiAuthClient, await getEmailFromIdToken(oauthClient, auth[1]));
+            await getUserRow(sheetsClient, await getEmailFromIdToken(oauthClient, auth[1]));
         } catch (e){
             if(e instanceof AuthenticationError){
                 return res.status(401).json({ error: 'User not authorized.' });
@@ -386,7 +387,7 @@ async function main(){
     app.use('/api/admin', adminVerificationMiddleWare);
 
     app.get('/api/bins', async (req, res) => {
-        return res.status(200).json(await getBins(apiAuthClient));
+        return res.status(200).json(await getBins(sheetsClient));
     });
 
     // Use the auth checking of middleware to verify proper auth
@@ -397,7 +398,7 @@ async function main(){
         }
         auth = auth.split(' ');
         try {
-            await getUserRow(apiAuthClient, await getEmailFromIdToken(oauthClient, auth[1]));
+            await getUserRow(sheetsClient, await getEmailFromIdToken(oauthClient, auth[1]));
             return res.status(200).send(true);
         } catch (e) {
             console.log(e);
@@ -407,7 +408,7 @@ async function main(){
 
     // Responds with json dictionary caller's grade data
     app.get('/api/grades', async (req, res) => {
-        return res.status(200).json(await getUserGradesFromTokenAsFraction(apiAuthClient,
+        return res.status(200).json(await getUserGradesFromTokenAsFraction(sheetsClient,
             oauthClient, req.headers.authorization.split(' ')[1]));
     });
 
@@ -419,7 +420,7 @@ async function main(){
 
     app.get('/api/projections', async (req, res) => {
         try{
-            return res.status(200).json(await getProjectedGradesFromToken(apiAuthClient,
+            return res.status(200).json(await getProjectedGradesFromToken(sheetsClient,
                 oauthClient, req.headers.authorization.split(' ')[1]));
         } catch (e) {
             if(e instanceof BadSheetDataError){
@@ -437,12 +438,12 @@ async function main(){
 
     // Responds with the current students in the spreadsheet
     app.get('/api/admin/students', async (req, res) => {
-        return res.status(200).json(await getStudents(apiAuthClient));
+        return res.status(200).json(await getStudents(sheetsClient));
     });
 
     // Responds with the grades for the specified student
     app.post('/api/admin/getStudent', async (req, res) => {
-        res.status(200).json(await getUserGradesAsFraction(apiAuthClient, req.body.email));
+        res.status(200).json(await getUserGradesAsFraction(sheetsClient, req.body.email));
     });
 
     app.listen(PORT, () => {
