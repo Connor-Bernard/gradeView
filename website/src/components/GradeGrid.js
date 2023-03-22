@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { experimentalStyled as styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import GradeTable from './GradeTable';
-
 
 
 export default function GradeGrid({ category, assignments }) {
@@ -22,7 +19,6 @@ export default function GradeGrid({ category, assignments }) {
         setCumGrade(Math.round(cg * 100) / 100);
         setCumMaxGrade(Math.round(cmg * 100) / 100);
     }, [assignments]);
-
 
     const headerRight = `${cumGrade} / ${cumMaxGrade}`;
 

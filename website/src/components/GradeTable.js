@@ -1,4 +1,5 @@
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Paper } from '@mui/material';
+import Toolbar from '@mui/material/Toolbar';
 
 
 export default function GradeTable({ assignments, headerLeft, headerRight}) {
@@ -16,13 +17,21 @@ export default function GradeTable({ assignments, headerLeft, headerRight}) {
         return 'normal';
     }
 
+
     return (
         <TableContainer sx={{maxWidth: 'md', margin:'auto' }} component={Paper}>
             <Table aria-label='Grade Table'>
                 <TableHead>
                     <TableRow>
-                        <TableCell>{headerLeft}</TableCell>
-                        <TableCell align='right'>{headerRight}</TableCell>
+                        <Toolbar > 
+                            <Typography variant="h6" component="div" sx={{ flexGrow: 1  }}>
+                                    {headerLeft}
+                            </Typography>
+
+                            <Typography variant="h6" component="div"  sx={{ flexGrow: 1  }}>
+                                    {headerRight}
+                            </Typography>
+                        </Toolbar>
                     </TableRow>
                 </TableHead>
                 <TableBody>
