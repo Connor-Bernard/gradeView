@@ -1,7 +1,7 @@
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
 
 
-export default function GradeTable({ assignments }) {
+export default function GradeTable({ assignments, headerLeft, headerRight}) {
 
     /**
      * Gets the formatting for the font-weight.
@@ -21,8 +21,8 @@ export default function GradeTable({ assignments }) {
             <Table aria-label='Grade Table'>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Assignment</TableCell>
-                        <TableCell align='right'>Grade</TableCell>
+                        <TableCell>{headerLeft}</TableCell>
+                        <TableCell align='right'>{headerRight}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

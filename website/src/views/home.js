@@ -113,7 +113,8 @@ function Home() {
                         </Box>
                     }
                     {!mobileView && 
-                        <Box sx={{ flexGrow: 1 }}>
+                    // TODO: fix the awkward margin space
+                        <Box sx={{display:'flex', flexDirection:'column', alignItems:'center'} }>
                             <Grid container spacing={{ xs: 3, md: 5 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                                 {accordionTabs.map((assignmentType) => (
                                     <GradeGrid
