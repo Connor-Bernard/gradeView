@@ -113,8 +113,8 @@ function Home() {
                         </Box>
                     }
                     {!mobileView && 
-                        
-                            <Grid container spacing={3}>
+                        <Box sx={{ flexGrow: 1 }}>
+                            <Grid container spacing={{ xs: 3, md: 5 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                                 {accordionTabs.map((assignmentType) => (
                                     <GradeGrid
                                         key={assignmentType}
@@ -123,6 +123,7 @@ function Home() {
                                     />
                                 ))}
                             </Grid>
+                        </Box>    
                         
                     }    
 
