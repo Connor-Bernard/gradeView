@@ -1,9 +1,12 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, Typography, useMediaQuery } from '@mui/material';
 import api from '../utils/api';
 import Loader from '../components/Loader';
 import GradeAccordion from '../components/GradeAccordion';
+import GradeGrid from '../components/GradeGrid';
+import Grid from '@mui/material/Unstable_Grid2';
+import Toolbar from '@mui/material/Toolbar';
 
 function Home() {
     const [accordionTabs, setAccordionTabs] = useState([]);
@@ -15,6 +18,8 @@ function Home() {
 
     // User admin status
     const [isAdmin, setAdminStatus] = useState(false);
+    
+    const mobileView = useMediaQuery('(max-width:600px)');
 
     useEffect(() => {
         let mounted = true;
@@ -108,14 +113,29 @@ function Home() {
                             </FormControl>
                         </Box>
                     }
-                    {
-                        accordionTabs.map((assignmentType) => (
-                            <GradeAccordion
-                                key={assignmentType}
-                                category={assignmentType}
-                                assignments={filterData(gradeData, assignmentType)}
-                            />
-                        ))
+                    {/* // TODO: fix the awkward margin space */}
+                    {mobileView ?       
+                        <>
+                            {accordionTabs.map((assignmentType) => (
+                                <GradeAccordion
+                                    key={assignmentType}
+                                    category={assignmentType}
+                                    assignments={filterData(gradeData, assignmentType)}
+                                />
+                            ))}
+                        </>
+                       : 
+                        <Box sx={{display:'flex', flexDirection:'column', alignItems:'center'} }>                            
+                            <Grid container spacing={{ xs: 3, md: 5 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                                {accordionTabs.map((assignmentType) => (
+                                    <GradeGrid
+                                        key={assignmentType}
+                                        category={assignmentType}
+                                        assignments={filterData(gradeData, assignmentType)}
+                                    />
+                                ))}
+                            </Grid>
+                        </Box>     
                     }
                     </Box>
                 )   
