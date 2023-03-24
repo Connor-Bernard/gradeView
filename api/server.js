@@ -27,8 +27,8 @@ const ENDBIN = config.get('spreadsheet.pages.binpage.endcell'); // The cell that
 
 /**
  * Verifies token and gets the associated email.
- * @param {OAuth2Client} oauthClient 
- * @param {String} token 
+ * @param {OAuth2Client} oauthClient
+ * @param {String} token
  * @returns {Promise<String>} user's email
  * @throws {AuthenticationError} if token is invalid
  */
@@ -50,8 +50,8 @@ async function getEmailFromIdToken(oauthClient, token){
 
 /**
  * Gets the current user's profile picture.
- * @param {OAuth2Client} oauthClient 
- * @param {String} token 
+ * @param {OAuth2Client} oauthClient
+ * @param {String} token
  * @returns {String} url of current user profile picture
  * @throws {AuthenticationError} if token is invalid
  */
@@ -73,8 +73,8 @@ async function getProfilePictureFromIdToken(oauthClient, token){
 
 /**
  * Gets the row of the spreadsheet corresponding to the provided email.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
- * @param {String} email 
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {String} email
  * @returns {Promise<Boolean>} the user's row, null if invalid
  */
 async function getUserRow(sheetsClient, email){
@@ -84,7 +84,7 @@ async function getUserRow(sheetsClient, email){
     if(ADMINS.includes(email)){
         return STARTGRADEROW;
     }
-    
+
     const res = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!B${STARTGRADEROW}:B`
@@ -101,14 +101,14 @@ async function getUserRow(sheetsClient, email){
 
 /**
  * Gets the user's grades associated with the provided email.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
- * @param {String} email 
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {String} email
  * @returns {Promise<Object>} dictionary of user's grades
  * @throws {AuthenticationError} if user is not found
  */
 async function getUserGrades(sheetsClient, email){
     const userRow = await getUserRow(sheetsClient, email);
-    
+
 
     const assignmentMetaRes = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
@@ -145,9 +145,9 @@ async function getUserGrades(sheetsClient, email){
 
 /**
  * Get the user's grades using the user's token.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
- * @param {OAuth2Client} oauthClient 
- * @param {String} token 
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {OAuth2Client} oauthClient
+ * @param {String} token
  * @returns {Promise<Object>} of user's grades
  */
 async function getUserGradesFromToken(sheetsClient, oauthClient, token){
@@ -156,8 +156,8 @@ async function getUserGradesFromToken(sheetsClient, oauthClient, token){
 
 /**
  * Gets the user's grades with fractional component associated with the provided email.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
- * @param {String} email 
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {String} email
  * @returns {Promise<Object>} dictionary of user's grades
  */
 async function getUserGradesAsFraction(sheetsClient, email){
@@ -174,9 +174,9 @@ async function getUserGradesAsFraction(sheetsClient, email){
 
 /**
  * Gets the user's grades with fractional component from the user's token.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
- * @param {String} oauthClient 
- * @param {String} token 
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {String} oauthClient
+ * @param {String} token
  * @returns {Promise<Object>} dictionary of user's grades
  */
 async function getUserGradesFromTokenAsFraction(sheetsClient, oauthClient, token){
@@ -185,8 +185,8 @@ async function getUserGradesFromTokenAsFraction(sheetsClient, oauthClient, token
 
 /**
  * Get the total amount of points the user had achieved so far.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
- * @param {String} email 
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {String} email
  * @returns {Promise<boolean>} user's total points
  */
 async function getUserPoints(sheetsClient, email){
@@ -206,8 +206,8 @@ async function getUserPoints(sheetsClient, email){
 
 /**
  * Use present data to project how the user will preform going forward using email.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
- * @param {String} email 
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {String} email
  * @returns {Promise<Object>} projections for users grades
  */
 async function getProjectedGrades(sheetsClient, email){
@@ -224,9 +224,9 @@ async function getProjectedGrades(sheetsClient, email){
 
 /**
  * Use present data to project how the user will preform going forward using token.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
- * @param {OAuth2Client} oauthClient 
- * @param {String} token 
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {OAuth2Client} oauthClient
+ * @param {String} token
  * @returns {Promise<Object>} projections for users grades
  */
 async function getProjectedGradesFromToken(sheetsClient, oauthClient, token){
@@ -235,8 +235,8 @@ async function getProjectedGradesFromToken(sheetsClient, oauthClient, token){
 
 /**
  * Checks to see if the current user is an admin.
- * @param {OAuth2Client} oauthClient 
- * @param {token} token 
+ * @param {OAuth2Client} oauthClient
+ * @param {token} token
  * @returns whether or not the current user is an admin
  */
 async function hasAdminStatus(oauthClient, token){
@@ -250,8 +250,8 @@ async function hasAdminStatus(oauthClient, token){
 
 /**
  * Admin access checking function for middleware.
- * @param {OAuth2Client} oauthClient 
- * @param {String} token 
+ * @param {OAuth2Client} oauthClient
+ * @param {String} token
  */
 async function confirmAdminAccount(oauthClient, token){
     try {
@@ -276,7 +276,7 @@ async function confirmAdminAccount(oauthClient, token){
 
 /**
  * Gets a list of all of the students in the class.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient
  * @returns list of lists with the first value of legal name and second of email
  */
 async function getStudents(sheetsClient) {
@@ -289,7 +289,7 @@ async function getStudents(sheetsClient) {
 
 /**
  * Gets the buckets for the current class.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient
  * @returns list of lists with the first value being the low end bucket val and the second being the grade
  */
 async function getBins(sheetsClient){
@@ -304,7 +304,7 @@ async function main(){
     const app = express();
     app.use(cors());
     app.use(json());
-       
+
     const apiAuthClient = await new google.auth.GoogleAuth({
         credentials: JSON.parse(process.env.SERVICE_ACCOUNT_CREDENTIALS),
         scopes: SCOPES
@@ -314,8 +314,8 @@ async function main(){
 
     /**
      * Use to exclude a route from being verified with middleware.
-     * @param {String} path 
-     * @param {Function} middleware 
+     * @param {String} path
+     * @param {Function} middleware
      * @returns Function
      */
     function unless(paths, middleware){
@@ -330,9 +330,9 @@ async function main(){
 
     /**
      * Middleware for verifying user acceses.
-     * @param {any} req 
-     * @param {any} res 
-     * @param {any} next 
+     * @param {any} req
+     * @param {any} res
+     * @param {any} next
      * @returns a response message for an error if there is one
      */
     async function verificationMiddleWare(req, res, next){
@@ -355,9 +355,9 @@ async function main(){
 
     /**
      * Middleware for verifying admin access.
-     * @param {any} req 
-     * @param {any} res 
-     * @param {any} next 
+     * @param {any} req
+     * @param {any} res
+     * @param {any} next
      * @returns a response message for an error if there is one
      */
     async function adminVerificationMiddleWare(req, res, next){
@@ -454,4 +454,3 @@ async function main(){
 if(esMain(import.meta)){
     main();
 }
-
