@@ -84,7 +84,7 @@ async function getUserRow(sheetsClient, email){
     if(ADMINS.includes(email)){
         return STARTGRADEROW;
     }
-    //const sheetsClient = google.sheets({version: 'v4', auth: apiAuthClient});
+    
     const res = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!B${STARTGRADEROW}:B`
@@ -108,7 +108,7 @@ async function getUserRow(sheetsClient, email){
  */
 async function getUserGrades(sheetsClient, email){
     const userRow = await getUserRow(sheetsClient, email);
-    //const sheets = google.sheets({version: 'v4', auth: apiAuthClient});
+    
 
     const assignmentMetaRes = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
@@ -280,7 +280,6 @@ async function confirmAdminAccount(oauthClient, token){
  * @returns list of lists with the first value of legal name and second of email
  */
 async function getStudents(sheetsClient) {
-    //const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
     const res = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!A${STARTGRADEROW}:B`
@@ -294,7 +293,6 @@ async function getStudents(sheetsClient) {
  * @returns list of lists with the first value being the low end bucket val and the second being the grade
  */
 async function getBins(sheetsClient){
-    //const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
     const res = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${BINSPAGE}!${STARTBIN}:${ENDBIN}`
@@ -456,3 +454,4 @@ async function main(){
 if(esMain(import.meta)){
     main();
 }
+
