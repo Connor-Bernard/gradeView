@@ -1,4 +1,4 @@
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Paper } from '@mui/material';
+import { Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Paper, AppBar  } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 
 
@@ -17,23 +17,20 @@ export default function GradeTable({ assignments, headerLeft, headerRight}) {
         return 'normal';
     }
 
-
     return (
-        <TableContainer sx={{maxWidth: 'md', margin:'auto' }} component={Paper}>
+        <TableContainer sx={{  backgroundColor: '#c2b9a7'}} component={Paper}>
+            {/* not prob with table */}
             <Table aria-label='Grade Table'>
-                <TableHead>
-                    <TableRow>
-                        <Toolbar > 
-                            <Typography variant="h6" component="div" sx={{ flexGrow: 1  }}>
-                                    {headerLeft}
-                            </Typography>
-
-                            <Typography variant="h6" component="div"  sx={{ flexGrow: 1  }}>
-                                    {headerRight}
-                            </Typography>
+            
+                {/* tbale head is what isnot taking full width  */}
+                <TableHead >
+                        {/* //! this is as wide as I can get it to be */}
+                        <Toolbar sx={{postion:'absolute', display:'flex', flexDirection:'row', justifyContent:'space-between', width: '100%', flex:'1 1 0'}}>
+                            <Typography variant="h6">{headerLeft}</Typography>
+                            <Typography variant="h6">{headerRight}</Typography>
                         </Toolbar>
-                    </TableRow>
-                </TableHead>
+                </TableHead>        
+
                 <TableBody>
                     {
                         assignments.map((assignment) => (
