@@ -17,13 +17,12 @@ export default function GradeTable({ assignments, headerLeft, headerRight}) {
         return 'normal';
     }
 
-    // TODO: CHANGE COLOR BACK TO NORMAL
     return (
-        <TableContainer sx={{backgroundColor: '#c2b9a7'}} component={Paper}>
+        <TableContainer component={Paper}>
             <Table aria-label='Grade Table'>
                 <TableHead >
-                            <TableCell align='left' sx={{fontSize:20, padding:3, borderBottom: 'none' , color: '#303f3c'}} >{headerLeft}</TableCell>
-                            <TableCell align='right'sx={{fontSize:20, padding:3, borderBottom: 'none', color: '#303f3c'}}>{headerRight}</TableCell>
+                            <TableCell align='left' sx={{fontSize:20, padding:3, borderBottom: 'none'}}>{headerLeft}</TableCell>
+                            <TableCell align='right'sx={{fontSize:20, padding:3, borderBottom: 'none'}}>{headerRight}</TableCell>
                 </TableHead>        
 
                 <TableBody>
@@ -32,8 +31,8 @@ export default function GradeTable({ assignments, headerLeft, headerRight}) {
                             <TableRow
                                 key={assignment.id + assignment.assignment}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                <TableCell component='th' scope='assignment' sx={{color: '#303f3c'}}>{assignment.assignment}</TableCell>
-                                <TableCell align='right' sx={{ color: '#303f3c', fontWeight: isBold(assignment.grade?.studentGrade, assignment.grade?.maxGrade)}}>
+                                <TableCell component='th' scope='assignment' >{assignment.assignment}</TableCell>
+                                <TableCell align='right' sx={{fontWeight: isBold(assignment.grade?.studentGrade, assignment.grade?.maxGrade)}}>
                                     {`${assignment.grade?.studentGrade || 'N/A'} / ${assignment.grade?.maxGrade || 'N/A'}`}
                                 </TableCell>
                             </TableRow>

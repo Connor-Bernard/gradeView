@@ -25,7 +25,7 @@ export default function GradeGrid({ category, assignments }) {
     
   return ( 
       <Grid xs={2} sm={4} md={4}>
-          <GradeTable assignments={assignments} headerLeft={category} headerRight= {headerRight} />
+          <GradeTable assignments={assignments} headerLeft={category} headerRight={headerRight} />
       </Grid>
   );
 }

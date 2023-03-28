@@ -8,7 +8,6 @@
     flex-flow: column;
     align-items: stretch;
     height: 100vh;
-    background-color: #c2b9a7;
 }
 
 .nav{
@@ -17,6 +16,4 @@
 
 .content{
     flex: 1 1 auto;
-    background-color: #c2b9a7;
-    
 }
