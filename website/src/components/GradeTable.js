@@ -1,5 +1,5 @@
 import { Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Paper, AppBar  } from '@mui/material';
-import Toolbar from '@mui/material/Toolbar';
+
 
 
 export default function GradeTable({ assignments, headerLeft, headerRight}) {
@@ -17,18 +17,13 @@ export default function GradeTable({ assignments, headerLeft, headerRight}) {
         return 'normal';
     }
 
+    // TODO: CHANGE COLOR BACK TO NORMAL
     return (
-        <TableContainer sx={{  backgroundColor: '#c2b9a7'}} component={Paper}>
-            {/* not prob with table */}
+        <TableContainer sx={{backgroundColor: '#c2b9a7'}} component={Paper}>
             <Table aria-label='Grade Table'>
-            
-                {/* tbale head is what isnot taking full width  */}
                 <TableHead >
-                        {/* //! this is as wide as I can get it to be */}
-                        <Toolbar sx={{postion:'absolute', display:'flex', flexDirection:'row', justifyContent:'space-between', width: '100%', flex:'1 1 0'}}>
-                            <Typography variant="h6">{headerLeft}</Typography>
-                            <Typography variant="h6">{headerRight}</Typography>
-                        </Toolbar>
+                            <TableCell align='left' sx={{fontSize:20, padding:3, borderBottom: 'none' , color: '#303f3c'}} >{headerLeft}</TableCell>
+                            <TableCell align='right'sx={{fontSize:20, padding:3, borderBottom: 'none', color: '#303f3c'}}>{headerRight}</TableCell>
                 </TableHead>        
 
                 <TableBody>
@@ -37,8 +32,8 @@ export default function GradeTable({ assignments, headerLeft, headerRight}) {
                             <TableRow
                                 key={assignment.id + assignment.assignment}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                <TableCell component='th' scope='assignment'>{assignment.assignment}</TableCell>
-                                <TableCell align='right' sx={{fontWeight: isBold(assignment.grade?.studentGrade, assignment.grade?.maxGrade)}}>
+                                <TableCell component='th' scope='assignment' sx={{color: '#303f3c'}}>{assignment.assignment}</TableCell>
+                                <TableCell align='right' sx={{ color: '#303f3c', fontWeight: isBold(assignment.grade?.studentGrade, assignment.grade?.maxGrade)}}>
                                     {`${assignment.grade?.studentGrade || 'N/A'} / ${assignment.grade?.maxGrade || 'N/A'}`}
                                 </TableCell>
                             </TableRow>
