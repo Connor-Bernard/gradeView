@@ -1,6 +1,7 @@
 :root{
   --accent: #7253ed;
   --tertiary: #e3a83b;
+
 }
 
 .app{
@@ -8,6 +9,7 @@
     flex-flow: column;
     align-items: stretch;
     height: 100vh;
+
 }
 
 .nav{
@@ -16,4 +18,8 @@
 
 .content{
     flex: 1 1 auto;
+}
+
+.sx {
+  max-width: 20%;
 }

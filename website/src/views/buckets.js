@@ -68,10 +68,12 @@ export default function Buckets(){
         { loadCount > 0 ? ( <Loader /> ) : (
                 <>
                 <Typography variant='h5' component='div' sx={{m:2, fontWeight:500}}>Grading Breakdown</Typography>
-                <Box sx={ minMedia ? 
-                        {mt:4, display:'flex', flexBasis:'min-content', justifyContent:'center', gap:'10%'} : 
-                        {display:'flex', flexDirection:'column', alignItems:'center', gap:4} 
+                <Box sx={ minMedia ?
+                        {mt:4, display:'flex', flexBasis:'min-content', justifyContent:'center', gap:'10%'} :
+                        {display:'flex', flexDirection:'column', alignItems:'center', gap:4}
+
                     }
+
                 >
                     <BinTable title='Assignment Breakdown' col1='Assignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
                     <BinTable title='Buckets' col1='Letter Grade' col2='Range' rows={binRows} keys={['grade', 'range']} />
