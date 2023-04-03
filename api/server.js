@@ -73,7 +73,7 @@ async function getProfilePictureFromIdToken(oauthClient, token){
 
 /**
  * Gets the row of the spreadsheet corresponding to the provided email.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {sheets_v4.Sheets} sheetsClient
  * @param {String} email
  * @returns {Promise<Boolean>} the user's row, null if invalid
  */
@@ -101,7 +101,7 @@ async function getUserRow(sheetsClient, email){
 
 /**
  * Gets the user's grades associated with the provided email.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {sheets_v4.Sheets} sheetsClient
  * @param {String} email
  * @returns {Promise<Object>} dictionary of user's grades
  * @throws {AuthenticationError} if user is not found
@@ -145,7 +145,7 @@ async function getUserGrades(sheetsClient, email){
 
 /**
  * Get the user's grades using the user's token.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {sheets_v4.Sheets} sheetsClient
  * @param {OAuth2Client} oauthClient
  * @param {String} token
  * @returns {Promise<Object>} of user's grades
@@ -156,7 +156,7 @@ async function getUserGradesFromToken(sheetsClient, oauthClient, token){
 
 /**
  * Gets the user's grades with fractional component associated with the provided email.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {sheets_v4.Sheets} sheetsClient
  * @param {String} email
  * @returns {Promise<Object>} dictionary of user's grades
  */
@@ -174,7 +174,7 @@ async function getUserGradesAsFraction(sheetsClient, email){
 
 /**
  * Gets the user's grades with fractional component from the user's token.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {sheets_v4.Sheets} sheetsClient
  * @param {String} oauthClient
  * @param {String} token
  * @returns {Promise<Object>} dictionary of user's grades
@@ -185,7 +185,7 @@ async function getUserGradesFromTokenAsFraction(sheetsClient, oauthClient, token
 
 /**
  * Get the total amount of points the user had achieved so far.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {sheets_v4.Sheets} sheetsClient
  * @param {String} email
  * @returns {Promise<boolean>} user's total points
  */
@@ -206,7 +206,7 @@ async function getUserPoints(sheetsClient, email){
 
 /**
  * Use present data to project how the user will preform going forward using email.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {sheets_v4.Sheets} sheetsClient
  * @param {String} email
  * @returns {Promise<Object>} projections for users grades
  */
@@ -224,7 +224,7 @@ async function getProjectedGrades(sheetsClient, email){
 
 /**
  * Use present data to project how the user will preform going forward using token.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {sheets_v4.Sheets} sheetsClient
  * @param {OAuth2Client} oauthClient
  * @param {String} token
  * @returns {Promise<Object>} projections for users grades
@@ -276,7 +276,7 @@ async function confirmAdminAccount(oauthClient, token){
 
 /**
  * Gets a list of all of the students in the class.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {sheets_v4.Sheets} sheetsClient
  * @returns list of lists with the first value of legal name and second of email
  */
 async function getStudents(sheetsClient) {
@@ -289,7 +289,7 @@ async function getStudents(sheetsClient) {
 
 /**
  * Gets the buckets for the current class.
- * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {sheets_v4.Sheets} sheetsClient
  * @returns list of lists with the first value being the low end bucket val and the second being the grade
  */
 async function getBins(sheetsClient){
