@@ -84,7 +84,6 @@ async function getUserRow(sheetsClient, email){
     if(ADMINS.includes(email)){
         return STARTGRADEROW;
     }
-
     const res = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!B${STARTGRADEROW}:B`
@@ -108,14 +107,11 @@ async function getUserRow(sheetsClient, email){
  */
 async function getUserGrades(sheetsClient, email){
     const userRow = await getUserRow(sheetsClient, email);
-
-
     const assignmentMetaRes = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}1:${ASSIGNMENTTYPEROW}`
     });
     let assignmentMeta = assignmentMetaRes.data.values;
-
     const gradesRes = await sheetsClient.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!${STARTGRADECOLNAME}${userRow}:${userRow}`
