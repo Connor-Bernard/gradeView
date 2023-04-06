@@ -1,12 +1,11 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Box, FormControl, InputLabel, MenuItem, Select, Typography, useMediaQuery } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, useMediaQuery } from '@mui/material';
 import api from '../utils/api';
 import Loader from '../components/Loader';
 import GradeAccordion from '../components/GradeAccordion';
 import GradeGrid from '../components/GradeGrid';
 import Grid from '@mui/material/Unstable_Grid2';
-import Toolbar from '@mui/material/Toolbar';
 
 function Home() {
     const [accordionTabs, setAccordionTabs] = useState([]);
@@ -113,7 +112,6 @@ function Home() {
                             </FormControl>
                         </Box>
                     }
-                    {/* // TODO: fix the awkward margin space */}
                     {mobileView ?       
                         <>
                             {accordionTabs.map((assignmentType) => (
