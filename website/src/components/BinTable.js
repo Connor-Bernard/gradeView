@@ -3,7 +3,7 @@ import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody
 export default function BinTable({ title, col1, col2, rows, keys }){
     return(
         <>
-            <Box sx={{maxWidth:'50%'}}>
+            <Box sx={{width:500,maxWidth:'100%'}}>
                 <Typography variant='h6' component='div' sx={{ m: 2, fontWeight: 500 }}>{title}</Typography>
                 <TableContainer component={Paper} sx={{ maxWidth: 500, height: 'fit-content' }}>
                     <Table>
