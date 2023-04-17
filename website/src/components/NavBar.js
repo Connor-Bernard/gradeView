@@ -84,26 +84,34 @@ export default function ButtonAppBar() {
                         </>
                     ) : (
                         <>
-                            <IconButton onClick={handleMenu} color="inherit">
-                                <MenuIcon/> 
-                                <Menu
-                                id='loggedInMenuMobile'
-                                anchorEl={anchorEl}
-                                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                                keepMounted
-                                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                                >
-                                    {tabs.map((tab) => (
-                                            <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>{tab.name}</MenuItem>
-                                        ))
-                                    }
-                                    <Link href='/login' color='inherit' underline='none'>
-                                        <MenuItem >Login</MenuItem>
-                                    </Link>
-                                </Menu>    
-                            </IconButton>
+                            { mobileView ? 
+                                <> 
+                                    <IconButton onClick={handleMenu} color="inherit">
+                                        <MenuIcon/> 
+                                    </IconButton>    
+                                    <Menu
+                                        id='loggedInMenuMobile'
+                                        anchorEl={anchorEl}
+                                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                        keepMounted
+                                        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                        open={Boolean(anchorEl)}
+                                        onClose={handleClose}
+                                    >
+                                        {tabs.map((tab) => (
+                                                <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>{tab.name}</MenuItem>
+                                            ))
+                                        }
+                                            <MenuItem onClick={() => {window.location = '/login'}} >Login</MenuItem>     
+                                    </Menu>  
+                                </>
+                                
+                            :  
+                                <Link href='/login' color='inherit' underline='none'>
+                                    <Button variant='outlined' color='inherit'>Login</Button>
+                                </Link>
+                            }
+                            
                     </>
                     )
                 }
