@@ -102,16 +102,14 @@ export default function ButtonAppBar() {
                                                 <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>{tab.name}</MenuItem>
                                             ))
                                         }
-                                            <MenuItem onClick={() => {window.location = '/login'}} >Login</MenuItem>     
+                                            <MenuItem onClick={() => {window.location = '/login'}}>Login</MenuItem>     
                                     </Menu>  
                                 </>
-                                
                             :  
                                 <Link href='/login' color='inherit' underline='none'>
                                     <Button variant='outlined' color='inherit'>Login</Button>
                                 </Link>
                             }
-                            
                     </>
                     )
                 }
