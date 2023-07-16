@@ -6,6 +6,7 @@ import Loader from '../components/Loader';
 import ProjectionTable from '../components/ProjectionTable';
 
 export default function Buckets(){
+
     const minMedia = useMediaQuery('(min-width:600px)');
     const [binRows, setBins] = useState([]);
     const [loadCount, setLoadCount] = useState(0);
@@ -78,7 +79,7 @@ export default function Buckets(){
                 </Box>
                 { localStorage.getItem('token') &&
                     <>
-                    <Typography variant='h5' component='div' sx={{mt:6, mb:1, fontWeight:500, textAlign:'center'}}>Grade Projections</Typography>
+                    <Typography variant='h5' component='div' sx={{mt:6, mb:2, fontWeight:500, textAlign:'center'}}>Grade Projections</Typography>
                     <Box sx={{mb:4, display:'flex', flexBasis:'min-content', justifyContent:'center'}}>
                         <ProjectionTable projections={projections} gradeData={gradeData} />
                     </Box>
