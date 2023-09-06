@@ -16,3 +16,10 @@ services:
     ports:
       - 8000:8000
     command: npm run server
+  dtgui:
+    build: ./dtgui
+    restart: always
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
