@@ -21,8 +21,13 @@ app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-// Start the server
+// Start the server listening on the unix socket or port if configured otherwise port 3000.
+const sock = `${process.env.SOCKET_DIR}/app.sock`;
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+app.listen((process.env.SOCKET_DIR && sock) || port, () => {
+    if (sock) {
+        console.log(`Server is listening on ${sock}`);
+    } else {
+        console.log(`Server is listening on port ${port}`);
+    }
 });
