@@ -29,7 +29,7 @@
     "start": "cd ../server && npm start",
     "startCurrentBuild": "nodemon index.js",
     "react": "react-scripts start",
-    "build": "react-scripts build && rm -rf production/build && mv build production",
+    "build": "react-scripts build && rm -rf server/build && mv build server",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

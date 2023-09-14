@@ -1,13 +1,13 @@
 # dependencies
 /website/node_modules
-/website/production/node_modules
+/website/server/node_modules
 /api/node_modules
 
 # Environment variables
 *.env
 
 # production
-/website/production/build
+/website/server/build
 
 # misc
 .DS_Store

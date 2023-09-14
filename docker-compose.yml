@@ -3,7 +3,9 @@ services:
   web:
     container_name: gradeview-web
     image: ${CI_REGISTRY_IMAGE:-gradeview}/web:${WEB_VERSION:-development}
-    build: ./website/production
+    volumes:
+      - ${SOCKET_DIR:-/dev/null}:/run/sockets
+    build: ./website/server
     ports:
       - 3000:3000
     command: npm start
