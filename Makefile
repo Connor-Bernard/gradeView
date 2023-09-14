@@ -6,7 +6,7 @@ init:
 	clear
 	cd website && npm install
 	cd api && npm install
-	cd website/production && npm install
+	cd website/server && npm install
 
 npm:
 	clear
