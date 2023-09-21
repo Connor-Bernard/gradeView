@@ -22,7 +22,7 @@ app.get('/*', (req, res) => {
 });
 
 // Start the server listening on the unix socket or port if configured otherwise port 3000.
-const sock = `${process.env.SOCKET_DIR}/app.sock`;
+const sock = `${process.env.SOCKETS_DIR}/app.sock`;
 const port = process.env.PORT || 3000;
 app.listen((process.env.SOCKET_DIR && sock) || port, () => {
     if (sock) {
