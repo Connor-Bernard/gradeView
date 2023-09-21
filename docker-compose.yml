@@ -4,7 +4,7 @@ services:
     container_name: gradeview-web
     image: ${CI_REGISTRY_IMAGE:-gradeview}/web:${WEB_VERSION:-development}
     volumes:
-      - ${SOCKET_DIR:-/dev/null}:/run/sockets
+      - ${SOCKETS_DIR:-/dev/null}:/run/sockets
     build: ./website/server
     ports:
       - 3000:3000
