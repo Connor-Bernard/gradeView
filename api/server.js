@@ -306,7 +306,7 @@ async function main(){
     const app = express();
     app.use(cors());
     app.use(json());
-       
+
     const apiAuthClient = await new google.auth.GoogleAuth({
         credentials: JSON.parse(process.env.SERVICE_ACCOUNT_CREDENTIALS),
         scopes: SCOPES

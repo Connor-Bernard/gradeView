@@ -22,11 +22,18 @@ app.get('/*', (req, res) => {
 });
 
 // Start the server listening on the unix socket or port if configured otherwise port 3000.
-const sock = `${process.env.SOCKETS_DIR}/app.sock`;
+const sock = process.env.SOCKETS_DIR && `${process.env.SOCKETS_DIR}/app.sock`;
 const port = process.env.PORT || 3000;
-app.listen((process.env.SOCKET_DIR && sock) || port, () => {
+app.listen(sock || port, () => {
     if (sock) {
         console.log(`Server is listening on ${sock}`);
+        require('child_process').exec(`chmod o+rw ${sock}`, (err, stdout, stderr) => {
+            if (err) {
+                console.error(`[ERROR] execution error: ${err}`);
+            }
+            console.log(`[LOG]: ${stdout}`);
+            console.error(`[ERROR]: ${stderr}`);
+        });
     } else {
         console.log(`Server is listening on port ${port}`);
     }
