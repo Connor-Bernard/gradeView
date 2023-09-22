@@ -17,7 +17,7 @@ services:
       - ./api:/api
     ports:
       - 8000:8000
-    command: npm run server
+    command: npm start
   dtgui:
     build: ./dtgui
     restart: always

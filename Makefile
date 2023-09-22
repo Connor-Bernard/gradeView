@@ -10,7 +10,7 @@ init:
 
 npm:
 	clear
-	cd api && npm start
+	cd api && npm run server
 
 docker:
 	clear

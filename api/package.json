@@ -4,8 +4,8 @@
   "description": "Gradeview API Server",
   "main": "server.js",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"cd ../website && npm run react\"",
-    "server": "nodemon server.js"
+    "start": "nodemon server.js",
+    "server": "concurrently \"npm run server\" \"cd ../website && npm run react\""
   },
   "author": "Connor Bernard",
   "license": "ISC",
