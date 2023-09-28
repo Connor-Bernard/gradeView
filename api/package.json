@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "server": "concurrently \"npm run server\" \"cd ../website && npm run react\""
+    "server": "concurrently \"npm run start\" \"cd ../website && npm run react\""
   },
   "author": "Connor Bernard",
   "license": "ISC",
