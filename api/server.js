@@ -382,11 +382,21 @@ async function main(){
     app.use(unless(['/api/bins', '/api/verifyaccess'], verificationMiddleWare));
     app.use('/api/admin', adminVerificationMiddleWare);
 
+    /** 
+     * @param Request req 
+     * @param Response res 
+     * @returns json with the lists of highs and lows for each grade bin
+    */
+
     app.get('/api/bins', async (req, res) => {
         return res.status(200).json(await getBins(apiAuthClient));
     });
 
-    // Use the auth checking of middleware to verify proper auth
+    /**
+     * @param Request req
+     * @param Response res
+     * @returns if email was verified 
+    */
     app.get('/api/verifyaccess', async (req, res) => {
         let auth = req.headers['authorization'];
         if (!auth) {
@@ -403,17 +413,32 @@ async function main(){
     });
 
     // Responds with json dictionary caller's grade data
+    /**
+     * @param Request req
+     * @param Response res
+     * @returns json dictionary with caller's grade data
+     */
     app.get('/api/grades', async (req, res) => {
         return res.status(200).json(await getUserGradesFromTokenAsFraction(apiAuthClient,
             oauthClient, req.headers.authorization.split(' ')[1]));
     });
 
     // Responds with the user's profile picture extracted from their token
+    /**
+     * @param Request req
+     * @param Response res
+     * @returns json with the users profile picture from ID Token
+     */
     app.get('/api/profilepicture', async (req, res) => {
         return res.status(200).json(await getProfilePictureFromIdToken(oauthClient,
             req.headers.authorization.split(' ')[1]));
     });
 
+    /**
+     * @param Request req
+     * @param Response res
+     * @returns json with projected grades from a users token
+     */
     app.get('/api/projections', async (req, res) => {
         try{
             return res.status(200).json(await getProjectedGradesFromToken(apiAuthClient,
@@ -427,21 +452,37 @@ async function main(){
     });
 
     // Responds with whether or not the current user is an admin
+    /**
+     * @param Request req
+     * @param Response res
+     * @returns json with boolean of whether or not the user is an admin
+     */
     app.get('/api/isadmin', async (req, res) => {
         return res.status(200).json(await hasAdminStatus(oauthClient,
             req.headers.authorization.split(' ')[1]));
     });
 
     // Responds with the current students in the spreadsheet
+    /**
+     * @param Request req
+     * @param Response res
+     * @returns json with students from the spreadsheet
+     */
     app.get('/api/admin/students', async (req, res) => {
         return res.status(200).json(await getStudents(apiAuthClient));
     });
 
     // Responds with the grades for the specified student
+    /**
+     * @param Request req
+     * @param Response res
+     * @returns json with users grades given their email
+     */
     app.post('/api/admin/getStudent', async (req, res) => {
         res.status(200).json(await getUserGradesAsFraction(apiAuthClient, req.body.email));
     });
 
+    //app listens on PORT
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}.`);
         console.log('Press Ctrl+C to quit.');
