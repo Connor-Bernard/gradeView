@@ -23,9 +23,9 @@ export default function GradeGrid({ category, assignments }) {
     const headerRight = `${cumGrade} / ${cumMaxGrade}`;
 
     
-  return ( 
-      <Grid xs={2} sm={4} md={4}>
-          <GradeTable assignments={assignments} headerLeft={category} headerRight={headerRight} />
-      </Grid>
-  );
+    return ( 
+        <Grid xs={2} sm={4} md={4}>
+            <GradeTable assignments={assignments} headerLeft={category} headerRight={headerRight} />
+        </Grid>
+    );
 }
