@@ -393,11 +393,13 @@ async function main(){
     app.get('/api/verifyaccess', async (req, res) => {
         let auth = req.headers['authorization'];
         if (!auth) {
+            console.log("Not authorized");
             return res.status(401).send(false);
         }
         auth = auth.split(' ');
         try {
-            await getUserRow(apiAuthClient, await getEmailFromIdToken(oauthClient, auth[1]));
+            const email = await getEmailFromIdToken(oauthClient, auth[1]);
+            await getUserRow(apiAuthClient, email);
             return res.status(200).send(true);
         } catch (e) {
             console.log(e);
