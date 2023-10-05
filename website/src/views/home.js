@@ -39,7 +39,7 @@ function Home() {
                 setLoading(false);
             }
 
-            if (localStorage.getItem('token')) {
+            if (mounted && localStorage.getItem('token')) {
                 api.get('/projections').then((res) => {
                     if (mounted) {
                         setProjections(res.data);
