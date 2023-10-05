@@ -383,9 +383,9 @@ async function main(){
     app.use('/api/admin', adminVerificationMiddleWare);
 
     /** 
-     * @param Request req 
-     * @param Response res 
-     * @returns json with the lists of highs and lows for each grade bin
+     * @param {Request} req 
+     * @param {Response} res 
+     * @returns {json} with the lists of highs and lows for each grade bin
     */
 
     app.get('/api/bins', async (req, res) => {
@@ -393,9 +393,9 @@ async function main(){
     });
 
     /**
-     * @param Request req
-     * @param Response res
-     * @returns if email was verified 
+     * @param {Request} req
+     * @param {Response} res
+     * @returns {json} if email was verified true, else false
     */
     app.get('/api/verifyaccess', async (req, res) => {
         let auth = req.headers['authorization'];
@@ -414,9 +414,9 @@ async function main(){
 
     // Responds with json dictionary caller's grade data
     /**
-     * @param Request req
-     * @param Response res
-     * @returns json dictionary with caller's grade data
+     * @param {Request} req
+     * @param {Response} res
+     * @returns {json} dictionary with caller's grade data
      */
     app.get('/api/grades', async (req, res) => {
         return res.status(200).json(await getUserGradesFromTokenAsFraction(apiAuthClient,
@@ -425,9 +425,9 @@ async function main(){
 
     // Responds with the user's profile picture extracted from their token
     /**
-     * @param Request req
-     * @param Response res
-     * @returns json with the users profile picture from ID Token
+     * @param {Request} req
+     * @param {Response} res
+     * @returns {json} with the users profile picture from ID Token
      */
     app.get('/api/profilepicture', async (req, res) => {
         return res.status(200).json(await getProfilePictureFromIdToken(oauthClient,
@@ -435,9 +435,9 @@ async function main(){
     });
 
     /**
-     * @param Request req
-     * @param Response res
-     * @returns json with projected grades from a users token
+     * @param {Request} req
+     * @param {Response} res
+     * @returns {json} with projected grades from a users token
      */
     app.get('/api/projections', async (req, res) => {
         try{
@@ -453,9 +453,9 @@ async function main(){
 
     // Responds with whether or not the current user is an admin
     /**
-     * @param Request req
-     * @param Response res
-     * @returns json with boolean of whether or not the user is an admin
+     * @param {Request} req
+     * @param {Response} res
+     * @returns {json} with boolean of whether or not the user is an admin
      */
     app.get('/api/isadmin', async (req, res) => {
         return res.status(200).json(await hasAdminStatus(oauthClient,
@@ -464,9 +464,9 @@ async function main(){
 
     // Responds with the current students in the spreadsheet
     /**
-     * @param Request req
-     * @param Response res
-     * @returns json with students from the spreadsheet
+     * @param {Request} req
+     * @param {Response} res
+     * @returns {json} with students from the spreadsheet
      */
     app.get('/api/admin/students', async (req, res) => {
         return res.status(200).json(await getStudents(apiAuthClient));
@@ -474,9 +474,9 @@ async function main(){
 
     // Responds with the grades for the specified student
     /**
-     * @param Request req
-     * @param Response res
-     * @returns json with users grades given their email
+     * @param {Request} req
+     * @param {Response} res
+     * @returns {json} with users grades given their email
      */
     app.post('/api/admin/getStudent', async (req, res) => {
         res.status(200).json(await getUserGradesAsFraction(apiAuthClient, req.body.email));
