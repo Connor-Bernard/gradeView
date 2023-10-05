@@ -37,6 +37,8 @@ export default function GradeAccordion({ category, assignments }) {
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
+    const headerLeft = 'Assignment';
+    const headerRight = 'Grade';
 
     return (
         <>
@@ -47,11 +49,11 @@ export default function GradeAccordion({ category, assignments }) {
                     id='panel1a-header'>
                     <Typography>{category}</Typography>
                     <Typography sx={{ marginLeft: 'auto', pr: 1, fontWeight: isBold(cumGrade, cumMaxGrade)}}>
-                        {cumGrade} / {cumMaxGrade}
+                         {cumGrade} / {cumMaxGrade}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <GradeTable assignments={assignments} />
+                    <GradeTable assignments={assignments} headerLeft={headerLeft} headerRight={headerRight} />
                 </AccordionDetails>
             </Accordion>
         </>

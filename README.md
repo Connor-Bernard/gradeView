@@ -57,7 +57,7 @@ __NOTE: If your API server's origin is different from your live website's origin
 14. Navigate to the keys section of the service account
 15. Click "Add Key" and create a JSON key
 16. Create a .env file in /api/ if one doesn't already exist
-17. Set the environment variable `SERVICE_ACCOUNT_CREDENTIALS` equal to the contents of this downloaded keyfile __SURROUNDED IN SINGLE QUOTES__
+17. Set the environment variable `SERVICE_ACCOUNT_CREDENTIALS` equal to the contents of this downloaded keyfile __NOTE: you will need to remove all new lines in this environment variable such that the environment variable declaration is in one line__
 
 ### CI/CD Configuration (optional)
 
@@ -125,6 +125,9 @@ eg: `git push production -o ci.variable="PRODUCTION=true"`
 ### Deployment with Make
 
 1. Set the environment variable `PRODUCTION_REMOTE_NAME` equal to the name of the production remote (you can do this locally or in /.env)
-2. Run `make deploy`
+2. Run the applicable command below:
+
+    - Deploying from current branch: `make deployFromCurrentBranch`
+    - Deploying from main branch: `make deployFromMain` (__WARNING:__ This command resets the production branch to the main branch; use with care)
 
 ### Note: The provided pipeline configuration relies on GitLab runners, so if a custom runner is preferred, it will have to be configured separately

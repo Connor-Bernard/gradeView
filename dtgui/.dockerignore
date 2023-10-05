@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+
+.dockerignore
+.gitignore
+.gitattributes
+README.md

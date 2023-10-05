@@ -11,8 +11,8 @@ export default function ProjectionTable({ projections: { zeros, pace, perfect },
     }
     return(
         <>
-        <Box>
-            <TableContainer component={Paper} sx={{maxWidth:500, height:'fit-content'}}>
+        <Box sx={{width:500, maxWidth:'90%'}}>
+            <TableContainer component={Paper} sx={{height:'fit-content'}}>
                 <Table>
                     <TableHead>
                         <TableRow>

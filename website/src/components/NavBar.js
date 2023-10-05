@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AppBar, Box, Toolbar, Typography, Button, Link, Avatar, Menu, MenuItem, IconButton, useMediaQuery } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu';
 import api from '../utils/api';
 import NavBarItem from './NavBarItem';
 
@@ -82,9 +83,34 @@ export default function ButtonAppBar() {
                             </Menu>
                         </>
                     ) : (
-                        <Link href='/login' color='inherit' underline='none'>
-                            <Button variant='outlined' color='inherit'>Login</Button>
-                        </Link>
+                        <>
+                            { mobileView ? 
+                                <> 
+                                    <IconButton onClick={handleMenu} color="inherit">
+                                        <MenuIcon/> 
+                                    </IconButton>    
+                                    <Menu
+                                        id='loggedInMenuMobile'
+                                        anchorEl={anchorEl}
+                                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                        keepMounted
+                                        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                        open={Boolean(anchorEl)}
+                                        onClose={handleClose}
+                                    >
+                                        {tabs.map((tab) => (
+                                                <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>{tab.name}</MenuItem>
+                                            ))
+                                        }
+                                            <MenuItem onClick={() => {window.location = '/login'}}>Login</MenuItem>     
+                                    </Menu>  
+                                </>
+                            :  
+                                <Link href='/login' color='inherit' underline='none'>
+                                    <Button variant='outlined' color='inherit'>Login</Button>
+                                </Link>
+                            }
+                    </>
                     )
                 }
                 </Toolbar>

@@ -3,7 +3,9 @@ services:
   web:
     container_name: gradeview-web
     image: ${CI_REGISTRY_IMAGE:-gradeview}/web:${WEB_VERSION:-development}
-    build: ./website/production
+    volumes:
+      - ${SOCKETS_DIR:-/dev/null}:/run/sockets
+    build: ./website/server
     ports:
       - 3000:3000
     command: npm start
@@ -15,4 +17,11 @@ services:
       - ./api:/api
     ports:
       - 8000:8000
-    command: npm run server
+    command: npm start
+  dtgui:
+    build: ./dtgui
+    restart: always
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
