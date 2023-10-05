@@ -38,16 +38,16 @@ function Home() {
                 setAccordionTabs(assignmentCategories);
                 setLoading(false);
             }
-
-            if (mounted && localStorage.getItem('token')) {
-                api.get('/projections').then((res) => {
-                    if (mounted) {
-                        setProjections(res.data);
-                    }
-                });
-            }
             return () => mounted = false;
         });
+
+        if (mounted && localStorage.getItem('token')) {
+            api.get('/projections').then((res) => {
+                if (mounted) {
+                    setProjections(res.data);
+                }
+            });
+        }
 
         // Update user admin status
         api.get('/isadmin').then((res) => {
