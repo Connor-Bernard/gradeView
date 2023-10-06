@@ -6,6 +6,8 @@ services:
     volumes:
       - ${SOCKETS_DIR:-/dev/null}:/run/sockets
     build: ./website/server
+    networks:
+      - frontend
     ports:
       - 3000:3000
     command: npm start
@@ -15,6 +17,8 @@ services:
     build: ./api
     volumes:
       - ./api:/api
+    networks:
+      - frontend
     ports:
       - 8000:8000
     command: npm start
@@ -25,3 +29,6 @@ services:
       - 8080
     ports:
       - 8080:8080
+networks:
+  frontend:
+    name: frontend
