@@ -1,6 +1,5 @@
 -include .env
 .DEFAULT_GOAL := docker
-CONFIRM ?= $(shell bash -c 'read -p "Are you sure you want to push to production? (y/n)" confirm; echo $$confirm')
 
 init:
 	clear
