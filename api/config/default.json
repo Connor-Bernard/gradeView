@@ -1,7 +1,4 @@
 {
-    "server": {
-        "port": 8000
-    },
     "spreadsheet": {
         "id": "1kaCebQXcx0DCu0-FNPbJlmF_XfN8QOOyI4LJxg4_J74",
         "scopes": [

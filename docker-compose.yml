@@ -1,34 +1,51 @@
 version: '3.8'
 services:
-  web:
-    container_name: gradeview-web
-    image: ${CI_REGISTRY_IMAGE:-gradeview}/web:${WEB_VERSION:-development}
+  reverseProxy:
+    container_name: gradeview-reverse-proxy
+    image: ${CI_REGISTRY_IMAGE:-gradeview}/reverse-proxy:${REVERSE_PROXY_VERSION:-development}
+    build: ./reverseProxy
     volumes:
       - ${SOCKETS_DIR:-/dev/null}:/run/sockets
-    build: ./website/server
+    environment:
+      - REVERSE_PROXY_LISTEN=${REVERSE_PROXY_LISTEN}
     networks:
       - frontend
     ports:
-      - 3000:3000
+      - 80:80
+  web:
+    container_name: gradeview-web
+    image: ${CI_REGISTRY_IMAGE:-gradeview}/web:${WEB_VERSION:-development}
+    build: ./website/server
+    environment:
+      - REACT_APP_PROXY_SERVER=${REACT_APP_PROXY_SERVER}
+      - PORT=${REACT_APP_PORT}
+    networks:
+      - frontend
     command: npm start
+    restart: always
   api:
     container_name: gradeview-api
     image: ${CI_REGISTRY_IMAGE:-gradeview}/server:${API_VERSION:-development}
     build: ./api
     volumes:
       - ./api:/api
+    environment:
+      - PORT=${API_PORT}
     networks:
       - frontend
-    ports:
-      - 8000:8000
     command: npm start
-  dtgui:
-    build: ./dtgui
     restart: always
-    expose:
-      - 8080
+  dtgui-progress-report:
+    container_name: dtgui-progress-report
+    image: ${CI_REGISTRY_IMAGE:-dtgui}/progress-report:${PROGRESS_REPORT_VERSION:-development}
+    build: ./progressReport
+    environment:
+      - LISTEN_PORT=${PROGRESS_REPORT_PORT}
     ports:
       - 8080:8080
+    expose:
+      - 8080
+    restart: always
 networks:
   frontend:
     name: frontend
