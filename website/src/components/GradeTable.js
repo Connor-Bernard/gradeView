@@ -21,8 +21,10 @@ export default function GradeTable({ assignments, headerLeft, headerRight}) {
         <TableContainer component={Paper}>
             <Table aria-label='Grade Table'>
                 <TableHead >
-                            <TableCell align='left' sx={{fontSize:20, padding:3, borderBottom: 'none'}}>{headerLeft}</TableCell>
-                            <TableCell align='right'sx={{fontSize:20, padding:3, borderBottom: 'none'}}>{headerRight}</TableCell>
+                    <TableRow>
+                        <TableCell align='left' sx={{fontSize:20, padding:3, borderBottom: 'none'}}>{headerLeft}</TableCell>
+                        <TableCell align='right'sx={{fontSize:20, padding:3, borderBottom: 'none'}}>{headerRight}</TableCell>
+                    </TableRow>
                 </TableHead>        
 
                 <TableBody>
