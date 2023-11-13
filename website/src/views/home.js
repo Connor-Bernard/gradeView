@@ -18,6 +18,8 @@ function Home() {
     // Hook for updating grades, calling updateGradeData(var) will make gradeDate = var
     const [gradeData, updateGradeData] = useState([]);
 
+    const[scoreToLetterGrade, setScoreToLetterGrade] = useState([]);
+
     // User admin status
     const [isAdmin, setAdminStatus] = useState(false);
     
@@ -29,6 +31,7 @@ function Home() {
         api.get('/grades').then((res) => {
             if(mounted){
                 updateGradeData(res.data);
+                console.log(res.data);
                 let assignmentCategories = [];
                 for(let assignment in res.data){
                     if(!assignmentCategories.includes(res.data[assignment].type)){
@@ -48,6 +51,12 @@ function Home() {
                 }
             });
         }
+
+        api.get('/bins').then((res) => {
+            if (mounted) {
+                setScoreToLetterGrade(res.data);
+            }
+        })
 
         // Update user admin status
         api.get('/isadmin').then((res) => {
@@ -150,7 +159,7 @@ function Home() {
                         <>
                             <Typography variant='h5' component='div' sx={{mt:6, mb:2, fontWeight:500, textAlign:'center'}}>Grade Projections</Typography>
                             <Box sx={{mb:4, display:'flex', flexBasis:'min-content', justifyContent:'center'}}>
-                                <ProjectionTable projections={projections} gradeData={gradeData} />
+                                <ProjectionTable projections={projections} gradeData={scoreToLetterGrade} />
                             </Box>
                         </>
                     }
