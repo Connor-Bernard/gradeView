@@ -31,7 +31,6 @@ function Home() {
         api.get('/grades').then((res) => {
             if(mounted){
                 updateGradeData(res.data);
-                console.log(res.data);
                 let assignmentCategories = [];
                 for(let assignment in res.data){
                     if(!assignmentCategories.includes(res.data[assignment].type)){
