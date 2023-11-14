@@ -29,9 +29,8 @@ function Home() {
         let mounted = true;
         // Initialize grade data
         api.get('/grades').then((res) => {
-            if(mounted){
+            if(mounted && localStorage.getItem('token')){
                 updateGradeData(res.data);
-                console.log(res.data);
                 let assignmentCategories = [];
                 for(let assignment in res.data){
                     if(!assignmentCategories.includes(res.data[assignment].type)){
@@ -53,7 +52,7 @@ function Home() {
         }
 
         api.get('/bins').then((res) => {
-            if (mounted) {
+            if (mounted && localStorage.getItem('token')) {
                 setScoreToLetterGrade(res.data);
             }
         })
