@@ -1,9 +1,10 @@
 import React from 'react'
-import { Button, Link } from '@mui/material';
+import { Button} from '@mui/material';
+import { Link } from "react-router-dom";
 
 export default function NavBarItem({ href, children }){
     return (
-        <Link href={href} color='inherit' underline='none'>
+        <Link to={href} style={{textDecoration:'none',color:'inherit'}}>
             <Button color='inherit'>{children}</Button>
         </Link>
     );

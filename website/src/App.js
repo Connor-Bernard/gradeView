@@ -37,10 +37,11 @@ export default function App() {
 		<ThemeProvider theme={theme}>
 			<div className="app">
 				<div className="nav">
-					<NavBar />
+					
 				</div>
 				<div className="content">
 					<BrowserRouter>
+						<NavBar />
 						<Routes>
 							<Route exact path='/login' element={localStorage.getItem('token') ? <Navigate to='/' /> : <Login />} />
 							<Route exact path='/buckets' element={<Buckets />} />
