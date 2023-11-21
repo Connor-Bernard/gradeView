@@ -1,19 +1,24 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Box, FormControl, InputLabel, MenuItem, Select, useMediaQuery } from '@mui/material';
+import { Box, Typography, FormControl, InputLabel, MenuItem, Select, useMediaQuery } from '@mui/material';
 import api from '../utils/api';
 import Loader from '../components/Loader';
 import GradeAccordion from '../components/GradeAccordion';
 import GradeGrid from '../components/GradeGrid';
 import Grid from '@mui/material/Unstable_Grid2';
+import ProjectionTable from '../components/ProjectionTable';
 
 function Home() {
     const [accordionTabs, setAccordionTabs] = useState([]);
 
     const [isLoading, setLoading] = useState(true);
 
+    const [projections, setProjections] = useState({zeros: 0, pace:0, perfect:0});
+
     // Hook for updating grades, calling updateGradeData(var) will make gradeDate = var
     const [gradeData, updateGradeData] = useState([]);
+
+    const[scoreToLetterGrade, setScoreToLetterGrade] = useState([]);
 
     // User admin status
     const [isAdmin, setAdminStatus] = useState(false);
@@ -37,6 +42,20 @@ function Home() {
             }
             return () => mounted = false;
         });
+
+        if (mounted && localStorage.getItem('token')) {
+            api.get('/projections').then((res) => {
+                if (mounted) {
+                    setProjections(res.data);
+                }
+            });
+        }
+
+        api.get('/bins').then((res) => {
+            if (mounted && localStorage.getItem('token')) {
+                setScoreToLetterGrade(res.data);
+            }
+        })
 
         // Update user admin status
         api.get('/isadmin').then((res) => {
@@ -134,6 +153,14 @@ function Home() {
                                 ))}
                             </Grid>
                         </Box>     
+                    }
+                    { localStorage.getItem('token') &&
+                        <>
+                            <Typography variant='h5' component='div' sx={{mt:6, mb:2, fontWeight:500, textAlign:'center'}}>Grade Projections</Typography>
+                            <Box sx={{mb:4, display:'flex', flexBasis:'min-content', justifyContent:'center'}}>
+                                <ProjectionTable projections={projections} gradeData={scoreToLetterGrade} />
+                            </Box>
+                        </>
                     }
                     </Box>
                 )   
