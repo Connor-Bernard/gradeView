@@ -42,20 +42,20 @@ function Home() {
             }
             return () => mounted = false;
         });
-
-        if (mounted && localStorage.getItem('token')) {
-            api.get('/projections').then((res) => {
-                if (mounted) {
-                    setProjections(res.data);
-                }
-            });
-        }
+        
+        api.get('/projections').then((res) => {
+            if (mounted && localStorage.getItem('token')) {
+                setProjections(res.data);
+            }
+            return () => mounted = false;
+        });
 
         api.get('/bins').then((res) => {
             if (mounted && localStorage.getItem('token')) {
                 setScoreToLetterGrade(res.data);
             }
-        })
+            return () => mounted = false;
+        });
 
         // Update user admin status
         api.get('/isadmin').then((res) => {
@@ -155,12 +155,12 @@ function Home() {
                         </Box>     
                     }
                     { localStorage.getItem('token') &&
-                        <>
+                        <Box>
                             <Typography variant='h5' component='div' sx={{mt:6, mb:2, fontWeight:500, textAlign:'center'}}>Grade Projections</Typography>
                             <Box sx={{mb:4, display:'flex', flexBasis:'min-content', justifyContent:'center'}}>
                                 <ProjectionTable projections={projections} gradeData={scoreToLetterGrade} />
                             </Box>
-                        </>
+                        </Box>
                     }
                     </Box>
                 )   
