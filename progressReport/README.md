@@ -11,7 +11,7 @@
     ```
 3. Activate virtual environment:
     ```
-    source venv/bin/activate
+    source .venv/bin/activate
     ```
 4. Install required packages:
     ```
@@ -21,7 +21,3 @@
     ```
     python3 app.py
     ```
-
-URL Argument for Student Mastery Levels:
-
-http://127.0.0.1:5000/?course_name=CS10&student_mastery=322113200
