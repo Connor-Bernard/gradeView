@@ -42,13 +42,22 @@ function Home() {
             }
             return () => mounted = false;
         });
-        
+    }, []);
+
+    useEffect(() => {
+        let mounted = true;
+
         api.get('/projections').then((res) => {
             if (mounted && localStorage.getItem('token')) {
                 setProjections(res.data);
             }
             return () => mounted = false;
         });
+        
+    }, [])
+
+    useEffect(() => {
+        let mounted = true;
 
         api.get('/bins').then((res) => {
             if (mounted && localStorage.getItem('token')) {
@@ -56,15 +65,19 @@ function Home() {
             }
             return () => mounted = false;
         });
+    }, [])
+
+    useEffect(() => {
+        let mounted = true;
 
         // Update user admin status
         api.get('/isadmin').then((res) => {
             if (mounted) {
                 setAdminStatus(res.data);
             }
+            return () => mounted = false;
         });
-        return () => mounted = false;
-    }, []);
+    })
 
     // Initalize list of students for admin viewership
     const [selectedStudent, setSelectedStudent] = useState('');
