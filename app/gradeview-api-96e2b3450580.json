@@ -1,13 +1,13 @@
 {
   "type": "service_account",
-  "project_id": "gradeview-api",
-  "private_key_id": "96e2b3450580b9f92fbf45085156b4e92f2737fd",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDDlj+/i6vVeAsc\nss2j5m7lMHQQTvdKBPT+m7Q+BO34yI/EXSnrKBKbtJWyN1yfj4qnb6PglURiXhZT\n93hzQR+mBY3i80hbII3wsS0cZ0jArCY7lW3rdyUoyLL0oQ0MFvIWtRyedK4FY9IB\ncED0opjTCDn5gDbVcVZjJq8OU1c9vADJlTNVQvArPsQRPrW7WAgQbs+ixGi7dYQ3\nAiUZccBtwuHID0HgcOt8NugeqCW0IUI8IiO8JGavVTWwkj8QgBGVPfEl4yz1vtWp\nJD95rhaxdIqlKyou4YIdFClY/5QpnSsbB3n3cN048WT6Gi3cVy+BFSvVKDC17SSE\ncQF4QCGlAgMBAAECggEAF+7lSxeYxczkMzVQA5vZexMkSLCZAwY7QoKkGii5RAWq\nzgEGdZ+YM1R0MvQiUeYbNeTr3Tn2vcC8o7a3Fwdji4nHdHuHoZsIs2jC1+RtmyIV\npZnh8vvH4Mc6WsPwWEfghNXRtDQb7U3rL0Dgue7Bm6U4jubZDuJJC2X66tpY5RVK\n2DebfX8Tz8idZNRfrcmrZvOHsoq2sWcypVVYfv3LdpmJHzB4kNRroenA60kGc0uy\nK3TfDR5h9T43Hr6qYtjyrAT3JcIinKo3Z0h7vCsyU7DxrMwtBlkO3xShnwvf6y/p\nk2UoRqRsS0CFVPL8O+BXPpPl3kMlIxqNqA/583N6cQKBgQD1CDpxjNi+YkTynL+2\n3o1SgArWQkjdxj8JR2FP/Zwwqy63K07N253HvETjdkLzrPXfWHKc0ao/dIZu6fYl\nj/F5CgGVAJKAfacLJOJoPYItJiseO0sO03aliVswITP5ZKfjTMzklUYKvewFHZZZ\nWizmtsF+AyjwGlGKCKark2k/7QKBgQDMV3Avo8gt9XY2mjAJJvfG/VvszBhaYnAl\nZkiGcRK51j4tTXQ/LZLp1RDH1C2oxK/VIlDQShYTIXS6dINCjb8FbngxWNAD9VAt\n8DSoBGvur+ir7ldfs6XQniUiqcojI5S1HQFfne9qwoAtK38NSVde3fyEZWnP1bM7\nyF4SLF0BmQKBgFZ+hxLaIxBhY/E4P7xvpvc+V5T2ZP5UIqBF4CX6Yg4T/zONSA4G\nvhVpce/RKSUXItuqPxr4L96iZWn1kHwF6blOPOy5/Pz6XeLjLECbpb4GQSY0y/P5\n1WHtsJC2x7/7NgBYdeMihkz4ab4MiawU1tDCJl8zAlpvD+Vn1F2wdXCpAoGAIl9S\n77CNK63uhKDLE78KTt6vZ9WtAwcr9h6OdI7wp3HyY4xz0WzJGaxNdk+qnoj3StLK\n5T6RGAa4q+SNb9SIHVHHxgU6eG/7XL7bHKghv7S3XrRo3iBJ9B2mAX6uEdsaWJzY\nbk0SyNKO3QpEBOghWkPdBihI9DzuOVArAsOToYECgYBGt3DmqPb7eGicK2BE/2Y6\nVqLSHtR8NXzxHAbvNEcTWss0kc/nOtNJVNsya5yJA9N+R9wKMngRkfLKHkixvNEJ\npzio7/rOGES+4U2t2tk8p7fXgtri8nO6FVgt6bdzU0M6+sl4WADQYnVF5FRWGP4t\nlcmstNWB/uSud4HCiFK3bA==\n-----END PRIVATE KEY-----\n",
-  "client_email": "gradeview@gradeview-api.iam.gserviceaccount.com",
-  "client_id": "108110584669044687801",
+  "project_id": ,
+  "private_key_id":
+  "private_key": 
+  "client_email": 
+  "client_id": ,
   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
   "token_uri": "https://oauth2.googleapis.com/token",
   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gradeview%40gradeview-api.iam.gserviceaccount.com",
+  "client_x509_cert_url":,
   "universe_domain": "googleapis.com"
 }
