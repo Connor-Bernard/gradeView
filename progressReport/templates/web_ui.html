@@ -16,18 +16,21 @@
         }
 
         .new circle {
-            fill: coral;
-            stroke: coral;
+            fill: #808080;
+            stroke: #808080;
+            stroke-width: 10px;
         }
 
         .in-process circle {
-            fill: burlywood;
-            stroke: burlywood;
+            fill: #FFA500;
+            stroke: #FFA500;
+            stroke-width: 10px;
         }
 
         .learned circle {
-            fill: darkolivegreen;
-            stroke: darkolivegreen;
+            fill: #228B22;
+            stroke: #228B22;
+            stroke-width: 10px;
         }
 
         .node text {
@@ -39,7 +42,6 @@
             stroke: grey;
             stroke-width: 2px;
         }
-
         #legends-wrapper {
             display: flex;
             justify-content: center;
@@ -148,8 +150,8 @@
                 .style("fill-opacity",  function(d) { return d._children ? 1 : 0; });
 
             nodeEnter.append("text")
-                .attr("x", function(d) { return d.children || d._children ? 13 : -13; })
-                .attr("dy", "1em")
+                .attr("x", function(d) { return d.children || d._children ? 15 : -15; })
+                .attr("dy", "1.5em")
                 .attr("text-anchor", function(d) { return d.children || d._children ? "start" : "end"; })
                 .text(function(d) { return d.name; })
                 .style("fill-opacity", 1e-6)
