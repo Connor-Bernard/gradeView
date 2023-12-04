@@ -1,0 +1,1 @@
+5 * * * * cd /app && python app.py >> /var/log/cron.log 2>&1
