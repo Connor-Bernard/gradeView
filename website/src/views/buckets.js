@@ -3,22 +3,18 @@ import { Box, Typography, useMediaQuery } from '@mui/material';
 import api from '../utils/api';
 import BinTable from '../components/BinTable';
 import Loader from '../components/Loader';
-import ProjectionTable from '../components/ProjectionTable';
 
 export default function Buckets(){
 
     const minMedia = useMediaQuery('(min-width:600px)');
     const [binRows, setBins] = useState([]);
     const [loadCount, setLoadCount] = useState(0);
-    const [projections, setProjections] = useState({ zeros: 0, pace: 0, perfect: 0 });
-    const [gradeData, setGradeData] = useState([]);
 
     useEffect(() => {
         let mounted = true;
         setLoadCount(i => i + 1);
         api.get('/bins').then((res) => {
             if(mounted){
-                setGradeData(res.data);
                 let tempBins = [{ grade: res.data[0][1], range: `0-${res.data[0][0]}`}];
                 for(let i = 1; i < res.data.length; i++){
                     const grade = res.data[i][1];
@@ -31,17 +27,6 @@ export default function Buckets(){
             console.log("test")
             setLoadCount(i => i - 1);
         });
-
-        if(localStorage.getItem('token')){
-            setLoadCount(i => i + 1);
-            api.get('/projections').then((res) => {
-                if(mounted){
-                    setProjections(res.data);
-                }
-            }).finally(() => {
-                setLoadCount(i => i - 1);
-            });
-        }
         return () => mounted = false;
     }, []);
 
@@ -77,14 +62,6 @@ export default function Buckets(){
                     <BinTable title='Assignment Breakdown' col1='Assignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
                     <BinTable title='Buckets' col1='Letter Grade' col2='Range' rows={binRows} keys={['grade', 'range']} />
                 </Box>
-                { localStorage.getItem('token') &&
-                    <>
-                    <Typography variant='h5' component='div' sx={{mt:6, mb:2, fontWeight:500, textAlign:'center'}}>Grade Projections</Typography>
-                    <Box sx={{mb:4, display:'flex', flexBasis:'min-content', justifyContent:'center'}}>
-                        <ProjectionTable projections={projections} gradeData={gradeData} />
-                    </Box>
-                    </>
-                }
                 </>
             )
         }
