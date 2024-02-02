@@ -7,7 +7,7 @@ services:
     volumes:
       - ${SOCKETS_DIR:-/dev/null}:/run/sockets
     environment:
-      - REVERSE_PROXY_LISTEN=${REVERSE_PROXY_LISTEN}
+      - REVERSE_PROXY_LISTEN=${REVERSE_PROXY_LISTEN:-0.0.0.0:80}
     networks:
       - frontend
     ports:
