@@ -12,6 +12,7 @@ import Home from './views/home';
 import Login from './views/login';
 import Buckets from './views/buckets';
 import HTTPError from './views/httpError';
+import ConceptMap from './views/conceptMap';
 
 const theme = createTheme({
 	palette: {
@@ -46,6 +47,7 @@ export default function App() {
 							<Route exact path='/buckets' element={<Buckets />} />
 							<Route element={<PrivateRoutes />}>
 								<Route exact path='/' element={<Home />} />
+								<Route exact path='/conceptmap' element={<ConceptMap />} />
 							</Route>
 							<Route exact path='/serverError' element={<HTTPError errorCode={500}/>} />
 							<Route exact path='/clientError' element={<HTTPError errorCode={400}/>} />
