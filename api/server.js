@@ -11,7 +11,7 @@ class UnauthorizedAccessError extends Error{}
 class BadSheetDataError extends Error{}
 
 dotenv.config(); // Load environment variables from .env file
-const PORT = process.env.PORT || config.get('server.port');
+const PORT = process.env.PORT || 8000;
 const SPREADSHEETID = config.get('spreadsheet.id'); // In spreadsheet URL
 const SCOPES = config.get('spreadsheet.scopes'); // Keep the same for readOnly
 const OAUTHCLIENTID = config.get('googleconfig.oauth.clientid');
