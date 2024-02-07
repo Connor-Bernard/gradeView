@@ -2,7 +2,6 @@ import re
 import json
 import os
 import datetime
-import graphviz
 from collections import OrderedDict
 
 
@@ -10,7 +9,7 @@ class Node:
     count = 0
 
     def __init__(self, label, style, week, link, parent=None, children=None):
-        self.id = Node.count
+        self.id = Node.count + 1
         self.label = label
         self.style = style
         self.week = int(week)
@@ -111,7 +110,6 @@ def read_meta(name):
 
     root.label = name
 
-    '''
     print("name: \n", name)
     print("term: \n", term)
     print("start date: \n", start_date)
@@ -119,7 +117,6 @@ def read_meta(name):
     print("class levels: \n", class_levels)
     print("student levels: \n", student_levels)
     print("nodes: \n", nodes)
-    '''
 
     return name, orientation, start_date, term, class_levels, student_levels, styles, root
 
@@ -147,140 +144,11 @@ def to_json(name, term, class_levels, student_levels, root):
     }
 
     print(json_out)
-    with open('data/{}_parser_new.json'.format(name), 'w', encoding='utf-8') as json_out_file:
+    with open('data/{}.json'.format(name), 'w', encoding='utf-8') as json_out_file:
         json.dump(json_out, json_out_file, indent=4)
 
 
-def to_dot(name, token, student_mastery, orientation, start_date, term, class_levels, student_levels, styles, root):
-    current_week = datetime.date.today().isocalendar()[1] - \
-                   datetime.date(start_date[0], start_date[1], start_date[2]).isocalendar()[1]
-    dot_out_file = open('data/{}_{}.dot'.format(name, token), 'w', encoding='utf-8')
-    dot_out = "digraph G { \n"
-    dot_out += "	rankdir = LR; \n"
-
-    def nodes_to_dot(node):
-        nonlocal dot_out
-        if len(student_mastery) >= node.id != 0:
-            mastery_color = list(student_levels.items())[int(student_mastery[node.id - 1])][1]
-        else:
-            mastery_color = "black"
-        dot_out += "    " \
-                   "node{}[label = \"{}\", " \
-                   "shape = {}, style = {}, " \
-                   "fillcolor = \"{}\", " \
-                   "color = \"{}\", " \
-                   "penwidth = 3, " \
-                   "href = \"{}\", " \
-                   "target=\"_blank\"]; \n".format(
-            node.id,
-            node.label,
-            styles[node.style]["shape"],
-            styles[node.style]["style"],
-            styles[node.style]["fillcolor"],
-            mastery_color,
-            node.link)
-        for c in node.children:
-            nodes_to_dot(c)
-
-    def paths_to_dot(node):
-        nonlocal dot_out
-        for c in node.children:
-            if c.week < current_week:
-                color = class_levels["Taught"]
-            else:
-                color = class_levels["Not Taught"]
-            if orientation == "LR":
-                dot_out += "    node{} -> node{} [penwidth = 3, color = \"{}\"]; \n".format(node.id, c.id, color)
-            else:
-                dot_out += "    node{} -> node{} [penwidth = 3, color = \"{}\"]; \n".format(c.id, node.id, color)
-        for c in node.children:
-            paths_to_dot(c)
-
-    nodes_to_dot(root)
-    dot_out += "    edge [arrowhead=\"none\"]; \n"
-    paths_to_dot(root)
-
-    dot_out += "} \n"
-
-    # print(dot_out)
-    dot_out_file.write(dot_out)
-    dot_out_file.close()
-
-    edge_legend_out_file = open('data/{}_{}_edge_legend.dot'.format(name, token), 'w', encoding='utf-8')
-    edge_legend_out = """
-digraph G {    
-    subgraph clusterLegend { 
-    label = "Class Levels (Edges)";
-    fontsize = 20
-    node [ color="white" ] {rank=same; keyLeft, keyRight}
-    keyLeft [ label=<<table border="0" cellpadding="1" cellspacing="0" cellborder="0">
-      <tr><td align="right" port="i1"> </td></tr>
-      <tr><td align="right" port="i2"> </td></tr>
-      </table>> ]
-    keyRight [ label=<<table border="0" cellpadding="1" cellspacing="0" cellborder="0">
-      <tr><td align="left" port="i1"> </td><td>Not Taught</td></tr>
-      <tr><td align="left" port="i2"> </td><td>Taught</td></tr>
-      </table>>] \n
-      """
-    edge_legend_out += "\tkeyLeft:i1 -> keyRight:i1 " \
-                       "[arrowhead=none, penwidth=3, color=\"{}\"] \n".format(class_levels["Not Taught"])
-    edge_legend_out += "\tkeyLeft:i2 -> keyRight:i2 " \
-                       "[arrowhead=none, penwidth=3, color=\"{}\"] \n".format(class_levels["Taught"])
-    edge_legend_out += """
-   }
-}
-    """
-    edge_legend_out_file.write(edge_legend_out)
-    edge_legend_out_file.close()
-
-    node_legend_out_file = open('data/{}_{}_node_legend.dot'.format(name, token), 'w', encoding='utf-8')
-    node_legend_out = """digraph G {    
-    subgraph clusterLegend { 
-    label = "Student Levels (Node Borders)";
-    fontsize = 20
-    node [ color="white" ] {rank=same; keyLeft, keyRight} \n"""
-    student_levels_items = list(student_levels.items())
-
-    node_legend_out += "\tkeyLeft [ label=<<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" cellborder=\"0\"> \n"
-    for i in range(len(student_levels_items)):
-        node_legend_out += "\t\t\t<tr><td align=\"right\" port=\"i{}\"> </td></tr> \n".format(i + 1)
-    node_legend_out += "\t\t</table>> ] \n"
-
-    node_legend_out += "\tkeyRight [ label=<<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" cellborder=\"0\"> \n"
-    for i in range(len(student_levels_items)):
-        node_legend_out += "\t\t<tr><td align=\"left\" port=\"i{}\"> " \
-                           "</td><td>{}</td></tr> \n".format(i + 1, student_levels_items[i][0])
-    node_legend_out += "\t</table>> ] \n"
-
-    for i in range(len(student_levels_items)):
-        node_legend_out += "\tkeyLeft:i{} -> keyRight:i{} " \
-                           "[arrowhead=none, penwidth=3, color=\"{}\"] \n".format(i + 1, i + 1, student_levels_items[i][1])
-    node_legend_out += """\t}
-}
-    """
-    node_legend_out_file.write(node_legend_out)
-    node_legend_out_file.close()
-
-
-def to_svg(name, token):
-    dot = graphviz.Source.from_file("data/{}_{}.dot".format(name, token))
-    dot.render(format="svg", cleanup=True, outfile="data/{}_{}.svg".format(name, token))
-    os.remove("data/{}_{}.dot".format(name, token))
-
-    edge_legend_dot = graphviz.Source.from_file("data/{}_{}_edge_legend.dot".format(name, token))
-    edge_legend_dot.render(format="svg", cleanup=True, outfile="data/{}_{}_edge_legend.svg".format(name, token))
-    os.remove("data/{}_{}_edge_legend.dot".format(name, token))
-
-    node_legend_dot = graphviz.Source.from_file("data/{}_{}_node_legend.dot".format(name, token))
-    node_legend_dot.render(format="svg", cleanup=True, outfile="data/{}_{}_node_legend.svg".format(name, token))
-    os.remove("data/{}_{}_node_legend.dot".format(name, token))
-
-
-def generate_map(name, token, student_mastery):
-    print("Log: {} {} -- {}".format(name, token, student_mastery))
+def generate_map(name, student_mastery):
+    print("Log: {} -- {}".format(name, student_mastery))
     name, orientation, start_date, term, class_levels, student_levels, styles, root = read_meta(name)
-    to_dot(name, token, student_mastery, orientation, start_date, term, class_levels, student_levels, styles, root)
-    to_svg(name, token)
-
-
-# generate_map("CS10", "", "322113200")
+    to_json(name, term, class_levels, student_levels, root)

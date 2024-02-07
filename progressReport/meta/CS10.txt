@@ -1,7 +1,7 @@
 name: CS10
-term: Fall 2022
+term: Fall 2023
 orientation: left to right
-start date: 2023 06 21
+start date: 2023 09 01
 styles:
     name: root, shape: ellipse, style: filled, fillcolor: #3A73A5
     name: blue1, shape: ellipse, style: filled, fillcolor: #74B3CE
@@ -13,16 +13,16 @@ class levels:
 student levels:
     Not Learned: #808080
     Unfamiliar: #FFFF00
-    Intermediate: #FFA500
     Proficient: #228B22
 nodes:
-    Higher-Order Functions [blue1, Week1, link="https://cs61c.org"]
-        Conditionals [blue2, Week1, link="https://cs61c.org"]
-            Boolean Logic [default, Week1, link="https://cs61c.org"]
-        Function Composition [blue2, Week2, link="https://cs61c.org"]
-        Functions [blue2, Week3, link="https://cs61c.org"]
-            Abstraction [default, Week3, link="https://cs61c.org"]
-            Domain and Range [default, Week3, link="https://cs61c.org"]
-            Variable Scope [default, Week4, link="https://cs61c.org"]
-            Debugging [default, Week5, link="https://cs61c.org"]
+    Functions [blue2, Week2, link="https://cs61c.org"]
+        Domain and range [default, Week4, link="https://cs61c.org"]
+        Call by value [default, Week5, link="https://cs61c.org"]
+        Variables [default, Week5, link="https://cs61c.org"]
+            Scope [default, Week5, link="https://cs61c.org"]
+            Global [default, Week8, link="https://cs61c.org"]
+            Local [default, Week11, link="https://cs61c.org"]
+    Expressions [blue2, Week12, link="https://cs61c.org"]
+        Order of evaluation [default, Week13, link="https://cs61c.org"]
+        Operators [default, Week15, link="https://cs61c.org"]
 end
