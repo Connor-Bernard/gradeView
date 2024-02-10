@@ -1,0 +1,117 @@
+{
+    "name": "CS10",
+    "term": "Fall 2023",
+    "class levels": {
+        "Taught": "#228B22",
+        "Not Taught": "#808080"
+    },
+    "student levels": {
+        "Not Learned": "#808080",
+        "Unfamiliar": "#FFFF00",
+        "Proficient": "#228B22"
+    },
+    "count": 11,
+    "nodes": {
+        "id": 1,
+        "name": "CS10",
+        "parent": "null",
+        "children": [
+            {
+                "id": 2,
+                "name": "Functions",
+                "parent": "null",
+                "children": [
+                    {
+                        "id": 3,
+                        "name": "Domain and range",
+                        "parent": "Functions",
+                        "children": [],
+                        "data": {
+                            "week": 4
+                        }
+                    },
+                    {
+                        "id": 4,
+                        "name": "Call by value",
+                        "parent": "Functions",
+                        "children": [],
+                        "data": {
+                            "week": 5
+                        }
+                    },
+                    {
+                        "id": 5,
+                        "name": "Variables",
+                        "parent": "Functions",
+                        "children": [
+                            {
+                                "id": 6,
+                                "name": "Scope",
+                                "parent": "Variables",
+                                "children": [],
+                                "data": {
+                                    "week": 5
+                                }
+                            },
+                            {
+                                "id": 7,
+                                "name": "Global",
+                                "parent": "Variables",
+                                "children": [],
+                                "data": {
+                                    "week": 8
+                                }
+                            },
+                            {
+                                "id": 8,
+                                "name": "Local",
+                                "parent": "Variables",
+                                "children": [],
+                                "data": {
+                                    "week": 11
+                                }
+                            }
+                        ],
+                        "data": {
+                            "week": 5
+                        }
+                    }
+                ],
+                "data": {
+                    "week": 2
+                }
+            },
+            {
+                "id": 9,
+                "name": "Expressions",
+                "parent": "null",
+                "children": [
+                    {
+                        "id": 10,
+                        "name": "Order of evaluation",
+                        "parent": "Expressions",
+                        "children": [],
+                        "data": {
+                            "week": 13
+                        }
+                    },
+                    {
+                        "id": 11,
+                        "name": "Operators",
+                        "parent": "Expressions",
+                        "children": [],
+                        "data": {
+                            "week": 15
+                        }
+                    }
+                ],
+                "data": {
+                    "week": 12
+                }
+            }
+        ],
+        "data": {
+            "week": 0
+        }
+    }
+}

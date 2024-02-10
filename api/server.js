@@ -6,6 +6,8 @@ import esMain from 'es-main';
 import config from 'config';
 import dotenv from 'dotenv';
 
+import pgrStructure from './assets/progressReport/CS10.json' assert { type: 'json' };
+
 class AuthenticationError extends Error{}
 class UnauthorizedAccessError extends Error{}
 class BadSheetDataError extends Error{}
@@ -381,8 +383,12 @@ async function main(){
         next();
     }
 
-    // Initialize middleware
-    app.use(unless(['/api/bins', '/api/verifyaccess'], verificationMiddleWare));
+    // Initialize middleware (if it doesn't need verification, specify route below).
+    app.use(unless([
+        '/api/bins',
+        '/api/verifyaccess',
+        '/api/pgrstructure',
+    ], verificationMiddleWare));
     app.use('/api/admin', adminVerificationMiddleWare);
 
     app.get('/api/bins', async (req, res) => {
@@ -427,6 +433,10 @@ async function main(){
                 return res.status(502).json({ error: '502: Bad Gateway'});
             }
         }
+    });
+
+    app.get('/api/pgrstructure', (_, res) => {
+        res.status(200).json(pgrStructure);
     });
 
     // Responds with whether or not the current user is an admin

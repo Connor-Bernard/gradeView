@@ -45,9 +45,9 @@ export default function App() {
 						<Routes>
 							<Route exact path='/login' element={localStorage.getItem('token') ? <Navigate to='/' /> : <Login />} />
 							<Route exact path='/buckets' element={<Buckets />} />
+							<Route exact path='/conceptmap' element={<ConceptMap />} />
 							<Route element={<PrivateRoutes />}>
 								<Route exact path='/' element={<Home />} />
-								<Route exact path='/conceptmap' element={<ConceptMap />} />
 							</Route>
 							<Route exact path='/serverError' element={<HTTPError errorCode={500}/>} />
 							<Route exact path='/clientError' element={<HTTPError errorCode={400}/>} />
