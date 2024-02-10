@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
+
 import api from '../utils/api';
 
-export default function ConceptMap() {
+import ConceptMap from '../components/ConceptMap';
+
+export default function ConceptMapView() {
     const [outlineData, setOutlineData] = useState({});
     useEffect(() => {
         let mounted = true;
@@ -12,9 +15,11 @@ export default function ConceptMap() {
         });
         return () => mounted = false;
     }, []);
+
     return (
         <div>
             <h1>Concept Map</h1>
+            <ConceptMap outlineData={outlineData} />
         </div>
     );
 }
