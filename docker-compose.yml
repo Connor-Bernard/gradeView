@@ -22,7 +22,7 @@ services:
     networks:
       - frontend
     command: npm start
-    restart: always
+    restart: unless-stopped
   api:
     container_name: gradeview-api
     image: ${CI_REGISTRY_IMAGE:-gradeview}/server:${API_VERSION:-development}
@@ -34,7 +34,7 @@ services:
     networks:
       - frontend
     command: npm start
-    restart: always
+    restart: unless-stopped 
   dtgui-progress-report:
     container_name: dtgui-progress-report
     image: ${CI_REGISTRY_IMAGE:-dtgui}/progress-report:${PROGRESS_REPORT_VERSION:-development}
@@ -45,7 +45,7 @@ services:
       - 8080:8080
     expose:
       - 8080
-    restart: always
+    restart: unless-stopped
 networks:
   frontend:
     name: frontend
