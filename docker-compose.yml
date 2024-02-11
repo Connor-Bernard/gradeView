@@ -42,7 +42,7 @@ services:
     environment:
       - LISTEN_PORT=${PROGRESS_REPORT_PORT}
     ports:
-      - 8080:8080
+      - 8080:${PROGRESS_REPORT_PORT}
     expose:
       - 8080
     restart: always
