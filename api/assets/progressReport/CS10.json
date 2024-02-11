@@ -1,6 +1,7 @@
 {
     "name": "CS10",
     "term": "Fall 2023",
+    "start date": "1/17/2024",
     "class levels": {
         "Taught": "#228B22",
         "Not Taught": "#808080"
@@ -47,7 +48,7 @@
                                 "name": "Scope",
                                 "parent": "Variables",
                                 "data": {
-                                    "week": 5
+                                    "week": 3
                                 }
                             },
                             {
@@ -55,7 +56,7 @@
                                 "name": "Global",
                                 "parent": "Variables",
                                 "data": {
-                                    "week": 8
+                                    "week": 3
                                 }
                             },
                             {
@@ -68,7 +69,7 @@
                             }
                         ],
                         "data": {
-                            "week": 5
+                            "week": 3
                         }
                     }
                 ],
