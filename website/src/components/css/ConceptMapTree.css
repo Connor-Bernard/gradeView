@@ -1,0 +1,36 @@
+.node {
+    cursor: pointer;
+}
+
+.node > circle {
+    stroke-width: 3px;
+}
+
+.new > circle {
+    fill: #808080;
+    stroke: #808080;
+    stroke-width: 10px;
+}
+
+.in-process > circle {
+    fill: #FFA500;
+    stroke: #FFA500;
+    stroke-width: 10px;
+}
+
+.learned > circle {
+    fill: #228B22;
+    stroke: #228B22;
+    stroke-width: 10px;
+}
+
+.node text {
+    font: 12px sans-serif;
+}
+
+.link {
+    fill: none;
+    stroke: grey;
+    stroke-width: 2px;
+}
+
