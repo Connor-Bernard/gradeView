@@ -25,7 +25,6 @@
                         "id": 3,
                         "name": "Domain and range",
                         "parent": "Functions",
-                        "children": [],
                         "data": {
                             "week": 4
                         }
@@ -34,7 +33,6 @@
                         "id": 4,
                         "name": "Call by value",
                         "parent": "Functions",
-                        "children": [],
                         "data": {
                             "week": 5
                         }
@@ -48,7 +46,6 @@
                                 "id": 6,
                                 "name": "Scope",
                                 "parent": "Variables",
-                                "children": [],
                                 "data": {
                                     "week": 5
                                 }
@@ -57,7 +54,6 @@
                                 "id": 7,
                                 "name": "Global",
                                 "parent": "Variables",
-                                "children": [],
                                 "data": {
                                     "week": 8
                                 }
@@ -66,7 +62,6 @@
                                 "id": 8,
                                 "name": "Local",
                                 "parent": "Variables",
-                                "children": [],
                                 "data": {
                                     "week": 11
                                 }
@@ -90,7 +85,6 @@
                         "id": 10,
                         "name": "Order of evaluation",
                         "parent": "Expressions",
-                        "children": [],
                         "data": {
                             "week": 13
                         }
@@ -99,7 +93,6 @@
                         "id": 11,
                         "name": "Operators",
                         "parent": "Expressions",
-                        "children": [],
                         "data": {
                             "week": 15
                         }
