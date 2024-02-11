@@ -21,6 +21,7 @@ services:
       - PORT=${REACT_APP_PORT}
     networks:
       - frontend
+      - concept_map_integration
     command: npm start
     restart: always
   api:
@@ -41,6 +42,8 @@ services:
     build: ./progressReport
     environment:
       - LISTEN_PORT=${PROGRESS_REPORT_PORT}
+    networks:
+      - concept_map_integration
     ports:
       - 8080:8080
     expose:
@@ -49,3 +52,5 @@ services:
 networks:
   frontend:
     name: frontend
+  concept_map_integration:
+    name: concept_map_integration
