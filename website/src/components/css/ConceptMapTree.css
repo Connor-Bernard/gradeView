@@ -3,7 +3,13 @@
 }
 
 .node > circle {
-    stroke-width: 3px;
+    stroke: grey;
+    stroke-width: 10px;
+    fill: transparent;
+}
+
+.not-taught > circle {
+    stroke: grey;
 }
 
 .new > circle {
@@ -25,12 +31,21 @@
 }
 
 .node text {
-    font: 12px sans-serif;
+    font-weight: bold;
+    fill: grey;
+    font: 12pt sans-serif black;
 }
 
-.link {
-    fill: none;
-    stroke: grey;
-    stroke-width: 2px;
+.path {
+    cursor: pointer !important;
+    stroke: grey !important;
+    stroke-width: 3px;
 }
 
+.collapsed > circle {
+    fill: grey !important;
+}
+
+.taught {
+    stroke: green !important;
+}
