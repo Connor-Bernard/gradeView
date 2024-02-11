@@ -69,6 +69,7 @@ def index():
     course_name = request.args.get("course_name", "CS10")
     start_date = request.args.get("start_date", "2022-01-01")
     student_mastery = request.args.get("student_mastery", "000000")
+    show_legend = request.args.get("show_legend", "true").lower() == "true"
     parser.generate_map(name=course_name, student_mastery=student_mastery)
     with open("data/{}.json".format(course_name)) as data_file:
         course_data = json.load(data_file)
@@ -78,6 +79,7 @@ def index():
     course_nodes = course_data["nodes"]
     course_level_colors = [c for n, c in course_levels.items()]
     return render_template("web_ui.html",
+                           show_legend = show_legend,
                            start_date=start_date,
                            student_mastery=student_mastery,
                            course_name=course_name,
@@ -86,7 +88,6 @@ def index():
                            course_level_colors=course_level_colors,
                            course_node_count=course_node_count,
                            course_data=course_nodes)
-
 
 if __name__ == '__main__':
     app.run()
