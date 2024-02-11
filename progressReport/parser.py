@@ -121,22 +121,33 @@ def read_meta(name):
     return name, orientation, start_date, term, class_levels, student_levels, styles, root
 
 
-def to_json(name, term, class_levels, student_levels, root):
+def to_json(name, term, start_date, class_levels, student_levels, root):
     def nodes_to_json(node):
-        nodes_json = {
-            "id": node.id,
-            "name": node.label,
-            "parent": node.parent.label if node.parent else "null",
-            "children": [nodes_to_json(c) for c in node.children],
-            "data": {
-                "week": node.week,
+        if node.children:
+            nodes_json = {
+                "id": node.id,
+                "name": node.label,
+                "parent": node.parent.label if node.parent else "null",
+                "children": [nodes_to_json(c) for c in node.children],
+                "data": {
+                    "week": node.week,
+                }
             }
-        }
+        else:
+            nodes_json = {
+                "id": node.id,
+                "name": node.label,
+                "parent": node.parent.label if node.parent else "null",
+                "data": {
+                    "week": node.week,
+                }
+            }
         return nodes_json
 
     json_out = {
         "name": name,
         "term": term,
+        "start date": "{}/{}/{}".format(start_date[1], start_date[2], start_date[0]),
         "class levels": class_levels,
         "student levels": student_levels,
         "count": Node.count,
@@ -148,7 +159,7 @@ def to_json(name, term, class_levels, student_levels, root):
         json.dump(json_out, json_out_file, indent=4)
 
 
-def generate_map(name, student_mastery):
-    print("Log: {} -- {}".format(name, student_mastery))
+def generate_map(name):
+    print("Log: {}".format(name))
     name, orientation, start_date, term, class_levels, student_levels, styles, root = read_meta(name)
-    to_json(name, term, class_levels, student_levels, root)
+    to_json(name, term, start_date, class_levels, student_levels, root)

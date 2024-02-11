@@ -1,7 +1,7 @@
 name: CS10
-term: Fall 2023
+term: Spring 2024
 orientation: left to right
-start date: 2023 09 01
+start date: 2024 01 15
 styles:
     name: root, shape: ellipse, style: filled, fillcolor: #3A73A5
     name: blue1, shape: ellipse, style: filled, fillcolor: #74B3CE
@@ -12,7 +12,7 @@ class levels:
     Not Taught: #808080
 student levels:
     Not Learned: #808080
-    Unfamiliar: #FFFF00
+    Unfamiliar: #FFA500
     Proficient: #228B22
 nodes:
     Functions [blue2, Week2, link="https://cs61c.org"]

@@ -69,7 +69,7 @@ def index():
     course_name = request.args.get("course_name", "CS10")
     start_date = request.args.get("start_date", "2022-01-01")
     student_mastery = request.args.get("student_mastery", "000000")
-    parser.generate_map(name=course_name, student_mastery=student_mastery)
+    parser.generate_map(name=course_name)
     with open("data/{}.json".format(course_name)) as data_file:
         course_data = json.load(data_file)
     course_term = course_data["term"]
@@ -86,6 +86,15 @@ def index():
                            course_level_colors=course_level_colors,
                            course_node_count=course_node_count,
                            course_data=course_nodes)
+
+
+@app.route('/parse', methods=["POST"])
+def parse():
+    course_name = request.form.get("course_name", "CS10")
+    parser.generate_map(name=course_name)
+    with open("data/{}.json".format(course_name)) as data_file:
+        course_data = json.load(data_file)
+    return course_data
 
 
 if __name__ == '__main__':
