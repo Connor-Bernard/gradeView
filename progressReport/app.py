@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
 import json
+import os
 import parser
 
 """
@@ -72,6 +73,8 @@ def index():
 @app.route('/parse', methods=["POST"])
 def parse():
     course_name = request.form.get("course_name", "CS10")
+    if '/' in course_name or not os.path.exists("meta/{}.txt".format(course_name)):
+        return "Course name \"{}\" is not valid.".format(course_name)
     parser.generate_map(name=course_name)
     with open("data/{}.json".format(course_name)) as data_file:
         course_data = json.load(data_file)

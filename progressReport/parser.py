@@ -110,14 +110,6 @@ def read_meta(name):
 
     root.label = name
 
-    print("name: \n", name)
-    print("term: \n", term)
-    print("start date: \n", start_date)
-    print("styles: \n", styles)
-    print("class levels: \n", class_levels)
-    print("student levels: \n", student_levels)
-    print("nodes: \n", nodes)
-
     return name, orientation, start_date, term, class_levels, student_levels, styles, root
 
 
@@ -154,7 +146,6 @@ def to_json(name, term, start_date, class_levels, student_levels, root):
         "nodes": nodes_to_json(root)
     }
 
-    print(json_out)
     with open('data/{}.json'.format(name), 'w', encoding='utf-8') as json_out_file:
         json.dump(json_out, json_out_file, indent=4)
 
