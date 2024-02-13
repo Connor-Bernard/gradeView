@@ -65,9 +65,20 @@ Dream Team GUI
 
 app = Flask(__name__)
 
-
 @app.route('/', methods=["GET"])
 def index():
+    def assign_node_levels(node):
+        nonlocal student_mastery
+        if not node["children"]:
+            node["student_level"] = int(student_mastery[0]) if student_mastery else 0
+            student_mastery = student_mastery[1:] if len(student_mastery) > 1 else ""
+        else:
+            children_levels = []
+            for child in node["children"]:
+                children_levels.append(assign_node_levels(child))
+            node["student_level"] = sum(children_levels) // len(children_levels)
+        return node["student_level"]
+
     course_name = request.args.get("course_name", "CS10")
     start_date = request.args.get("start_date", "2022-01-01")
     student_mastery = request.args.get("student_mastery", "000000")
@@ -78,10 +89,9 @@ def index():
     student_levels = course_data["student levels"]
     course_node_count = course_data["count"]
     course_nodes = course_data["nodes"]
-
+    assign_node_levels(course_nodes)
     return render_template("web_ui.html",
                            start_date=start_date,
-                           student_mastery=student_mastery,
                            course_name=course_name,
                            course_term=course_term,
                            student_levels=student_levels,

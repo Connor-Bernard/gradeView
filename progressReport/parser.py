@@ -149,7 +149,6 @@ def to_json(name, term, start_date, class_levels, student_levels, root, render=F
     with open('data/{}.json'.format(name), 'w', encoding='utf-8') as json_out_file:
         json.dump(json_out, json_out_file, indent=4)
 
-
 def generate_map(name, render=False):
     print("Log: {}".format(name))
     name, orientation, start_date, term, class_levels, student_levels, styles, root = read_meta(name)

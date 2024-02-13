@@ -209,17 +209,10 @@
         }
 
         function assignStudentLevels(node) {
-            if (node["id"] > studentMastery.length) {
-                node["data"]["class"] = "level0";
-            } else {
-                node["data"]["class"] = "level" + studentMastery[node["id"]-1];
+            node["data"]["class"] = "level" + node["student_level"];
+            for (let i = 0; i < node["children"].length; i++) {
+                assignStudentLevels(node["children"][i])
             }
-            if ("children" in node) {
-                for (let i = 0; i < node["children"].length; i++) {
-                    assignStudentLevels(node["children"][i])
-                }
-            }
-
         }
 
         function parseNodeClass_NewLearned(node) {
