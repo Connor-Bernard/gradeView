@@ -1,7 +1,7 @@
 name: CS10
-term: Fall 2022
+term: Spring 2024
 orientation: left to right
-start date: 2023 06 21
+start date: 2024 01 15
 styles:
     name: root, shape: ellipse, style: filled, fillcolor: #3A73A5
     name: blue1, shape: ellipse, style: filled, fillcolor: #74B3CE
@@ -11,18 +11,17 @@ class levels:
     Taught: #228B22
     Not Taught: #808080
 student levels:
-    Not Learned: #808080
-    Unfamiliar: #FFFF00
-    Intermediate: #FFA500
-    Proficient: #228B22
+    First Steps: #dddddd
+    Needs Practice: #a3d7fc
+    In Progress: #59b0f9
+    Almost There: #3981c1
+    Mastered: #20476a
 nodes:
-    Higher-Order Functions [blue1, Week1, link="https://cs61c.org"]
-        Conditionals [blue2, Week1, link="https://cs61c.org"]
-            Boolean Logic [default, Week1, link="https://cs61c.org"]
-        Function Composition [blue2, Week2, link="https://cs61c.org"]
-        Functions [blue2, Week3, link="https://cs61c.org"]
-            Abstraction [default, Week3, link="https://cs61c.org"]
-            Domain and Range [default, Week3, link="https://cs61c.org"]
-            Variable Scope [default, Week4, link="https://cs61c.org"]
-            Debugging [default, Week5, link="https://cs61c.org"]
+    Quest [blue2, Week2, link="https://cs61c.org"]
+        Abstraction [default, Week4, link="https://cs61c.org"]
+        Iteration [default, Week5, link="https://cs61c.org"]
+        Functions [default, Week5, link="https://cs61c.org"]
+        HOF [blue2, Week12, link="https://cs61c.org"]
+        Domain [default, Week13, link="https://cs61c.org"]
+        Range [default, Week15, link="https://cs61c.org"]
 end
