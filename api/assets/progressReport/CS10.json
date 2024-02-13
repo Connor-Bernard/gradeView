@@ -1,0 +1,112 @@
+{
+    "name": "CS10",
+    "term": "Spring 2024",
+    "start date": "1/15/2024",
+    "class levels": [
+        {
+            "name": "Taught",
+            "color": "#228B22"
+        },
+        {
+            "name": "Not Taught",
+            "color": "#808080"
+        }
+    ],
+    "student levels": [
+        {
+            "name": "First Steps",
+            "color": "#757C88"
+        },
+        {
+            "name": "Needs Practice",
+            "color": "#ADD8E6"
+        },
+        {
+            "name": "In Progress",
+            "color": "#89CFF0"
+        },
+        {
+            "name": "Almost There",
+            "color": "#6495ED"
+        },
+        {
+            "name": "Mastered",
+            "color": "#0F4D92"
+        }
+    ],
+    "count": 8,
+    "nodes": {
+        "id": 1,
+        "name": "CS10",
+        "parent": "null",
+        "children": [
+            {
+                "id": 2,
+                "name": "Quest",
+                "parent": "null",
+                "children": [
+                    {
+                        "id": 3,
+                        "name": "Abstraction",
+                        "parent": "Quest",
+                        "children": [],
+                        "data": {
+                            "week": 4
+                        }
+                    },
+                    {
+                        "id": 4,
+                        "name": "Iteration",
+                        "parent": "Quest",
+                        "children": [],
+                        "data": {
+                            "week": 5
+                        }
+                    },
+                    {
+                        "id": 5,
+                        "name": "Functions",
+                        "parent": "Quest",
+                        "children": [],
+                        "data": {
+                            "week": 5
+                        }
+                    },
+                    {
+                        "id": 6,
+                        "name": "HOF",
+                        "parent": "Quest",
+                        "children": [],
+                        "data": {
+                            "week": 12
+                        }
+                    },
+                    {
+                        "id": 7,
+                        "name": "Domain",
+                        "parent": "Quest",
+                        "children": [],
+                        "data": {
+                            "week": 13
+                        }
+                    },
+                    {
+                        "id": 8,
+                        "name": "Range",
+                        "parent": "Quest",
+                        "children": [],
+                        "data": {
+                            "week": 15
+                        }
+                    }
+                ],
+                "data": {
+                    "week": 2
+                }
+            }
+        ],
+        "data": {
+            "week": 0
+        }
+    }
+}
