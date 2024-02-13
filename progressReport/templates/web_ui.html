@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Tree Example</title>
+    <title>{{ course_name }} Progress Report</title>
 
     <style>
 
@@ -32,14 +32,41 @@
             stroke: grey;
             stroke-width: 2px;
         }
+
         #legends-wrapper {
             display: flex;
             justify-content: center;
             justify-items: center;
+            margin-top: 20px;
         }
 
-        #legends {
-         margin: 50px;
+        .legend {
+            margin: 10px;
+            padding: 10px;
+            text-align: center;
+            height: 80px;
+            width: 80px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .legend-text {
+            background-color: white;
+            opacity: 0.8;
+            height: 70px;
+            width: 70px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h5 {
+            text-align: center;
+            vertical-align: middle;
         }
 
     </style>
@@ -48,25 +75,22 @@
 
 <body>
     <div id="legends-wrapper">
-        <div id="legends">
-        <h2> {{ course_name }} {{ course_term }} </h2>
-        <h3>
-            {% for level in student_levels %}
-                <span style="color:{{ level["color"] }};">{{ level["name"] }}&nbsp;&nbsp;</span>
-            {% endfor %}
-        </h3>
-    </div>
+        {% for level in student_levels %}
+            <div class="legend" style="background-color:{{ level["color"] }};">
+                <div class="legend-text"> <h5> {{ level["name"] }} </h5> </div>
+            </div>
+        {% endfor %}
     </div>
 
-    <!-- load the d3.js library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"
             integrity="sha256-dsOXGNHAo/syFnazt+KTBsCQeRmlcW1XKL0bCK4Baec="
-	        crossorigin="anonymous"></script>
+	        crossorigin="anonymous">
+    </script>
 
     <script>
         let courseData = {{ course_data|tojson }};
 
-        let margin = {top: 100, right: innerWidth/3, bottom: 100, left: 0},
+        let margin = {top: 100, right: innerWidth/3 + 100, bottom: 100, left: innerWidth/3 + 100},
             width = innerWidth - margin.right - margin.left,
             height = 50 * {{ course_node_count }};
 
