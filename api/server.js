@@ -481,7 +481,6 @@ async function main(){
      * @returns {Promise<Response<string>>} the user's progress report query string.
      */
     app.get('/api/progressquerystring', async (req, res) => {
-        console.debug('received request');
         const email = await getEmailFromIdToken(oauthClient, req.headers.authorization.split(' ')[1]);
         return res.status(200).send(await getProgressReportQueryParameter(apiAuthClient, email));
     });
