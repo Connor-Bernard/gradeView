@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import api from '../utils/api';
 import Loader from '../components/Loader';
+import PageHeader from '../components/PageHeader';
 import './css/conceptMap.css';
 
 export default function ConceptMap() {
@@ -28,14 +29,18 @@ export default function ConceptMap() {
     }
 
     return (
-        <div style={{ textAlign: 'center', height:'100%',border: 'none' }} overflow="hidden">
-            <h1>Concept Map</h1>
-            <iframe id="ConceptMap" title="Concept Map"  
-            className='concept_map_iframe'
-            src={`${window.location.origin}/progress?show_legend=false&student_mastery=${studentMastery}`} 
-            allowfullscreen="" 
-            scrolling='no'>
-            </iframe>
-        </div>
+        <>
+            <PageHeader>Concept Map</PageHeader>
+            <div style={{ textAlign: 'center', height:"100%" }} overflow="hidden">
+                <iframe
+                    className="concept_map_iframe"
+                    id="ConceptMap"
+                    title="Concept Map"
+                    scrolling="no"
+                    src={`${window.location.origin}/progress?show_legend=false&student_mastery=${studentMastery}`}
+                    allowFullScreen
+                />
+            </div>
+        </>
     );
 }
