@@ -28,16 +28,14 @@ export default function ConceptMap() {
     }
 
     return (
-        <div style={{ textAlign: 'center' }} overflow="hidden">
+        <div style={{ textAlign: 'center', height:'100%',border: 'none' }} overflow="hidden">
             <h1>Concept Map</h1>
-            <iframe
-                className="concept_map_iframe"
-                id="ConceptMap"
-                title="Concept Map"
-                scrolling="no"
-                src={`${window.location.origin}/progress?show_legend=false&student_mastery=${studentMastery}`}
-                allowFullScreen
-            />
+            <iframe id="ConceptMap" title="Concept Map"  
+            className='concept_map_iframe'
+            src={`${window.location.origin}/progress?show_legend=false&student_mastery=${studentMastery}`} 
+            allowfullscreen="" 
+            scrolling='no'>
+            </iframe>
         </div>
     );
 }
