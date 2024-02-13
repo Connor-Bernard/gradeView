@@ -41,11 +41,11 @@ services:
     image: ${CI_REGISTRY_IMAGE:-dtgui}/progress-report:${PROGRESS_REPORT_VERSION:-development}
     build: ./progressReport
     environment:
-      - LISTEN_PORT=${PROGRESS_REPORT_PORT}
+      - LISTEN_PORT=${PROGRESS_REPORT_PORT:-5000}
     networks:
       - concept_map_integration
     ports:
-      - 8080:8080
+      - 8080:${PROGRESS_REPORT_PORT}
     expose:
       - 8080
     restart: always
