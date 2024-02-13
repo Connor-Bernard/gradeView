@@ -6,6 +6,8 @@ import esMain from 'es-main';
 import config from 'config';
 import dotenv from 'dotenv';
 
+import ProgressReportData from './assets/progressReport/CS10.json' assert {type: 'json'};
+
 class AuthenticationError extends Error{}
 class UnauthorizedAccessError extends Error{}
 class BadSheetDataError extends Error{}
@@ -302,6 +304,48 @@ async function getBins(apiAuthClient){
     return res.data.values;
 }
 
+/**
+ * Calculates the total amount of points a user has achieved so far for each topic.
+ * @param {Array<object>} userGradeData the total user's grade data.
+ * @returns {object} a dictionary of topics to sum of those grades.
+ */
+function mapTopicsToGrades(userGradeData) {
+    const topicsToGradesTable = {};
+    userGradeData.forEach((assignment) => {
+        if (!(assignment.assignment in topicsToGradesTable)) {
+            topicsToGradesTable[assignment.assignment] = 0;
+        }
+        topicsToGradesTable[assignment.assignment] += +(assignment.grade ?? 0);
+    });
+    return topicsToGradesTable;
+}
+
+/**
+ * Gets the user's progress for each of the topics taught so far.
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {string} email the email of the user to look up.
+ */
+async function getProgressReportQueryParameter(apiAuthClient, email){
+    const userGrades = await getUserGrades(apiAuthClient, email);
+    const maxGrades = await getUserGrades(apiAuthClient, MAXGRADEROW);
+    const userTopicPoints = mapTopicsToGrades(userGrades);
+    const maxTopicPoints = mapTopicsToGrades(maxGrades);
+    const numMasteryLevels = ProgressReportData['student levels'].length - 2;
+    Object.entries(userTopicPoints).forEach(([topic, userPoints]) => {
+        const maxAchievablePoints = maxTopicPoints[topic];
+        if (userPoints === 0) {
+            return;
+        }
+        if (userPoints >= maxAchievablePoints) {
+            userTopicPoints[topic] = numMasteryLevels + 1;
+            return;
+        }
+        userTopicPoints[topic] = Math.ceil((userPoints / maxAchievablePoints) * numMasteryLevels);
+    });
+    return Object.values(userTopicPoints).join('');
+}
+
+
 async function main(){
     const app = express();
     app.use(cors());
@@ -311,6 +355,7 @@ async function main(){
         credentials: JSON.parse(process.env.SERVICE_ACCOUNT_CREDENTIALS),
         scopes: SCOPES
     }).getClient();
+
     const oauthClient = new OAuth2Client(OAUTHCLIENTID);
 
     /**
@@ -453,6 +498,17 @@ async function main(){
                 return res.status(502).json({ error: '502: Bad Gateway'});
             }
         }
+    });
+
+    /**
+     * Responds with the logged in user's configured progress report query string.
+     * @param {Request} req authenticated request.
+     * @param {Response} res
+     * @returns {Promise<Response<string>>} the user's progress report query string.
+     */
+    app.get('/api/progressquerystring', async (req, res) => {
+        const email = await getEmailFromIdToken(oauthClient, req.headers.authorization.split(' ')[1]);
+        return res.status(200).send(await getProgressReportQueryParameter(apiAuthClient, email));
     });
 
     // Responds with whether or not the current user is an admin

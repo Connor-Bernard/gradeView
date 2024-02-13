@@ -2,10 +2,18 @@ import axios from 'axios';
 
 const URL = window.location.origin;
 
-const api = axios.create({
-    baseURL: `${URL}/api/`,
-    headers: {'Authorization': localStorage.getItem('token')}
-});
+let api;
+
+if (localStorage.getItem('token')) {
+    api = axios.create({
+        baseURL: `${URL}/api/`,
+        headers: {'Authorization': localStorage.getItem('token')}
+    });
+} else {
+    api = axios.create({
+        baseURL: `${URL}/api/`,
+    });
+}
 
 api.interceptors.response.use(undefined, (err) => {
     try {
