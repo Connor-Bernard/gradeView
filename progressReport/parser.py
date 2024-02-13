@@ -113,9 +113,9 @@ def read_meta(name):
     return name, orientation, start_date, term, class_levels, student_levels, styles, root
 
 
-def to_json(name, term, start_date, class_levels, student_levels, root):
+def to_json(name, term, start_date, class_levels, student_levels, root, render=False):
     def nodes_to_json(node):
-        if node.children:
+        if render or node.children:
             nodes_json = {
                 "id": node.id,
                 "name": node.label,
@@ -150,7 +150,7 @@ def to_json(name, term, start_date, class_levels, student_levels, root):
         json.dump(json_out, json_out_file, indent=4)
 
 
-def generate_map(name):
+def generate_map(name, render=False):
     print("Log: {}".format(name))
     name, orientation, start_date, term, class_levels, student_levels, styles, root = read_meta(name)
-    to_json(name, term, start_date, class_levels, student_levels, root)
+    to_json(name, term, start_date, class_levels, student_levels, root, render)
