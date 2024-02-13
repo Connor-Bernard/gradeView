@@ -30,7 +30,7 @@ export default function ConceptMap() {
 
     return (
         <>
-            <PageHeader>Concept Mape</PageHeader>
+            <PageHeader>Concept Map</PageHeader>
             <div style={{ textAlign: 'center' }} overflow="hidden">
                 <iframe
                     className="concept_map_iframe"
