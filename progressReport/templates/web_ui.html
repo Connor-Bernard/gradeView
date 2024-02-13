@@ -57,6 +57,7 @@
 </head>
 
 <body>
+    {% if show_legend %}
     <div id="legends-wrapper">
         <div id="legends">
         <h2> {{ course_name }} {{ course_term }} </h2>
@@ -67,6 +68,7 @@
         </h3>
     </div>
     </div>
+    {% endif %}
 
     <!-- load the d3.js library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
