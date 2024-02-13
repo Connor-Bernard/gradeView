@@ -10,6 +10,7 @@ services:
       - REVERSE_PROXY_LISTEN=${REVERSE_PROXY_LISTEN:-0.0.0.0:80}
     networks:
       - frontend
+      - concept_map_integration
     ports:
       - 80:80
   web:
@@ -21,7 +22,6 @@ services:
       - PORT=${REACT_APP_PORT}
     networks:
       - frontend
-      - concept_map_integration
     command: npm start
     restart: always
   api:
