@@ -1,4 +1,5 @@
 import React from 'react';
+import './css/conceptMap.css';
 
 export default function ConceptMap() {
 
