@@ -15,23 +15,13 @@
             stroke-width: 3px;
         }
 
-        .new circle {
-            fill: #808080;
-            stroke: #808080;
-            stroke-width: 10px;
-        }
-
-        .in-process circle {
-            fill: #FFA500;
-            stroke: #FFA500;
-            stroke-width: 10px;
-        }
-
-        .learned circle {
-            fill: #228B22;
-            stroke: #228B22;
-            stroke-width: 10px;
-        }
+        {% for i in range(student_levels|length) %}
+            .level{{ i }} circle {
+                fill: {{ student_levels[i]["color"] }};
+                stroke: {{ student_levels[i]["color"] }};
+                stroke-width: 10px;
+            }
+        {% endfor %}
 
         .node text {
             font: 12px sans-serif;
@@ -61,8 +51,8 @@
         <div id="legends">
         <h2> {{ course_name }} {{ course_term }} </h2>
         <h3>
-            {% for level_name, level_color in course_levels.items() %}
-                <span style="color:{{ level_color }};">{{ level_name }}</span>
+            {% for level in student_levels %}
+                <span style="color:{{ level["color"] }};">{{ level["name"] }}&nbsp;&nbsp;</span>
             {% endfor %}
         </h3>
     </div>
@@ -75,8 +65,6 @@
 
     <script>
         let courseData = {{ course_data|tojson }};
-        console.log(courseData);
-        console.log(courseData["nodes"]);
 
         let margin = {top: 100, right: innerWidth/3, bottom: 100, left: 0},
             width = innerWidth - margin.right - margin.left,
@@ -99,7 +87,6 @@
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         let studentMastery = "{{ student_mastery }}";
-        let level_colors = {{ course_level_colors|tojson }};
 
         let termStartDate = "{{ start_date }}";
         let week = (new Date() - Date.parse(termStartDate)) / (1000*60*60*24*7)
@@ -111,18 +98,11 @@
         let allLearned = true;
 
         function loadCourseData(treeData) {
-            parseNodeClass_NewLearned(treeData);
-            parseNodeClass_InProcess(treeData);
-            if (allLearned) {
-                treeData["data"]["class"] = "learned";
-            } else {
-                treeData["data"]["class"] = "in-process";
-            }
             root = treeData;
             root.x0 = height / 2;
             root.y0 = width / 2;
+            assignStudentLevels(root);
             update(root);
-
             d3.select(self.frameElement).style("height", "500px");
         }
 
@@ -157,14 +137,7 @@
                 .attr("text-anchor", function(d) { return d.children || d._children ? "start" : "end"; })
                 .text(function(d) { return d.name; })
                 .style("fill-opacity", 1e-6)
-                .style("fill", function(d) {
-                    if (d.id === 0) {
-                        return "red";
-                    }
-                    else {
-                        return level_colors[studentMastery[d.id - 1]];
-                    }
-                });
+                .style("fill", "black");
 
             // Transition nodes to their new position.
             let nodeUpdate = node.transition()
@@ -233,6 +206,20 @@
                 d._children = null;
             }
             update(d);
+        }
+
+        function assignStudentLevels(node) {
+            if (node["id"] > studentMastery.length) {
+                node["data"]["class"] = "level0";
+            } else {
+                node["data"]["class"] = "level" + studentMastery[node["id"]-1];
+            }
+            if ("children" in node) {
+                for (let i = 0; i < node["children"].length; i++) {
+                    assignStudentLevels(node["children"][i])
+                }
+            }
+
         }
 
         function parseNodeClass_NewLearned(node) {

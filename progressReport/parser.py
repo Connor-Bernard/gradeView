@@ -29,8 +29,8 @@ def read_meta(name):
     orientation = ""
     start_date = []
     styles = {}
-    class_levels = {}
-    student_levels = OrderedDict()
+    class_levels = []
+    student_levels = []
     nodes = []
     root = Node(label="", style="root", week=0, link="", parent=None, children=nodes)
 
@@ -77,10 +77,10 @@ def read_meta(name):
             }
         elif parse_mode == "CLASS_LEVEL":
             level_match = re.search(r"\s*([A-Za-z-_\s]+): #([A-Za-z0-9]+)", line)
-            class_levels[level_match.group(1)] = "#{}".format(level_match.group(2))
+            class_levels.append({"name": level_match.group(1), "color": "#{}".format(level_match.group(2))})
         elif parse_mode == "STUDENT_LEVEL":
             level_match = re.search(r"\s*([A-Za-z-_\s]+): #([A-Za-z0-9]+)", line)
-            student_levels[level_match.group(1)] = "#{}".format(level_match.group(2))
+            student_levels.append({"name": level_match.group(1), "color": "#{}".format(level_match.group(2))})
         elif parse_mode == "NODE":
             node_match = re.search(r"(\s+)([A-Za-z0-9\-\s]+) \[([A-Za-z0-9]+), Week([0-9]+), link=\"(.+)\"]", line)
             if len(node_match.group(1)) // 4 == 1:
