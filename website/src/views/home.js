@@ -155,8 +155,8 @@ function Home() {
                             ))}
                         </>
                        : 
-                        <Box sx={{display:'flex', flexDirection:'column', alignItems:'center', marginTop:4} }>                            
-                            <Grid container spacing={{ xs: 3, md: 5 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                        <Box sx={{display:'flex', flexDirection:'column', alignItems:'center', marginTop:4, width: '100%'}}>                            
+                            <Grid container sx={{width:'100%'}} spacing={{ xs: 3, md: 5 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                                 {accordionTabs.map((assignmentType) => (
                                     <GradeGrid
                                         key={assignmentType}
