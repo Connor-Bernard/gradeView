@@ -31,14 +31,14 @@
             fill: none;
         }
 
-        .link-taught {
-            stroke: darkseagreen;
-            stroke-width: 3px;
+        .link-not-taught {
+            stroke: {{ class_levels[0]["color"] }};
+            stroke-width: 2px;
         }
 
-        .link-not-taught {
-            stroke: grey;
-            stroke-width: 2px;
+        .link-taught {
+            stroke: {{ class_levels[1]["color"] }};
+            stroke-width: 3px;
         }
 
         #legends-wrapper {
@@ -52,8 +52,6 @@
             margin: 10px;
             padding: 10px;
             text-align: center;
-            height: 80px;
-            width: 80px;
             border-radius: 5px;
             cursor: pointer;
             display: flex;
@@ -64,12 +62,31 @@
         .legend-text {
             background-color: white;
             opacity: 0.8;
-            height: 70px;
-            width: 70px;
             border-radius: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .legend-node {
+            height: 80px;
+            width: 80px;
+        }
+
+        .legend-link {
+            height: 20px;
+            width: 180px;
+        }
+
+
+        .legend-node-text {
+            height: 70px;
+            width: 70px;
+        }
+
+        .legend-link-text {
+            height: 15px;
+            width: 200px;
         }
 
         h5 {
@@ -84,8 +101,15 @@
 <body>
     <div id="legends-wrapper">
         {% for level in student_levels %}
-            <div class="legend" style="background-color:{{ level["color"] }};">
-                <div class="legend-text"> <h5> {{ level["name"] }} </h5> </div>
+            <div class="legend legend-node" style="background-color:{{ level["color"] }};">
+                <div class="legend-text legend-node-text"> <h5> {{ level["name"] }} </h5> </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div id="legends-wrapper">
+        {% for level in class_levels %}
+            <div class="legend legend-link" style="background-color:{{ level["color"] }};">
+                <div class="legend-text legend-link-text"> <h5> {{ level["name"] }} </h5> </div>
             </div>
         {% endfor %}
     </div>
@@ -211,8 +235,7 @@
             // Enter any new links at the parent's previous position
             link.enter().insert("path", "g")
                 .attr("class", function(d) {
-                    let targetWeek = d.target["data"]["week"];
-                    if (targetWeek <= week) {
+                    if (d.target["data"]["week"] <= week && d.source["data"]["week"] <= week) {
                         return "link link-taught";
                     } else {
                         return "link link-not-taught";

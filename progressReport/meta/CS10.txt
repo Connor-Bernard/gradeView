@@ -8,8 +8,8 @@ styles:
     name: blue2, shape: ellipse, style: filled, fillcolor: #87CEEB
     name: default, shape: ellipse, style: filled, fillcolor: #E0E0E0
 class levels:
-    Taught: #228B22
-    Not Taught: #808080
+    Not Taught: #dddddd
+    Taught: #8fbc8f
 student levels:
     First Steps: #dddddd
     Needs Practice: #a3d7fc
