@@ -29,6 +29,14 @@
 
         .link {
             fill: none;
+        }
+
+        .link-taught {
+            stroke: darkseagreen;
+            stroke-width: 3px;
+        }
+
+        .link-not-taught {
             stroke: grey;
             stroke-width: 2px;
         }
@@ -88,7 +96,8 @@
     </script>
 
     <script>
-        let courseData = {{ course_data|tojson }};
+        let courseData = {{ course_data|tojson|safe }};
+        var student_levels = {{ student_levels|tojson|safe }};
 
         let margin = {top: 100, right: innerWidth/3 + 100, bottom: 100, left: innerWidth/3 + 100},
             width = innerWidth - margin.right - margin.left,
@@ -153,7 +162,10 @@
 
             nodeEnter.append("circle")
                 .attr("r", 1e-6)
-                .style("fill-opacity",  function(d) { return d._children ? 1 : 0; });
+                // .style("fill-opacity",  function(d) { return d._children ? 1 : 0; });
+                .style("fill",  function(d) {
+                    return d._children ? student_levels[d["student_level"]]["color"] : "white";
+                });
 
             nodeEnter.append("text")
                 .attr("x", function(d) { return d.children || d._children ? 15 : -15; })
@@ -170,7 +182,10 @@
 
             nodeUpdate.select("circle")
                 .attr("r", 10)
-                .style("fill-opacity", function(d) { return d._children ? 1 : 0; });
+                //.style("fill-opacity", function(d) { return d._children ? 1 : 0; });
+                .style("fill",  function(d) {
+                    return d._children ? student_levels[d["student_level"]]["color"] : "white";
+                });
 
             nodeUpdate.select("text")
                 .style("fill-opacity", 1);
@@ -189,11 +204,20 @@
 
             // Update the links…
             let link = svg.selectAll("path.link")
-                .data(links, function(d) { return d.target.id; });
+                .data(links, function(d) {
+                    return d.target.id;
+                });
 
-            // Enter any new links at the parent's previous position.
+            // Enter any new links at the parent's previous position
             link.enter().insert("path", "g")
-                .attr("class", "link")
+                .attr("class", function(d) {
+                    let targetWeek = d.target["data"]["week"];
+                    if (targetWeek <= week) {
+                        return "link link-taught";
+                    } else {
+                        return "link link-not-taught";
+                    }
+                })
                 .attr("d", function(d) {
                     let o = {x: source.x0, y: source.y0};
                     return diagonal({source: o, target: o});

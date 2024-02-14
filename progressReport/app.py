@@ -80,11 +80,11 @@ def index():
         return node["student_level"]
 
     course_name = request.args.get("course_name", "CS10")
-    start_date = request.args.get("start_date", "2022-01-01")
     student_mastery = request.args.get("student_mastery", "000000")
     parser.generate_map(name=course_name, render=True)
     with open("data/{}.json".format(secure_filename(course_name))) as data_file:
         course_data = json.load(data_file)
+    start_date = course_data["start date"]
     course_term = course_data["term"]
     student_levels = course_data["student levels"]
     course_node_count = course_data["count"]
