@@ -83,6 +83,7 @@ def read_meta(name):
             student_levels.append({"name": level_match.group(1), "color": "#{}".format(level_match.group(2))})
         elif parse_mode == "NODE":
             node_match = re.search(r"(\s+)([A-Za-z0-9\-\s]+) \[([A-Za-z0-9]+), Week([0-9]+), link=\"(.+)\"]", line)
+            root.week = max(root.week, int(node_match.group(4)))
             if len(node_match.group(1)) // 4 == 1:
                 cur_node_parent = Node(node_match.group(2), node_match.group(3), node_match.group(4),
                                        node_match.group(5))
