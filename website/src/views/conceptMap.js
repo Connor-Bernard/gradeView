@@ -14,7 +14,6 @@ export default function ConceptMap() {
         setLoading(true);
         if (mounted && localStorage.getItem('token')) {
             api.get('/progressquerystring').then((res) => {
-                console.debug('debug: hit this point.');
                 setStudentMastery(res.data)
                 setLoading(false);
             });
