@@ -475,10 +475,7 @@ async function main(){
     });
 
     /**
-     * Responds with the logged in user's configured progress report query string.
      * @param {Request} req authenticated request.
-     * @param {Response} res
-     * @returns {Promise<Response<string>>} the user's progress report query string.
      */
     app.get('/api/progressquerystring', async (req, res) => {
         const email = await getEmailFromIdToken(oauthClient, req.headers.authorization.split(' ')[1]);
