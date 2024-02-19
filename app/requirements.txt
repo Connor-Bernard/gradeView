@@ -1,4 +1,0 @@
-python-dotenv==1.0.0
-gspread
-google-auth
-redis
