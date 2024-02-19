@@ -430,20 +430,11 @@ async function main(){
     app.use(unless(['/api/bins', '/api/verifyaccess'], verificationMiddleWare));
     app.use('/api/admin', adminVerificationMiddleWare);
 
-    /** 
-     * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
-     * @returns list of lists with the first value being the low end bucket val and the second being the grade
-    */
-
     app.get('/api/bins', async (req, res) => {
         return res.status(200).json(await getBins(apiAuthClient));
     });
 
-    /**
-     * @param {OAuth2Client} oauthClient 
-     * @param {String} token 
-     * @returns {Promise<String>} user's email 
-    */
+    // Use the auth checking of middleware to verify proper auth
     app.get('/api/verifyaccess', async (req, res) => {
         let auth = req.headers['authorization'];
         if (!auth) {
@@ -460,34 +451,17 @@ async function main(){
     });
 
     // Responds with json dictionary caller's grade data
-    /**
-     * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
-     * @param {String} oauthClient 
-     * @param {String} token 
-     * @returns {Promise<Object>} dictionary of user's grades
-     */
     app.get('/api/grades', async (req, res) => {
         return res.status(200).json(await getUserGradesFromTokenAsFraction(apiAuthClient,
             oauthClient, req.headers.authorization.split(' ')[1]));
     });
 
     // Responds with the user's profile picture extracted from their token
-    /**
-     * @param {OAuth2Client} oauthClient 
-     * @param {String} token 
-     * @returns {String} url of current user profile picture
-     */
     app.get('/api/profilepicture', async (req, res) => {
         return res.status(200).json(await getProfilePictureFromIdToken(oauthClient,
             req.headers.authorization.split(' ')[1]));
     });
 
-    /**
-     * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
-     * @param {OAuth2Client} oauthClient 
-     * @param {String} token 
-     * @returns {Promise<Object>} projections for users grades
-     */
     app.get('/api/projections', async (req, res) => {
         try{
             return res.status(200).json(await getProjectedGradesFromToken(apiAuthClient,
@@ -512,36 +486,21 @@ async function main(){
     });
 
     // Responds with whether or not the current user is an admin
-    /**
-     * @param {OAuth2Client} oauthClient 
-     * @param {token} token 
-     * @returns whether or not the current user is an admin
-     */
     app.get('/api/isadmin', async (req, res) => {
         return res.status(200).json(await hasAdminStatus(oauthClient,
             req.headers.authorization.split(' ')[1]));
     });
 
     // Responds with the current students in the spreadsheet
-    /**
-     * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
-     * @returns list of lists with the first value of legal name and second of email
-     */
     app.get('/api/admin/students', async (req, res) => {
         return res.status(200).json(await getStudents(apiAuthClient));
     });
 
     // Responds with the grades for the specified student
-    /**
-     * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
-     * @param {String} email 
-     * @returns {Promise<Object>} dictionary of user's grades
-     */
     app.post('/api/admin/getStudent', async (req, res) => {
         res.status(200).json(await getUserGradesAsFraction(apiAuthClient, req.body.email));
     });
 
-    //app listens on PORT
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}.`);
         console.log('Press Ctrl+C to quit.');
