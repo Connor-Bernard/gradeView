@@ -35,18 +35,18 @@ export default function Buckets(){
     }
 
     const gradingRows = [
-        createGradingRow('Quest', 40),
-        createGradingRow('Midterm (With Snap!)', 15),
-        createGradingRow('Midterm (Without Snap!)', 65),
+        createGradingRow('Quest', 25),
+        createGradingRow('Midterm', 80),
         createGradingRow('Postterm', 100),
         createGradingRow('Project 1: Wordle™-lite', 10),
-        createGradingRow('Project 2: Wordle™', 20),
-        createGradingRow('Project 3: 2048', 30),
-        createGradingRow('Project 4: Explore', 40),
-        createGradingRow('Project 5: Python', 50),
+        createGradingRow('Project 2: Spelling-Bee', 20),
+        createGradingRow('Project 3: 2048', 45),
+        createGradingRow('Project 4: Explore', 25),
+        createGradingRow('Project 5: Pyturis', 50),
         createGradingRow('Final Project', 80),
         createGradingRow('Labs', 30),
-        createGradingRow('Reading Quizzes', 20)
+        createGradingRow('Attendance / Participation', 25),
+        createGradingRow('Reading Quizzes', 10)
     ];
 
     return(
