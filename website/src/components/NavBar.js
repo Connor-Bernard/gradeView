@@ -56,6 +56,7 @@ export default function ButtonAppBar() {
                                 <NavBarItem href='/'>My Grades</NavBarItem>
                             }
                             <NavBarItem href='/buckets'>Buckets</NavBarItem>
+                            <NavBarItem href='/conceptmap'>Concept Map</NavBarItem>
                             </>
                         }
                     </Box>

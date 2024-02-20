@@ -10,6 +10,7 @@ services:
       - REVERSE_PROXY_LISTEN=${REVERSE_PROXY_LISTEN:-0.0.0.0:80}
     networks:
       - frontend
+      - concept_map_integration
     ports:
       - 80:80
   web:
@@ -22,7 +23,7 @@ services:
     networks:
       - frontend
     command: npm start
-    restart: always
+    restart: unless-stopped
   api:
     container_name: gradeview-api
     image: ${CI_REGISTRY_IMAGE:-gradeview}/server:${API_VERSION:-development}
@@ -34,18 +35,20 @@ services:
     networks:
       - frontend
     command: npm start
-    restart: always
+    restart: unless-stopped
   dtgui-progress-report:
     container_name: dtgui-progress-report
     image: ${CI_REGISTRY_IMAGE:-dtgui}/progress-report:${PROGRESS_REPORT_VERSION:-development}
     build: ./progressReport
     environment:
       - LISTEN_PORT=${PROGRESS_REPORT_PORT:-5000}
+    networks:
+      - concept_map_integration
     ports:
       - 8080:${PROGRESS_REPORT_PORT}
-    expose:
-      - 8080
-    restart: always
+    restart: unless-stopped 
 networks:
   frontend:
     name: frontend
+  concept_map_integration:
+    name: concept_map_integration

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 
     <title>{{ course_name }} Progress Report</title>
-
+  
     <style>
 
         .node {
@@ -143,7 +143,6 @@
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         let studentMastery = "{{ student_mastery }}";
-
         let termStartDate = "{{ start_date }}";
         let week = (new Date() - Date.parse(termStartDate)) / (1000*60*60*24*7)
         if (Number.parseFloat(week) - Number.parseInt(week) === 0) {
@@ -159,7 +158,7 @@
             root.y0 = width / 2;
             assignStudentLevels(root);
             update(root);
-            d3.select(self.frameElement).style("height", "500px");
+            d3.select(self.frameElement).style("height", "100%");
         }
 
         function update(source) {
