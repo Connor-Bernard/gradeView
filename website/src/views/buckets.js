@@ -59,7 +59,7 @@ export default function Buckets(){
                         {display:'flex', flexDirection:'column', alignItems:'center', gap:4} 
                     }
                 >
-                    <BinTable title='Assignment Breakdown' col1='Assignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
+                    <BinTable title='Grading Breakdown' col1='Assignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
                     <BinTable title='Buckets' col1='Letter Grade' col2='Range' rows={binRows} keys={['grade', 'range']} />
                 </Box>
                 </>
