@@ -53,7 +53,7 @@ export default function Buckets(){
         <>
         { loadCount > 0 ? ( <Loader /> ) : (
                 <>
-                <Typography variant='h5' component='div' sx={{m:2, fontWeight:500}}>Grading Breakdown</Typography>
+                <Typography variant='h5' component='div' sx={{m:2, fontWeight:500}}>Buckets</Typography>
                 <Box sx={ minMedia ? 
                         {mt:4, display:'flex', flexBasis:'min-content', justifyContent:'center', gap:'10%'} : 
                         {display:'flex', flexDirection:'column', alignItems:'center', gap:4} 
