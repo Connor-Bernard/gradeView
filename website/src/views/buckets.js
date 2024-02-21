@@ -16,10 +16,10 @@ export default function Buckets(){
         api.get('/bins').then((res) => {
             if(mounted){
                 let tempBins = [{ grade: res.data[0][1], range: `0-${res.data[0][0]}`}];
-                for(let i = 1; i < res.data.length; i++){
+                for (let i = 1; i < res.data.length; i++) {
                     const grade = res.data[i][1];
                     const range = `${+res.data[i - 1][0] + 1}-${res.data[i][0]}`;
-                    tempBins = [...tempBins, { grade, range }];
+                    tempBins = [{ grade, range }, ...tempBins];
                 }
                 setBins(tempBins);
             }
