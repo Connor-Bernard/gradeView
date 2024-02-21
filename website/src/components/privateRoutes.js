@@ -24,6 +24,5 @@ export default function PrivateRoutes(){
 
     return (
         loaded ? authorized ? <Outlet /> : <Navigate to='/login'/> : <Loader />
-        
     )
 }

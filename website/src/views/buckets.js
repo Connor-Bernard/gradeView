@@ -35,31 +35,31 @@ export default function Buckets(){
     }
 
     const gradingRows = [
-        createGradingRow('Quest', 40),
-        createGradingRow('Midterm (With Snap!)', 15),
-        createGradingRow('Midterm (Without Snap!)', 65),
+        createGradingRow('Quest', 25),
+        createGradingRow('Midterm', 80),
         createGradingRow('Postterm', 100),
         createGradingRow('Project 1: Wordle™-lite', 10),
-        createGradingRow('Project 2: Wordle™', 20),
-        createGradingRow('Project 3: 2048', 30),
-        createGradingRow('Project 4: Explore', 40),
-        createGradingRow('Project 5: Python', 50),
+        createGradingRow('Project 2: Spelling-Bee', 20),
+        createGradingRow('Project 3: 2048', 45),
+        createGradingRow('Project 4: Explore', 25),
+        createGradingRow('Project 5: Pyturis', 50),
         createGradingRow('Final Project', 80),
         createGradingRow('Labs', 30),
-        createGradingRow('Reading Quizzes', 20)
+        createGradingRow('Attendance / Participation', 25),
+        createGradingRow('Reading Quizzes', 10)
     ];
 
     return(
         <>
         { loadCount > 0 ? ( <Loader /> ) : (
                 <>
-                <Typography variant='h5' component='div' sx={{m:2, fontWeight:500}}>Grading Breakdown</Typography>
+                <Typography variant='h5' component='div' sx={{m:2, fontWeight:500}}>Buckets</Typography>
                 <Box sx={ minMedia ? 
                         {mt:4, display:'flex', flexBasis:'min-content', justifyContent:'center', gap:'10%'} : 
                         {display:'flex', flexDirection:'column', alignItems:'center', gap:4} 
                     }
                 >
-                    <BinTable title='Assignment Breakdown' col1='Assignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
+                    <BinTable title='Grading Breakdown' col1='Assignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
                     <BinTable title='Buckets' col1='Letter Grade' col2='Range' rows={binRows} keys={['grade', 'range']} />
                 </Box>
                 </>
