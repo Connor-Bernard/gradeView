@@ -503,7 +503,7 @@ async function main(){
 
     // Responds with the grade projections for the specified student
     app.get('/api/admin/getStudentProjection', async (req, res) => {
-        res.status(200).json(await getProjectedGrades(apiAuthClient, req.params.email));
+        res.status(200).json(await getProjectedGrades(apiAuthClient, req.query['email']));
     })
 
     app.listen(PORT, () => {
