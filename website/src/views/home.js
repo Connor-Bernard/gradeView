@@ -108,9 +108,8 @@ function Home() {
             updateGradeData(res.data);
             setLoading(false);
         });
-        api.post('/admin/getStudentProjection', {
-            email: e.target.value
-        }).then((res) => {
+        api.get('/admin/getStudentProjection?email=' + e.target.value)
+            .then((res) => {
                 setProjections(res.data);
         });
     }
