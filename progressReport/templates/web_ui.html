@@ -189,7 +189,6 @@
 
             nodeEnter.append("circle")
                 .attr("r", 1e-6)
-                // .style("fill-opacity",  function(d) { return d._children ? 1 : 0; });
                 .style("fill",  function(d) {
                     return d._children ? student_levels[d["student_level"]]["color"] : "white";
                 });
