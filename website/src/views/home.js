@@ -108,6 +108,10 @@ function Home() {
             updateGradeData(res.data);
             setLoading(false);
         });
+        api.get('/admin/studentProjection?email=' + e.target.value)
+            .then((res) => {
+                setProjections(res.data);
+        });
     }
 
     /**
