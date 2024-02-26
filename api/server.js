@@ -340,7 +340,15 @@ async function getProgressReportQueryParameter(apiAuthClient, email){
             userTopicPoints[topic] = numMasteryLevels + 1;
             return;
         }
-        userTopicPoints[topic] = Math.ceil((userPoints / maxAchievablePoints) * numMasteryLevels);
+        const unBoundedMasteryLevel = userPoints / maxAchievablePoints * numMasteryLevels;
+        if (unBoundedMasteryLevel === numMasteryLevels) {
+            userTopicPoints[topic] = numMasteryLevels;
+        } else if (unBoundedMasteryLevel % 1 === 0) {
+            // Push them over to the next category if they are exactly on the edge.
+            userTopicPoints[topic] = unBoundedMasteryLevel + 1;
+        } else {
+            userTopicPoints[topic] = Math.ceil(unBoundedMasteryLevel);
+        }
     });
     return Object.values(userTopicPoints).join('');
 }
