@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 
     <title>{{ course_name }} Progress Report</title>
-  
+
     <style>
 
         .node {
@@ -50,18 +50,19 @@
 
         .legend {
             margin: 10px;
-            padding: 10px;
+            padding: 5px;
             text-align: center;
-            border-radius: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font: 15px sans-serif;
         }
 
         .legend-text {
+            padding: 5px;
             background-color: white;
             opacity: 0.8;
-            border-radius: 5px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -70,21 +71,24 @@
         .legend-node {
             height: 80px;
             width: 80px;
+            border-radius: 50%;
         }
 
         .legend-link {
-            height: 20px;
-            width: 180px;
+            height: 10px;
+            width: 100px;
+            border-bottom: solid 5px;
         }
 
 
         .legend-node-text {
-            height: 70px;
-            width: 70px;
+            height: 60px;
+            width: 60px;
         }
 
         .legend-link-text {
-            height: 15px;
+            background-color: transparent;
+            height: 25px;
             width: 200px;
         }
 
@@ -107,7 +111,7 @@
     </div>
     <div id="legends-wrapper">
         {% for level in class_levels %}
-            <div class="legend legend-link" style="background-color:{{ level["color"] }};">
+            <div class="legend legend-link" style="border-bottom-color:{{ level["color"] }};">
                 <div class="legend-text legend-link-text"> <h5> {{ level["name"] }} </h5> </div>
             </div>
         {% endfor %}
@@ -143,6 +147,7 @@
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         let studentMastery = "{{ student_mastery }}";
+
         let termStartDate = "{{ start_date }}";
         let week = (new Date() - Date.parse(termStartDate)) / (1000*60*60*24*7)
         if (Number.parseFloat(week) - Number.parseInt(week) === 0) {
@@ -158,7 +163,7 @@
             root.y0 = width / 2;
             assignStudentLevels(root);
             update(root);
-            d3.select(self.frameElement).style("height", "100%");
+            d3.select(self.frameElement).style("height", "500px");
         }
 
         function update(source) {
