@@ -501,6 +501,11 @@ async function main(){
         res.status(200).json(await getUserGradesAsFraction(apiAuthClient, req.body.email));
     });
 
+    // Responds with the grade projections for the specified student
+    app.get('/api/admin/studentProjection', async (req, res) => {
+        res.status(200).json(await getProjectedGrades(apiAuthClient, req.query['email']));
+    })
+
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}.`);
         console.log('Press Ctrl+C to quit.');
