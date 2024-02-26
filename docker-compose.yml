@@ -25,3 +25,18 @@ services:
       - 8080
     ports:
       - 8080:8080
+  redis:
+    build: 
+     context: ./database
+     dockerfile: Dockerfile.redis
+    ports:
+      - "6379:6379"
+  dbscript:
+    build: 
+      context: ./database
+      dockerfile: Dockerfile
+    volumes:
+      - ./database:/database
+    depends_on:
+      - redis
+
