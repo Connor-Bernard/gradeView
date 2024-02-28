@@ -340,7 +340,15 @@ async function getProgressReportQueryParameter(apiAuthClient, email){
             userTopicPoints[topic] = numMasteryLevels + 1;
             return;
         }
-        userTopicPoints[topic] = Math.ceil((userPoints / maxAchievablePoints) * numMasteryLevels);
+        const unBoundedMasteryLevel = userPoints / maxAchievablePoints * numMasteryLevels;
+        if (unBoundedMasteryLevel === numMasteryLevels) {
+            userTopicPoints[topic] = numMasteryLevels;
+        } else if (unBoundedMasteryLevel % 1 === 0) {
+            // Push them over to the next category if they are exactly on the edge.
+            userTopicPoints[topic] = unBoundedMasteryLevel + 1;
+        } else {
+            userTopicPoints[topic] = Math.ceil(unBoundedMasteryLevel);
+        }
     });
     return Object.values(userTopicPoints).join('');
 }
@@ -500,6 +508,11 @@ async function main(){
     app.post('/api/admin/getStudent', async (req, res) => {
         res.status(200).json(await getUserGradesAsFraction(apiAuthClient, req.body.email));
     });
+
+    // Responds with the grade projections for the specified student
+    app.get('/api/admin/studentProjection', async (req, res) => {
+        res.status(200).json(await getProjectedGrades(apiAuthClient, req.query['email']));
+    })
 
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}.`);
