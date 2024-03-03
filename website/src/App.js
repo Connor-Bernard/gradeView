@@ -13,6 +13,7 @@ import Login from './views/login';
 import Buckets from './views/buckets';
 import HTTPError from './views/httpError';
 import ConceptMap from './views/conceptMap';
+import StudentSelectionWrapper from "./components/StudentSelectionWrapper";
 
 const theme = createTheme({
 	palette: {
@@ -36,26 +37,28 @@ console.log("%cDeveloped by Connor Bernard at UC Berkeley under professor Daniel
 export default function App() {
 	return (
 		<ThemeProvider theme={theme}>
-			<div className="app">
-				<div className="nav">
-					<NavBar />
+			<StudentSelectionWrapper>
+				<div className="app">
+					<div className="nav">
+						<NavBar />
+					</div>
+					<div className="content">
+						<BrowserRouter>
+							<Routes>
+								<Route exact path='/login' element={localStorage.getItem('token') ? <Navigate to='/' /> : <Login />} />
+								<Route exact path='/buckets' element={<Buckets />} />
+								<Route element={<PrivateRoutes />}>
+									<Route exact path='/' element={<Home />} />
+								</Route>
+								<Route exact path='/conceptmap' element={<ConceptMap />} />
+								<Route exact path='/serverError' element={<HTTPError errorCode={500}/>} />
+								<Route exact path='/clientError' element={<HTTPError errorCode={400}/>} />
+								<Route exact path='*' element={<HTTPError errorCode={404} />} />
+							</Routes>
+						</BrowserRouter>
+					</div>
 				</div>
-				<div className="content">
-					<BrowserRouter>
-						<Routes>
-							<Route exact path='/login' element={localStorage.getItem('token') ? <Navigate to='/' /> : <Login />} />
-							<Route exact path='/buckets' element={<Buckets />} />
-							<Route element={<PrivateRoutes />}>
-								<Route exact path='/' element={<Home />} />
-							</Route>
-							<Route exact path='/conceptmap' element={<ConceptMap />} />
-							<Route exact path='/serverError' element={<HTTPError errorCode={500}/>} />
-							<Route exact path='/clientError' element={<HTTPError errorCode={400}/>} />
-							<Route exact path='*' element={<HTTPError errorCode={404} />} />
-						</Routes>
-					</BrowserRouter>
-				</div>
-			</div>
+			</StudentSelectionWrapper>
 		</ThemeProvider>
 	);
 }

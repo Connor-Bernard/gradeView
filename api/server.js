@@ -514,6 +514,10 @@ async function main(){
         res.status(200).json(await getProjectedGrades(apiAuthClient, req.query['email']));
     })
 
+    app.get('/api/admin/progressquerystring', async (req, res) => {
+        res.status(200).send(await getProgressReportQueryParameter(apiAuthClient, req.query['email']));
+    })
+
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}.`);
         console.log('Press Ctrl+C to quit.');

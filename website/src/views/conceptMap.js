@@ -1,27 +1,37 @@
-import { useEffect, useState } from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import api from '../utils/api';
 import Loader from '../components/Loader';
 import PageHeader from '../components/PageHeader';
 import './css/conceptMap.css';
+import {StudentSelectionContext} from "../components/StudentSelectionWrapper";
 
 export default function ConceptMap() {
     const [loading, setLoading] = useState(false);
     const [studentMastery, setStudentMastery] = useState('000000');
+    const {selectedStudent, getSelectedStudent} = useContext(StudentSelectionContext);
 
     useEffect(() => {
         let mounted = true;
         setLoading(true);
         if (mounted && localStorage.getItem('token')) {
-            api.get('/progressquerystring').then((res) => {
-                setStudentMastery(res.data)
-                setLoading(false);
-            });
+            if (selectedStudent === "") {
+                api.get('/progressquerystring').then((res) => {
+                    setStudentMastery(res.data)
+                    setLoading(false);
+                });
+            } else {
+                api.get('/admin/progressquerystring?email=' + selectedStudent).then((res) => {
+                    console.log(res.data);
+                    setStudentMastery(res.data);
+                    setLoading(false);
+                })
+            }
         } else {
             setLoading(false);
         }
         return () => mounted = false;
-    }, []);
+    }, [selectedStudent]);
 
     if (loading) {
         return <Loader />;

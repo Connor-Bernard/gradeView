@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { Box, Typography, FormControl, InputLabel, MenuItem, Select, useMediaQuery } from '@mui/material';
 import api from '../utils/api';
 import Loader from '../components/Loader';
@@ -7,6 +6,7 @@ import GradeAccordion from '../components/GradeAccordion';
 import GradeGrid from '../components/GradeGrid';
 import Grid from '@mui/material/Unstable_Grid2';
 import ProjectionTable from '../components/ProjectionTable';
+import {StudentSelectionContext} from "../components/StudentSelectionWrapper";
 
 function Home() {
     const [accordionTabs, setAccordionTabs] = useState([]);
@@ -24,6 +24,8 @@ function Home() {
     const [isAdmin, setAdminStatus] = useState(false);
     
     const mobileView = useMediaQuery('(max-width:600px)');
+
+    const {selectedStudent, setSelectedStudent} = useContext(StudentSelectionContext);
 
     useEffect(() => {
         let mounted = true;
@@ -67,52 +69,26 @@ function Home() {
         });
     }, [])
 
-    useEffect(() => {
-        let mounted = true;
-
-        // Update user admin status
-        api.get('/isadmin').then((res) => {
-            if (mounted) {
-                setAdminStatus(res.data);
-            }
-            return () => mounted = false;
-        });
-    })
-
-    // Initalize list of students for admin viewership
-    const [selectedStudent, setSelectedStudent] = useState('');
-    const [students, setStudents] = useState([]);
-    useEffect(() => {
-        let mounted = true;
-        if(isAdmin){
-            api.get('/admin/students').then((res) => {
-                if(mounted){
-                    setStudents(res.data);
-                    setSelectedStudent(res.data[0][1]);
-                }
-            });
-        }
-        return () => mounted = false;
-    }, [isAdmin]);
-
     /**
      * Updates the grades shown to that of the selected student.
      * @param {Event} e
      */
-    function loadStudentData(e){
+
+    useEffect(() => {
         setLoading(true);
         api.post('/admin/getStudent', {
-            email: e.target.value
+            email: selectedStudent
         }).then((res) => {
-            setSelectedStudent(e.target.value);
             updateGradeData(res.data);
             setLoading(false);
         });
-        api.get('/admin/studentProjection?email=' + e.target.value)
+        api.get('/admin/studentProjection?email=' + selectedStudent)
             .then((res) => {
                 setProjections(res.data);
-        });
-    }
+            });
+
+    }, [selectedStudent]);
+
 
     /**
      * Filters the input grade data by the filter string.
@@ -127,9 +103,9 @@ function Home() {
         <>
             { isLoading ? ( <Loader /> ) : (
                     <Box sx={{ display: 'flex', flexFlow: 'column', height: '100%' }}>
-                    {isAdmin &&
+                    {
                         // Student drop-down selection
-                        <Box>
+                        /*<Box>
                             <FormControl size='small' sx={{m: 1, minWidth:100}}>
                                 <InputLabel id='student-dropdown-label'>Student</InputLabel>
                                 <Select
@@ -147,6 +123,7 @@ function Home() {
                                 </Select>
                             </FormControl>
                         </Box>
+                        */
                     }
                     {mobileView ?       
                         <>
