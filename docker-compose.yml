@@ -27,16 +27,16 @@ services:
       - 8080:8080
   redis:
     build: 
-     context: ./database
-     dockerfile: Dockerfile.redis
+     context: ./database/redis
+     dockerfile: Dockerfile
+    command: redis-server --requirepass ${REDIS_DB_SECRET}
     ports:
-      - "6379:6379"
-  dbscript:
+      - 6379:6379
+  dbcron:
     build: 
-      context: ./database
+      context: ./database/dbcron
       dockerfile: Dockerfile
     volumes:
-      - ./database:/database
+      - ./database/dbcron:/database/dbcron
     depends_on:
       - redis
-

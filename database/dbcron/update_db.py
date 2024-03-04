@@ -1,39 +1,34 @@
 import gspread
 from google.oauth2.service_account import Credentials
-from dotenv import load_dotenv;
+from dotenv import load_dotenv
 import json
 import os
 import redis
-import time
 
-config_path = 'config/default.json'
+load_dotenv()
 
-# Load the configuration file
-with open(config_path, 'r') as config_file:
-    config = json.load(config_file)
-
-SCOPES = config['spreadsheet']['scopes']
-HOST = config['server']['host']
-PORT = config['server']['port']
-DB = config['server']['db']
-SHEETNAME = config['spreadsheet']['sheetname']
-WORKSHEET = config['spreadsheet']['worksheet']
-CATEGORYCOL = config['spreadsheet']['keyvals']['categorycol']
-CATEGORYROW = config['spreadsheet']['keyvals']['categoryrow']
-CONCEPTSCOL = config['spreadsheet']['keyvals']['conceptscol']
-CONCEPTSROW = config['spreadsheet']['keyvals']['conceptsrow']
-MAXPOINTSROW = config['spreadsheet']['keyvals']['maxpointsrow']
-MAXPOINTSCOL = config['spreadsheet']['keyvals']['maxpointscol']
+PORT = int(os.getenv("SERVER_PORT"))
+SCOPES = json.loads(os.getenv("SPREADSHEET_SCOPES"))
+HOST = os.getenv("SERVER_HOST")
+DB = int(os.getenv("SERVER_DBINDEX"))
+SHEETNAME = os.getenv("SPREADSHEET_SHEETNAME")
+WORKSHEET = int(os.getenv("SPREADSHEET_WORKSHEET"))
+CATEGORYCOL = int(os.getenv("ASSIGNMENT_CATEGORYCOL"))
+CATEGORYROW = int(os.getenv("ASSIGNMENT_CATEGORYROW"))
+CONCEPTSCOL = int(os.getenv("ASSIGNMENT_CONCEPTSCOL"))
+CONCEPTSROW = int(os.getenv("ASSIGNMENT_CONCEPTSROW"))
+MAXPOINTSROW = int(os.getenv("ASSIGNMENT_MAXPOINTSROW"))
+MAXPOINTSCOL = int(os.getenv("ASSIGNMENT_MAXPOINTSCOL"))
+REDIS_PW = os.getenv("REDIS_DB_SECRET")
 
 #needs both spreadsheet and drive access or else there is a permissions error, added as a viewer on the spreadsheet
-load_dotenv()
 credentials_json = os.getenv("GRADE_DB_SECRET")
 credentials_dict = json.loads(credentials_json)
 credentials = Credentials.from_service_account_info(credentials_dict, scopes=SCOPES)
 client = gspread.authorize(credentials)
 
 #redis setup
-redis_client = redis.Redis(host=HOST, port=PORT, db=DB) 
+redis_client = redis.Redis(host=HOST, port=PORT, db=DB, password=REDIS_PW) 
 
 def update_redis():
     sheet = client.open(SHEETNAME).get_worksheet(WORKSHEET)
