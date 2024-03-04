@@ -163,7 +163,7 @@
             root.y0 = width / 2;
             assignStudentLevels(root);
             update(root);
-            d3.select(self.frameElement).style("height", "100%");
+            d3.select(self.frameElement).style("height", "500px");
         }
 
         function update(source) {
@@ -189,6 +189,7 @@
 
             nodeEnter.append("circle")
                 .attr("r", 1e-6)
+                // .style("fill-opacity",  function(d) { return d._children ? 1 : 0; });
                 .style("fill",  function(d) {
                     return d._children ? student_levels[d["student_level"]]["color"] : "white";
                 });
@@ -208,6 +209,7 @@
 
             nodeUpdate.select("circle")
                 .attr("r", 10)
+                //.style("fill-opacity", function(d) { return d._children ? 1 : 0; });
                 .style("fill",  function(d) {
                     return d._children ? student_levels[d["student_level"]]["color"] : "white";
                 });
@@ -236,11 +238,15 @@
             // Enter any new links at the parent's previous position
             link.enter().insert("path", "g")
                 .attr("class", function(d) {
-                    if (d.target["data"]["week"] <= week && d.source["data"]["week"] <= week) {
-                        return "link link-taught";
-                    } else {
-                        return "link link-not-taught";
-                    }
+                    {% if use_url_class_mastery == False %}
+                        if (d.target["data"]["week"] <= week && d.source["data"]["week"] <= week) {
+                            return "link link-taught";
+                        } else {
+                            return "link link-not-taught";
+                        }
+                    {% else %}
+                        return d.target["class_level"] === 1 ? "link link-taught" : "link link-not-taught";
+                    {% endif %}
                 })
                 .attr("d", function(d) {
                     let o = {x: source.x0, y: source.y0};

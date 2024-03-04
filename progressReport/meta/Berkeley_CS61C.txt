@@ -1,0 +1,27 @@
+name: CS61C
+term: Spring 2024
+orientation: left to right
+start date: 2024 01 15
+styles:
+    name: root, shape: ellipse, style: filled, fillcolor: #3A73A5
+    name: blue1, shape: ellipse, style: filled, fillcolor: #74B3CE
+    name: blue2, shape: ellipse, style: filled, fillcolor: #87CEEB
+    name: default, shape: ellipse, style: filled, fillcolor: #E0E0E0
+class levels:
+    Not Taught: #dddddd
+    Taught: #8fbc8f
+student levels:
+    First Steps: #dddddd
+    Needs Practice: #a3d7fc
+    In Progress: #59b0f9
+    Almost There: #3981c1
+    Mastered: #20476a
+nodes:
+    C [blue2, Week1]
+        C Intro [default, Week1]
+        C Pointers Arrays Strings [default, Week2]
+        Number Representation [default, Week3]
+        C Memory Management [blue2, Week4]
+        Floating Point [default, Week5]
+        C Generics Function Pointers [default, Week6]
+end

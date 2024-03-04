@@ -68,21 +68,30 @@ app = Flask(__name__)
 @app.route('/', methods=["GET"])
 def index():
     def assign_node_levels(node):
-        nonlocal student_mastery
+        nonlocal student_mastery, class_mastery
         if not node["children"]:
             node["student_level"] = int(student_mastery[0]) if student_mastery else 0
+            node["class_level"] = int(class_mastery[0]) if class_mastery else 0
             student_mastery = student_mastery[1:] if len(student_mastery) > 1 else ""
+            class_mastery = class_mastery[1:] if len(class_mastery) > 1 else ""
         else:
-            children_levels = []
+            children_student_levels = []
+            children_class_levels = []
             for child in node["children"]:
-                children_levels.append(assign_node_levels(child))
-            node["student_level"] = sum(children_levels) // len(children_levels)
-        return node["student_level"]
+                student_level, class_level = assign_node_levels(child)
+                children_student_levels.append(student_level)
+                children_class_levels.append(class_level)
+            node["student_level"] = sum(children_student_levels) // len(children_student_levels)
+            node["class_level"] = sum(children_class_levels) // len(children_class_levels)
+        return node["student_level"], node["class_level"]
 
-    course_name = request.args.get("course_name", "CS10")
+    school_name = request.args.get("school", "Berkeley")
+    course_name = request.args.get("class", "CS10")
     student_mastery = request.args.get("student_mastery", "000000")
-    parser.generate_map(name=course_name, render=True)
-    with open("data/{}.json".format(secure_filename(course_name))) as data_file:
+    class_mastery = request.args.get("class_mastery", "")
+    use_url_class_mastery = True if class_mastery != "" else False
+    parser.generate_map(school_name=secure_filename(school_name), course_name=secure_filename(course_name), render=True)
+    with open("data/{}_{}.json".format(secure_filename(school_name), secure_filename(course_name))) as data_file:
         course_data = json.load(data_file)
     start_date = course_data["start date"]
     course_term = course_data["term"]
@@ -97,15 +106,17 @@ def index():
                            course_term=course_term,
                            class_levels=class_levels,
                            student_levels=student_levels,
+                           use_url_class_mastery=use_url_class_mastery,
                            course_node_count=course_node_count,
                            course_data=course_nodes)
 
 
 @app.route('/parse', methods=["POST"])
 def parse():
+    school_name = request.args.get("school_name", "Berkeley")
     course_name = request.form.get("course_name", "CS10")
-    parser.generate_map(name=secure_filename(course_name))
-    with open("data/{}.json".format(secure_filename(course_name))) as data_file:
+    parser.generate_map(school_name=secure_filename(school_name), course_name=secure_filename(course_name), render=False)
+    with open("data/{}_{}.json".format(secure_filename(school_name), secure_filename(course_name))) as data_file:
         course_data = json.load(data_file)
     return course_data
 
