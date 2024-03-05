@@ -95,7 +95,7 @@ def index():
         with open("data/{}_{}.json".format(secure_filename(school_name), secure_filename(course_name))) as data_file:
             course_data = json.load(data_file)
     except FileNotFoundError:
-        return "Class not found"
+        return "Class not found", 400
     start_date = course_data["start date"]
     course_term = course_data["term"]
     class_levels = course_data["class levels"]
@@ -123,7 +123,7 @@ def parse():
         with open("data/{}_{}.json".format(secure_filename(school_name), secure_filename(course_name))) as data_file:
             course_data = json.load(data_file)
     except FileNotFoundError:
-        return "Class not found"
+        return "Class not found", 400
     return course_data
 
 
