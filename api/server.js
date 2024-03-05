@@ -542,7 +542,7 @@ async function main(){
             }
         }
         res.status(200).json(progressReport);
-    })
+    });
 
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}.`);
