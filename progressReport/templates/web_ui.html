@@ -236,11 +236,15 @@
             // Enter any new links at the parent's previous position
             link.enter().insert("path", "g")
                 .attr("class", function(d) {
-                    if (d.target["data"]["week"] <= week && d.source["data"]["week"] <= week) {
-                        return "link link-taught";
-                    } else {
-                        return "link link-not-taught";
-                    }
+                    {% if use_url_class_mastery == False %}
+                        if (d.target["data"]["week"] <= week && d.source["data"]["week"] <= week) {
+                            return "link link-taught";
+                        } else {
+                            return "link link-not-taught";
+                        }
+                    {% else %}
+                        return d.target["class_level"] === 1 ? "link link-taught" : "link link-not-taught";
+                    {% endif %}
                 })
                 .attr("d", function(d) {
                     let o = {x: source.x0, y: source.y0};
