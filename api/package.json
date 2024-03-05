@@ -4,9 +4,8 @@
   "description": "Gradeview API Server",
   "main": "server.js",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"cd ../website && npm run react\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon server.js"
+    "start": "nodemon server.js",
+    "server": "concurrently \"npm run start\" \"cd ../website && npm run react\""
   },
   "author": "Connor Bernard",
   "license": "ISC",
@@ -21,9 +20,7 @@
     "dotenv": "^16.0.3",
     "es-main": "^1.2.0",
     "express": "^4.18.2",
-    "googleapis": "^105.0.0"
-  },
-  "devDependencies": {
+    "googleapis": "^105.0.0",
     "nodemon": "^2.0.20"
   }
 }

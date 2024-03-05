@@ -67,4 +67,3 @@ networks:
     name: frontend
   concept_map_integration:
     name: concept_map_integration
-  

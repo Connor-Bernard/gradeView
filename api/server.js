@@ -6,12 +6,14 @@ import esMain from 'es-main';
 import config from 'config';
 import dotenv from 'dotenv';
 
+import ProgressReportData from './assets/progressReport/CS10.json' assert {type: 'json'};
+
 class AuthenticationError extends Error{}
 class UnauthorizedAccessError extends Error{}
 class BadSheetDataError extends Error{}
 
 dotenv.config(); // Load environment variables from .env file
-const PORT = process.env.PORT || config.get('server.port');
+const PORT = process.env.PORT || 8000;
 const SPREADSHEETID = config.get('spreadsheet.id'); // In spreadsheet URL
 const SCOPES = config.get('spreadsheet.scopes'); // Keep the same for readOnly
 const OAUTHCLIENTID = config.get('googleconfig.oauth.clientid');
@@ -302,15 +304,67 @@ async function getBins(apiAuthClient){
     return res.data.values;
 }
 
+/**
+ * Calculates the total amount of points a user has achieved so far for each topic.
+ * @param {Array<object>} userGradeData the total user's grade data.
+ * @returns {object} a dictionary of topics to sum of those grades.
+ */
+function mapTopicsToGrades(userGradeData) {
+    const topicsToGradesTable = {};
+    userGradeData.forEach((assignment) => {
+        if (!(assignment.assignment in topicsToGradesTable)) {
+            topicsToGradesTable[assignment.assignment] = 0;
+        }
+        topicsToGradesTable[assignment.assignment] += +(assignment.grade ?? 0);
+    });
+    return topicsToGradesTable;
+}
+
+/**
+ * Gets the user's progress for each of the topics taught so far.
+ * @param {Promise<Compute | JSONClient | T>} apiAuthClient
+ * @param {string} email the email of the user to look up.
+ * @returns {string} the query parameter consumed by the progress report encoding student mastery. 
+ */
+async function getProgressReportQueryParameter(apiAuthClient, email){
+    const userGrades = await getUserGrades(apiAuthClient, email);
+    const maxGrades = await getUserGrades(apiAuthClient, MAXGRADEROW);
+    const userTopicPoints = mapTopicsToGrades(userGrades);
+    const maxTopicPoints = mapTopicsToGrades(maxGrades);
+    const numMasteryLevels = ProgressReportData['student levels'].length - 2;
+    Object.entries(userTopicPoints).forEach(([topic, userPoints]) => {
+        const maxAchievablePoints = maxTopicPoints[topic];
+        if (userPoints === 0) {
+            return;
+        }
+        if (userPoints >= maxAchievablePoints) {
+            userTopicPoints[topic] = numMasteryLevels + 1;
+            return;
+        }
+        const unBoundedMasteryLevel = userPoints / maxAchievablePoints * numMasteryLevels;
+        if (unBoundedMasteryLevel === numMasteryLevels) {
+            userTopicPoints[topic] = numMasteryLevels;
+        } else if (unBoundedMasteryLevel % 1 === 0) {
+            // Push them over to the next category if they are exactly on the edge.
+            userTopicPoints[topic] = unBoundedMasteryLevel + 1;
+        } else {
+            userTopicPoints[topic] = Math.ceil(unBoundedMasteryLevel);
+        }
+    });
+    return Object.values(userTopicPoints).join('');
+}
+
+
 async function main(){
     const app = express();
     app.use(cors());
     app.use(json());
-       
+
     const apiAuthClient = await new google.auth.GoogleAuth({
         credentials: JSON.parse(process.env.SERVICE_ACCOUNT_CREDENTIALS),
         scopes: SCOPES
     }).getClient();
+
     const oauthClient = new OAuth2Client(OAUTHCLIENTID);
 
     /**
@@ -385,7 +439,7 @@ async function main(){
     app.use(unless(['/api/bins', '/api/verifyaccess'], verificationMiddleWare));
     app.use('/api/admin', adminVerificationMiddleWare);
 
-    app.get('/api/bins', async (req, res) => {
+    app.get('/api/bins', async (_, res) => {
         return res.status(200).json(await getBins(apiAuthClient));
     });
 
@@ -429,6 +483,17 @@ async function main(){
         }
     });
 
+    /**
+     * Responds with the logged in user's configured progress report query string.
+     * @param {Request} req authenticated request.
+     * @param {Response} res
+     * @returns {Promise<Response<string>>} the user's progress report query string.
+     */
+    app.get('/api/progressquerystring', async (req, res) => {
+        const email = await getEmailFromIdToken(oauthClient, req.headers.authorization.split(' ')[1]);
+        return res.status(200).send(await getProgressReportQueryParameter(apiAuthClient, email));
+    });
+
     // Responds with whether or not the current user is an admin
     app.get('/api/isadmin', async (req, res) => {
         return res.status(200).json(await hasAdminStatus(oauthClient,
@@ -436,13 +501,30 @@ async function main(){
     });
 
     // Responds with the current students in the spreadsheet
-    app.get('/api/admin/students', async (req, res) => {
+    app.get('/api/admin/students', async (_, res) => {
         return res.status(200).json(await getStudents(apiAuthClient));
     });
 
     // Responds with the grades for the specified student
     app.post('/api/admin/getStudent', async (req, res) => {
         res.status(200).json(await getUserGradesAsFraction(apiAuthClient, req.body.email));
+    });
+
+    // Responds with the grade projections for the specified student.
+    app.get('/api/admin/studentProjection', async (req, res) => {
+        if (req.query.email === undefined) {
+            return res.status(400).json({ error: 'No email provided.' });
+        }
+        let projectedGrades;
+        try {
+            projectedGrades = await getProjectedGrades(apiAuthClient, req.query.email);
+        } catch (e) {
+            if (e instanceof AuthenticationError) {
+                console.log(e);
+                return res.status(400).json({ error: 'User not found.' });
+            }
+        }
+        res.status(200).json(projectedGrades);
     });
 
     app.listen(PORT, () => {

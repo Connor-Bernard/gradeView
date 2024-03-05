@@ -1,0 +1,20 @@
+server {
+    listen $REVERSE_PROXY_LISTEN;
+    server_name  _;
+
+    location / {
+        proxy_pass http://web:3000;
+    }
+
+    location /api {
+        proxy_pass http://api:8000;
+    }
+
+    location /progress {
+        proxy_pass http://dtgui-progress-report:8080/;
+    }
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}

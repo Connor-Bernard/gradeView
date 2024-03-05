@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>{{ course_name }} Progress Report</title>
+
+    <style>
+
+        .node {
+            cursor: pointer;
+        }
+
+        .node circle {
+            stroke-width: 3px;
+        }
+
+        {% for i in range(student_levels|length) %}
+            .level{{ i }} circle {
+                fill: {{ student_levels[i]["color"] }};
+                stroke: {{ student_levels[i]["color"] }};
+                stroke-width: 10px;
+            }
+        {% endfor %}
+
+        .node text {
+            font: 12px sans-serif;
+        }
+
+        .link {
+            fill: none;
+        }
+
+        .link-not-taught {
+            stroke: {{ class_levels[0]["color"] }};
+            stroke-width: 2px;
+        }
+
+        .link-taught {
+            stroke: {{ class_levels[1]["color"] }};
+            stroke-width: 3px;
+        }
+
+        #legends-wrapper {
+            display: flex;
+            justify-content: center;
+            justify-items: center;
+            margin-top: 20px;
+        }
+
+        .legend {
+            margin: 10px;
+            padding: 5px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font: 15px sans-serif;
+        }
+
+        .legend-text {
+            padding: 5px;
+            background-color: white;
+            opacity: 0.8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .legend-node {
+            height: 80px;
+            width: 80px;
+            border-radius: 50%;
+        }
+
+        .legend-link {
+            height: 10px;
+            width: 100px;
+            border-bottom: solid 5px;
+        }
+
+
+        .legend-node-text {
+            height: 60px;
+            width: 60px;
+        }
+
+        .legend-link-text {
+            background-color: transparent;
+            height: 25px;
+            width: 200px;
+        }
+
+        h5 {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <div id="legends-wrapper">
+        {% for level in student_levels %}
+            <div class="legend legend-node" style="background-color:{{ level["color"] }};">
+                <div class="legend-text legend-node-text"> <h5> {{ level["name"] }} </h5> </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div id="legends-wrapper">
+        {% for level in class_levels %}
+            <div class="legend legend-link" style="border-bottom-color:{{ level["color"] }};">
+                <div class="legend-text legend-link-text"> <h5> {{ level["name"] }} </h5> </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"
+            integrity="sha256-dsOXGNHAo/syFnazt+KTBsCQeRmlcW1XKL0bCK4Baec="
+	        crossorigin="anonymous">
+    </script>
+
+    <script>
+        let courseData = {{ course_data|tojson|safe }};
+        var student_levels = {{ student_levels|tojson|safe }};
+
+        let margin = {top: 100, right: innerWidth/3 + 100, bottom: 100, left: innerWidth/3 + 100},
+            width = innerWidth - margin.right - margin.left,
+            height = 50 * {{ course_node_count }};
+
+        let i = 0,
+            duration = 750,
+            root;
+
+        let tree = d3.layout.tree()
+            .size([height, width]);
+
+        let diagonal = d3.svg.diagonal()
+            .projection(function(d) { return [d.y, d.x]; });
+
+        let svg = d3.select("body").append("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        let studentMastery = "{{ student_mastery }}";
+
+        let termStartDate = "{{ start_date }}";
+        let week = (new Date() - Date.parse(termStartDate)) / (1000*60*60*24*7)
+        if (Number.parseFloat(week) - Number.parseInt(week) === 0) {
+            week = week+1
+        } else {
+            week = Math.ceil(week)
+        }
+        let allLearned = true;
+
+        function loadCourseData(treeData) {
+            root = treeData;
+            root.x0 = height / 2;
+            root.y0 = width / 2;
+            assignStudentLevels(root);
+            update(root);
+            d3.select(self.frameElement).style("height", "100%");
+        }
+
+        function update(source) {
+
+            // Compute the new tree layout.
+            let nodes = tree.nodes(root).reverse(),
+                links = tree.links(nodes);
+
+            // Normalize for fixed-depth.
+            nodes.forEach(function(d) { d.y = width - (d.depth * 180); });
+
+            // Update the nodes…
+            let node = svg.selectAll("g.node")
+                .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+            // Enter any new nodes at the parent's previous position.
+            let nodeEnter = node.enter().append("g")
+            nodeEnter.attr("class", function (d) {
+                return d["data"]["class"] + " " + "node"
+            });
+            nodeEnter.attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+            nodeEnter.on("click", click);
+
+            nodeEnter.append("circle")
+                .attr("r", 1e-6)
+                .style("fill",  function(d) {
+                    return d._children ? student_levels[d["student_level"]]["color"] : "white";
+                });
+
+            nodeEnter.append("text")
+                .attr("x", function(d) { return d.children || d._children ? 15 : -15; })
+                .attr("dy", "1.5em")
+                .attr("text-anchor", function(d) { return d.children || d._children ? "start" : "end"; })
+                .text(function(d) { return d.name; })
+                .style("fill-opacity", 1e-6)
+                .style("fill", "black");
+
+            // Transition nodes to their new position.
+            let nodeUpdate = node.transition()
+                .duration(duration)
+                .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+            nodeUpdate.select("circle")
+                .attr("r", 10)
+                .style("fill",  function(d) {
+                    return d._children ? student_levels[d["student_level"]]["color"] : "white";
+                });
+
+            nodeUpdate.select("text")
+                .style("fill-opacity", 1);
+
+            // Transition exiting nodes to the parent's new position.
+            let nodeExit = node.exit().transition()
+                .duration(duration)
+                .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+                .remove();
+
+            nodeExit.select("circle")
+                .attr("r", 1e-6);
+
+            nodeExit.select("text")
+                .style("fill-opacity", 1e-6);
+
+            // Update the links…
+            let link = svg.selectAll("path.link")
+                .data(links, function(d) {
+                    return d.target.id;
+                });
+
+            // Enter any new links at the parent's previous position
+            link.enter().insert("path", "g")
+                .attr("class", function(d) {
+                    if (d.target["data"]["week"] <= week && d.source["data"]["week"] <= week) {
+                        return "link link-taught";
+                    } else {
+                        return "link link-not-taught";
+                    }
+                })
+                .attr("d", function(d) {
+                    let o = {x: source.x0, y: source.y0};
+                    return diagonal({source: o, target: o});
+                });
+
+            // Transition links to their new position.
+            link.transition()
+                .duration(duration)
+                .attr("d", diagonal);
+
+            // Transition exiting nodes to the parent's new position.
+            link.exit().transition()
+                .duration(duration)
+                .attr("d", function(d) {
+                    let o = {x: source.x, y: source.y};
+                    return diagonal({source: o, target: o});
+                })
+                .remove();
+
+            // Stash the old positions for transition.
+            nodes.forEach(function(d) {
+                d.x0 = d.x;
+                d.y0 = d.y;
+            });
+        }
+
+        // Toggle children on click.
+        function click(d) {
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                d.children = d._children;
+                d._children = null;
+            }
+            update(d);
+        }
+
+        function assignStudentLevels(node) {
+            node["data"]["class"] = "level" + node["student_level"];
+            for (let i = 0; i < node["children"].length; i++) {
+                assignStudentLevels(node["children"][i])
+            }
+        }
+
+        function parseNodeClass_NewLearned(node) {
+            if (node["data"]["week"] <= week) {
+                node["data"]["class"] = "learned"
+            } else {
+                allLearned = false;
+                node["data"]["class"] = "new"
+            }
+            for (let i = 0; i < node["children"].length; i++) {
+                parseNodeClass_NewLearned(node["children"][i])
+            }
+        }
+
+        function parseNodeClass_InProcess_Helper(node) {
+            if (node["data"]["class"] === "learned") {
+                return true;
+            } else {
+                for (let i = 0; i < node["children"].length; i++) {
+                    if (parseNodeClass_InProcess_Helper(node["children"][i]) === true) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+        }
+
+        function parseNodeClass_InProcess(node) {
+            if (node["data"]["class"] === "new" && parseNodeClass_InProcess_Helper(node) === true) {
+                node["data"]["class"] = "in-process"
+            }
+            for (let i = 0; i < node["children"].length; i++) {
+                parseNodeClass_InProcess(node["children"][i])
+            }
+        }
+
+        loadCourseData(courseData);
+
+    </script>
+</body>
+</html>
