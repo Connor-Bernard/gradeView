@@ -51,7 +51,7 @@ services:
     build: 
      context: ./database/redis
      dockerfile: Dockerfile
-    command: redis-server --requirepass ${REDIS_DB_SECRET}
+    command: redis-server --requirepass ${REDIS_DB_SECRET:-password}
     ports:
       - 6379:6379
   dbcron:
