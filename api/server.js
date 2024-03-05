@@ -527,6 +527,23 @@ async function main(){
         res.status(200).json(projectedGrades);
     });
 
+    // Responds with the progress report for the specified student
+    app.get('/api/admin/studentProgressReport', async (req, res) => {
+        if (req.query.email === undefined) {
+            return res.status(400).json({ error: 'No email provided.' });
+        }
+        let progressReport;
+        try {
+            progressReport = await getProgressReportQueryParameter(apiAuthClient, req.query.email);
+        } catch (e) {
+            if (e instanceof AuthenticationError) {
+                console.log(e);
+                return res.status(400).json({ error: 'User email not found.' });
+            }
+        }
+        res.status(200).json(progressReport);
+    })
+
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}.`);
         console.log('Press Ctrl+C to quit.');
