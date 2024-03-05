@@ -91,8 +91,11 @@ def index():
     class_mastery = request.args.get("class_mastery", "")
     use_url_class_mastery = True if class_mastery != "" else False
     parser.generate_map(school_name=secure_filename(school_name), course_name=secure_filename(course_name), render=True)
-    with open("data/{}_{}.json".format(secure_filename(school_name), secure_filename(course_name))) as data_file:
-        course_data = json.load(data_file)
+    try:
+        with open("data/{}_{}.json".format(secure_filename(school_name), secure_filename(course_name))) as data_file:
+            course_data = json.load(data_file)
+    except FileNotFoundError:
+        return "Class not found"
     start_date = course_data["start date"]
     course_term = course_data["term"]
     class_levels = course_data["class levels"]
@@ -116,8 +119,11 @@ def parse():
     school_name = request.args.get("school_name", "Berkeley")
     course_name = request.form.get("course_name", "CS10")
     parser.generate_map(school_name=secure_filename(school_name), course_name=secure_filename(course_name), render=False)
-    with open("data/{}_{}.json".format(secure_filename(school_name), secure_filename(course_name))) as data_file:
-        course_data = json.load(data_file)
+    try:
+        with open("data/{}_{}.json".format(secure_filename(school_name), secure_filename(course_name))) as data_file:
+            course_data = json.load(data_file)
+    except FileNotFoundError:
+        return "Class not found"
     return course_data
 
 

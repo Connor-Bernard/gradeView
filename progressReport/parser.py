@@ -17,9 +17,8 @@ class Node:
         Node.count += 1
 
 
-def read_meta(school_name, course_name):
+def read_meta(f):
     Node.count = 0
-    f = open("meta/{}_{}.txt".format(school_name, course_name), "r")
     name = ""
     term = ""
     orientation = ""
@@ -144,5 +143,9 @@ def to_json(school_name, course_name, term, start_date, class_levels, student_le
 
 def generate_map(school_name, course_name, render=False):
     print("Log: {}_{}".format(school_name, course_name))
-    name, orientation, start_date, term, class_levels, student_levels, styles, root = read_meta(school_name, course_name)
-    to_json(school_name, course_name, term, start_date, class_levels, student_levels, root, render)
+    try:
+        with open("meta/{}_{}.txt".format(school_name, course_name), "r") as f:
+            name, orientation, start_date, term, class_levels, student_levels, styles, root = read_meta(f)
+            to_json(school_name, course_name, term, start_date, class_levels, student_levels, root, render)
+    except FileNotFoundError:
+        return

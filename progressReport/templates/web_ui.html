@@ -163,7 +163,7 @@
             root.y0 = width / 2;
             assignStudentLevels(root);
             update(root);
-            d3.select(self.frameElement).style("height", "500px");
+            d3.select(self.frameElement).style("height", "100%");
         }
 
         function update(source) {
@@ -189,7 +189,6 @@
 
             nodeEnter.append("circle")
                 .attr("r", 1e-6)
-                // .style("fill-opacity",  function(d) { return d._children ? 1 : 0; });
                 .style("fill",  function(d) {
                     return d._children ? student_levels[d["student_level"]]["color"] : "white";
                 });
@@ -209,7 +208,6 @@
 
             nodeUpdate.select("circle")
                 .attr("r", 10)
-                //.style("fill-opacity", function(d) { return d._children ? 1 : 0; });
                 .style("fill",  function(d) {
                     return d._children ? student_levels[d["student_level"]]["color"] : "white";
                 });
