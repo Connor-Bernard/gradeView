@@ -22,7 +22,7 @@ export default function ButtonAppBar() {
 
     const mobileView = useMediaQuery('(max-width:600px)');
     const [loggedIn, setLoginStatus] = useState(localStorage.getItem('token') ? true : false);
-    const {selectedStudent, setSelectedStudent} = useContext(StudentSelectionContext);
+    const { selectedStudent, setSelectedStudent } = useContext(StudentSelectionContext);
     const [isAdmin, setAdminStatus] = useState(false);
 
     // Sets up the profile picture on element load by getting pfp url from api
