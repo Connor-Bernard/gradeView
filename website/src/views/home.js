@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, Typography, FormControl, InputLabel, MenuItem, Select, useMediaQuery } from '@mui/material';
 import api from '../utils/api';
 import Loader from '../components/Loader';
