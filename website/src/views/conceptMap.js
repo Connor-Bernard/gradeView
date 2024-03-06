@@ -4,7 +4,7 @@ import api from '../utils/api';
 import Loader from '../components/Loader';
 import PageHeader from '../components/PageHeader';
 import './css/conceptMap.css';
-import {StudentSelectionContext} from "../components/StudentSelectionWrapper";
+import { StudentSelectionContext } from "../components/StudentSelectionWrapper";
 
 export default function ConceptMap() {
     const [loading, setLoading] = useState(false);
