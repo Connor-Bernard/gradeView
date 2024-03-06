@@ -24,7 +24,7 @@ export default function ConceptMap() {
                 api.get('/admin/studentProgressReport?email=' + selectedStudent).then((res) => {
                     setStudentMastery(res.data);
                     setLoading(false);
-                })
+                });
             }
         } else {
             setLoading(false);
