@@ -37,17 +37,16 @@ export default function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<div className="app">
-				<div className="nav">
-					<NavBar />
-				</div>
 				<div className="content">
 					<BrowserRouter>
+					<div className="nav">
+						<NavBar />
+					</div>
 						<Routes>
 							<Route exact path='/login' element={localStorage.getItem('token') ? <Navigate to='/' /> : <Login />} />
 							<Route exact path='/buckets' element={<Buckets />} />
 							<Route element={<PrivateRoutes />}>
 								<Route exact path='/' element={<Home />} />
-								<Route exact path='/conceptmap' element={<ConceptMap />} />
 							</Route>
 							<Route exact path='/conceptmap' element={<ConceptMap />} />
 							<Route exact path='/serverError' element={<HTTPError errorCode={500}/>} />

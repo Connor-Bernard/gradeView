@@ -5,14 +5,13 @@ import api from '../utils/api';
 import NavBarItem from './NavBarItem';
 
 export default function ButtonAppBar() {
-
     const mobileView = useMediaQuery('(max-width:600px)');
     const [loggedIn, setLoginStatus] = useState(localStorage.getItem('token') ? true : false);
-
     // Sets up the profile picture on element load by getting pfp url from api
     // This also serves as a auth verification
     const [profilePicture, updateProfilePicture] = useState('');
     const [tabs, updateTabs] = useState([{name:'Buckets', href:'/buckets'}]);
+
     useEffect(() => {
         let mounted = true;
         if(loggedIn){
@@ -27,6 +26,8 @@ export default function ButtonAppBar() {
         }
         return () => mounted = false;
     }, [loggedIn]);
+
+
 
     // Set up handlers for user menu
     const [anchorEl, setAnchorEl] = useState(null);
