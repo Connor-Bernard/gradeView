@@ -9,7 +9,7 @@ import {StudentSelectionContext} from "../components/StudentSelectionWrapper";
 export default function ConceptMap() {
     const [loading, setLoading] = useState(false);
     const [studentMastery, setStudentMastery] = useState('000000');
-    const {selectedStudent, getSelectedStudent} = useContext(StudentSelectionContext);
+    const { selectedStudent, getSelectedStudent } = useContext(StudentSelectionContext);
 
     useEffect(() => {
         let mounted = true;
