@@ -25,7 +25,7 @@ function Home() {
     
     const mobileView = useMediaQuery('(max-width:600px)');
 
-    const {selectedStudent, setSelectedStudent} = useContext(StudentSelectionContext);
+    const { selectedStudent, setSelectedStudent } = useContext(StudentSelectionContext);
 
     useEffect(() => {
         let mounted = true;
