@@ -509,14 +509,39 @@ async function main(){
         res.status(200).json(await getUserGradesAsFraction(apiAuthClient, req.body.email));
     });
 
-    // Responds with the grade projections for the specified student
+    // Responds with the grade projections for the specified student.
     app.get('/api/admin/studentProjection', async (req, res) => {
-        res.status(200).json(await getProjectedGrades(apiAuthClient, req.query['email']));
-    })
+        if (req.query.email === undefined) {
+            return res.status(400).json({ error: 'No email provided.' });
+        }
+        let projectedGrades;
+        try {
+            projectedGrades = await getProjectedGrades(apiAuthClient, req.query.email);
+        } catch (e) {
+            if (e instanceof AuthenticationError) {
+                console.log(e);
+                return res.status(400).json({ error: 'User not found.' });
+            }
+        }
+        res.status(200).json(projectedGrades);
+    });
 
-    app.get('/api/admin/progressquerystring', async (req, res) => {
-        res.status(200).send(await getProgressReportQueryParameter(apiAuthClient, req.query['email']));
-    })
+    // Responds with the progress report for the specified student
+    app.get('/api/admin/studentProgressReport', async (req, res) => {
+        if (req.query.email === undefined) {
+            return res.status(400).json({ error: 'No email provided.' });
+        }
+        let progressReport;
+        try {
+            progressReport = await getProgressReportQueryParameter(apiAuthClient, req.query.email);
+        } catch (e) {
+            if (e instanceof AuthenticationError) {
+                console.log(e);
+                return res.status(400).json({ error: 'User email not found.' });
+            }
+        }
+        res.status(200).json(progressReport);
+    });
 
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}.`);

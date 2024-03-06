@@ -103,28 +103,6 @@ function Home() {
         <>
             { isLoading ? ( <Loader /> ) : (
                     <Box sx={{ display: 'flex', flexFlow: 'column', height: '100%' }}>
-                    {
-                        // Student drop-down selection
-                        /*<Box>
-                            <FormControl size='small' sx={{m: 1, minWidth:100}}>
-                                <InputLabel id='student-dropdown-label'>Student</InputLabel>
-                                <Select
-                                    labelId='student-dropdown-label'
-                                    id='student-dropdown'
-                                    label='student'
-                                    onChange={loadStudentData}
-                                    defaultValue={selectedStudent}
-                                    >
-                                        {
-                                            students.map((student) => (
-                                                <MenuItem key={student[1]} value={student[1]}>{student[0]}</MenuItem>
-                                            ))
-                                        }
-                                </Select>
-                            </FormControl>
-                        </Box>
-                        */
-                    }
                     {mobileView ?       
                         <>
                             {accordionTabs.map((assignmentType) => (

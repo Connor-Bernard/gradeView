@@ -59,13 +59,7 @@ export default function ButtonAppBar() {
     }
 
     // Moved from home.js
-    function loadStudentData(e){/*
-        api.post('/admin/getStudent', {
-            email: e.target.value
-        }).then((res) => {
-            setSelectedStudent(e.target.value);
-        });
-        */
+    function loadStudentData(e){
         setSelectedStudent(e.target.value);
     }
 
