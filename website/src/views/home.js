@@ -6,7 +6,7 @@ import GradeAccordion from '../components/GradeAccordion';
 import GradeGrid from '../components/GradeGrid';
 import Grid from '@mui/material/Unstable_Grid2';
 import ProjectionTable from '../components/ProjectionTable';
-import {StudentSelectionContext} from "../components/StudentSelectionWrapper";
+import { StudentSelectionContext } from "../components/StudentSelectionWrapper";
 
 function Home() {
     const [accordionTabs, setAccordionTabs] = useState([]);
