@@ -16,7 +16,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import api from '../utils/api';
 import NavBarItem from './NavBarItem';
-import {StudentSelectionContext} from "./StudentSelectionWrapper";
+import { StudentSelectionContext } from "./StudentSelectionWrapper";
 
 export default function ButtonAppBar() {
 
