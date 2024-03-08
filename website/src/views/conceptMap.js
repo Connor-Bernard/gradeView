@@ -4,12 +4,12 @@ import api from '../utils/api';
 import Loader from '../components/Loader';
 import PageHeader from '../components/PageHeader';
 import './css/conceptMap.css';
-import {StudentSelectionContext} from "../components/StudentSelectionWrapper";
+import { StudentSelectionContext } from "../components/StudentSelectionWrapper";
 
 export default function ConceptMap() {
     const [loading, setLoading] = useState(false);
     const [studentMastery, setStudentMastery] = useState('000000');
-    const {selectedStudent, getSelectedStudent} = useContext(StudentSelectionContext);
+    const { selectedStudent, getSelectedStudent } = useContext(StudentSelectionContext);
 
     useEffect(() => {
         let mounted = true;
@@ -24,7 +24,7 @@ export default function ConceptMap() {
                 api.get('/admin/studentProgressReport?email=' + selectedStudent).then((res) => {
                     setStudentMastery(res.data);
                     setLoading(false);
-                })
+                });
             }
         } else {
             setLoading(false);

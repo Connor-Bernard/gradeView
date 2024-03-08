@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, Typography, FormControl, InputLabel, MenuItem, Select, useMediaQuery } from '@mui/material';
 import api from '../utils/api';
 import Loader from '../components/Loader';
@@ -6,7 +6,7 @@ import GradeAccordion from '../components/GradeAccordion';
 import GradeGrid from '../components/GradeGrid';
 import Grid from '@mui/material/Unstable_Grid2';
 import ProjectionTable from '../components/ProjectionTable';
-import {StudentSelectionContext} from "../components/StudentSelectionWrapper";
+import { StudentSelectionContext } from "../components/StudentSelectionWrapper";
 
 function Home() {
     const [accordionTabs, setAccordionTabs] = useState([]);
@@ -25,7 +25,7 @@ function Home() {
     
     const mobileView = useMediaQuery('(max-width:600px)');
 
-    const {selectedStudent, setSelectedStudent} = useContext(StudentSelectionContext);
+    const { selectedStudent, setSelectedStudent } = useContext(StudentSelectionContext);
 
     useEffect(() => {
         let mounted = true;
