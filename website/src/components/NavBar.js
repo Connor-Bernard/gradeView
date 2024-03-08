@@ -117,13 +117,14 @@ export default function ButtonAppBar() {
                             {isAdmin &&
                                 // Student drop-down selection
                                 <Box>
-                                    <FormControl size='small' sx={{m: 1, minWidth:100, backgroundColor:"white"}}>
+                                    <FormControl size='small' sx={{m: 1, minWidth:100}} variant={"filled"}>
                                         <InputLabel id='student-dropdown-label'>Student</InputLabel>
                                         <Select
                                             labelId='student-dropdown-label'
                                             id='student-dropdown'
                                             label='student'
                                             onChange={loadStudentData}
+                                            style={{backgroundColor: "white"}}
                                             defaultValue={selectedStudent}
                                         >
                                             {
