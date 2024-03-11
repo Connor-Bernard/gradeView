@@ -40,7 +40,7 @@ export default function App() {
 
 				<div className="content">
 					<BrowserRouter>
-					<div className="nav" key="mehul">
+					<div className="nav">
 					<NavBar />
 				</div>
 						<Routes>
