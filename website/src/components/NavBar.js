@@ -111,11 +111,7 @@ export default function ButtonAppBar() {
                     { loggedIn ?
                     (
                         <>
-                            <IconButton onClick={handleMenu} >
-                                <Avatar src={profilePicture} imgProps={{referrerPolicy:'no-referrer'}} />
-                            </IconButton>
                             {isAdmin &&
-                                // Student drop-down selection
                                 <Box>
                                     <FormControl size='small' sx={{m: 1, minWidth:100}} variant={"filled"}>
                                         <InputLabel id='student-dropdown-label'>Student</InputLabel>
@@ -136,6 +132,9 @@ export default function ButtonAppBar() {
                                     </FormControl>
                                 </Box>
                             }
+                            <IconButton onClick={handleMenu} >
+                                <Avatar src={profilePicture} imgProps={{referrerPolicy:'no-referrer'}} />
+                            </IconButton>
                             <Menu
                                 id='loggedInMenu'
                                 anchorEl={anchorEl}
