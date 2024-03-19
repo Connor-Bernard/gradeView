@@ -68,7 +68,7 @@ export async function getStudentScores(email) {
 /**
  * Gets the total amount of points a user has gotten so far.
  * @param {string} email the email of the student whose information to get.
- * @returns {boolean} the total amount of points the user has accumulated.
+ * @returns {number} the total amount of points the user has accumulated.
  */
 export async function getStudentTotalScore(email) {
     const studentInfo = await getStudent(email);
@@ -82,4 +82,8 @@ export async function getStudentTotalScore(email) {
 export async function getTotalPossibleScore() {
     const categories = await getCategories();
     return Object.values(categories).reduce((acc, curr) => acc + curr, 0);
+}
+
+export async function getMaxPointsSoFar() {
+    return await getStudent("MAX POINTS")
 }
