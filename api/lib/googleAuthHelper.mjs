@@ -1,5 +1,5 @@
 import config from "config";
-import AuthenticationError from "../v2/Errors/AuthenticationError.js";
+import AuthenticationError from "../v2/Errors/AuthorizationError.js";
 import {OAuth2Client} from "google-auth-library";
 
 export function hasAuthHeader(token) {

@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "testDb": "nodemon testDb.js",
+    "testApi": "nodemon testApi.js",
     "server": "concurrently \"npm run start\" \"cd ../website && npm run react\""
   },
   "author": "Connor Bernard",

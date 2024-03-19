@@ -9,6 +9,7 @@ export default function GradeGrid({ category, assignments }) {
     const [cumGrade, setCumGrade] = useState(0);
     const [cumMaxGrade, setCumMaxGrade] = useState(0);
 
+    
     useEffect(() => {
         let cg = 0;
         let cmg = 0;
