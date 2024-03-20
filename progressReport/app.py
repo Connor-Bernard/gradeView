@@ -67,18 +67,26 @@ app = Flask(__name__)
 
 @app.route('/', methods=["GET"])
 def index():
-    def assign_node_levels(node):
+    def assign_node_levels(node, student_levels_count, class_levels_count):
         nonlocal student_mastery, class_mastery
         if not node["children"]:
-            node["student_level"] = int(student_mastery[0]) if student_mastery else 0
-            node["class_level"] = int(class_mastery[0]) if class_mastery else 0
+            if student_mastery:
+                node["student_level"] = int(student_mastery[0]) if int(student_mastery[0]) < student_levels_count \
+                    else student_levels_count - 1
+            else:
+                node["student_level"] = 0
+            if class_mastery:
+                node["class_level"] = int(class_mastery[0]) if int(class_mastery[0]) < class_levels_count \
+                    else class_levels_count - 1
+            else:
+                node["class_level"] = 0
             student_mastery = student_mastery[1:] if len(student_mastery) > 1 else ""
             class_mastery = class_mastery[1:] if len(class_mastery) > 1 else ""
         else:
             children_student_levels = []
             children_class_levels = []
             for child in node["children"]:
-                student_level, class_level = assign_node_levels(child)
+                student_level, class_level = assign_node_levels(child, student_levels_count, class_levels_count)
                 children_student_levels.append(student_level)
                 children_class_levels.append(class_level)
             node["student_level"] = sum(children_student_levels) // len(children_student_levels)
@@ -90,6 +98,10 @@ def index():
     student_mastery = request.args.get("student_mastery", "000000")
     class_mastery = request.args.get("class_mastery", "")
     use_url_class_mastery = True if class_mastery != "" else False
+    if not student_mastery.isdigit():
+        return "URL parameter student_mastery is invalid", 400
+    if use_url_class_mastery and not class_mastery.isdigit():
+        return "URL parameter class_mastery is invalid", 400
     parser.generate_map(school_name=secure_filename(school_name), course_name=secure_filename(course_name), render=True)
     try:
         with open("data/{}_{}.json".format(secure_filename(school_name), secure_filename(course_name))) as data_file:
@@ -102,7 +114,7 @@ def index():
     student_levels = course_data["student levels"]
     course_node_count = course_data["count"]
     course_nodes = course_data["nodes"]
-    assign_node_levels(course_nodes)
+    assign_node_levels(course_nodes, len(student_levels), len(class_levels))
     return render_template("web_ui.html",
                            start_date=start_date,
                            course_name=course_name,

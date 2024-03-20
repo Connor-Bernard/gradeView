@@ -39,9 +39,9 @@ export default function App() {
 			<div className="app">
 				<div className="content">
 					<BrowserRouter>
-					<div className="nav">
-						<NavBar />
-					</div>
+						<div className="nav">
+							<NavBar />
+						</div>
 						<Routes>
 							<Route exact path='/login' element={localStorage.getItem('token') ? <Navigate to='/' /> : <Login />} />
 							<Route exact path='/buckets' element={<Buckets />} />

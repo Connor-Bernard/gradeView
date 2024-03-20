@@ -1,19 +1,28 @@
 import React from 'react'
-import { Button, Link } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { Button, Link, Box } from '@mui/material';
+import { NavLink, useMatch } from 'react-router-dom';
 
-export default function NavBarItem({ href, children }) {
-    const location = useLocation();
-    const isActive = location.pathname === href;
-    // Makes the text grey if the tab is active
-    const activeStyle = {
-        background: isActive? "#4169E1": "inherit",
-        color: 'inherit',
-    };
-
+export default function NavBarItem({ href, children }){
+    const match = useMatch(href);
     return (
-        <Link href={href} underline='none' style={activeStyle}>
-            <Button color='inherit'>{children}</Button>
-        </Link>
+        <Link component={NavLink} to={href} color='inherit' >
+          <Button sx={{ color: 'inherit', opacity: match ? 1 : 0.7 }}>
+            {children}
+            {match && (
+              <Box
+                className="underline"
+                sx={{
+                  position: 'absolute',
+                  bottom: 0, // Position at the bottom of the button
+                  left: '50%',
+                  transform: 'translateX(-50%)', // Center the Box
+                  width: '100%',
+                  height: '2px', // Thickness of the underline
+                  backgroundColor: 'currentColor', // Use the text color for the underline
+                }}
+              />
+          )}
+        </Button>
+      </Link>
     );
 }
