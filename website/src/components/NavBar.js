@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { AppBar, Box, Toolbar, Typography, Button, Link, Avatar, Menu, MenuItem, IconButton, useMediaQuery } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu';
+import { LoginOutlined, StorageOutlined, AccountCircleOutlined, AccountTree } from '@mui/icons-material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import  MenuIcon from '@mui/icons-material/Menu';
 import api from '../utils/api';
 import NavBarItem from './NavBarItem';
 
@@ -10,12 +12,16 @@ export default function ButtonAppBar() {
     // Sets up the profile picture on element load by getting pfp url from api
     // This also serves as a auth verification
     const [profilePicture, updateProfilePicture] = useState('');
-    const [tabs, updateTabs] = useState([{name:'Buckets', href:'/buckets'}]);
+    const tabList = [{name:'Profile', href:'/',  icon: <AccountCircleOutlined style={{ marginRight: '15px' }} /> },
+        {name:'Buckets', href:'/buckets', icon: <StorageOutlined style={{ marginRight: '15px' }} /> }, 
+        {name: 'Concept Map', href: '/conceptmap', icon: <AccountTree style={{ marginRight: '15px' }} />},
+    ]
+    const [tabs, updateTabs] = useState(tabList.slice(1));
 
     useEffect(() => {
         let mounted = true;
         if(loggedIn){
-            updateTabs((tabs) => [{name:'Profile', href:'/'}, ...tabs]);
+            updateTabs((tabs) => tabList);
             api.get('/profilepicture').then((res) => {
                 if(mounted){
                     updateProfilePicture(res.data);
@@ -78,10 +84,20 @@ export default function ButtonAppBar() {
                             >
                                 { mobileView &&
                                     tabs.map((tab) => (
-                                        <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>{tab.name}</MenuItem>
+                                        <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>
+                                            <Box display="flex" alignItems="center">
+                                                {tab.icon}
+                                                <Typography variant="inherit">{tab.name}</Typography> 
+                                            </Box>
+                                        </MenuItem>
                                     ))
                                 }
-                                <MenuItem onClick={doLogout}>Logout</MenuItem>
+                                <MenuItem onClick={doLogout}>
+                                    <Box display="flex" alignItems="center">
+                                        <LogoutIcon style={{ marginRight: '15px' }}></LogoutIcon>
+                                        <Typography variant="inherit">Logout</Typography> 
+                                    </Box>
+                                </MenuItem>
                             </Menu>
                         </>
                     ) : (
@@ -100,11 +116,21 @@ export default function ButtonAppBar() {
                                         open={Boolean(anchorEl)}
                                         onClose={handleClose}
                                     >
+                                        <MenuItem onClick={() => {window.location = '/login'}}>
+                                            <Box display="flex" alignItems="center">
+                                                <LoginOutlined style={{ marginRight: '15px' }} />
+                                                <Typography variant="inherit">Login</Typography> 
+                                            </Box>
+                                        </MenuItem>     
                                         {tabs.map((tab) => (
-                                                <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>{tab.name}</MenuItem>
+                                                <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>
+                                                    <Box display="flex" alignItems="center">
+                                                        {tab.icon}
+                                                        <Typography variant="inherit">{tab.name}</Typography> 
+                                                    </Box>
+                                                </MenuItem>
                                             ))
                                         }
-                                            <MenuItem onClick={() => {window.location = '/login'}}>Login</MenuItem>     
                                     </Menu>  
                                 </>
                             :  
