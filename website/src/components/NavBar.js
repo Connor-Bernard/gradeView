@@ -1,10 +1,27 @@
 import { useEffect, useState } from 'react';
-import { AppBar, Box, Toolbar, Typography, Button, Link, Avatar, Menu, MenuItem, IconButton, useMediaQuery } from '@mui/material'
-import { LoginOutlined, StorageOutlined, AccountCircleOutlined, AccountTree } from '@mui/icons-material';
-import LogoutIcon from '@mui/icons-material/Logout';
+import {
+    AppBar,
+    Box,
+    Toolbar,
+    Typography,
+    Button,
+    Link,
+    Avatar,
+    Menu,
+    IconButton,
+    useMediaQuery,
+} from '@mui/material';
+import {
+    LoginOutlined,
+    StorageOutlined,
+    AccountCircleOutlined,
+    AccountTree,
+    Logout
+} from '@mui/icons-material';
 import  MenuIcon from '@mui/icons-material/Menu';
 import api from '../utils/api';
 import NavBarItem from './NavBarItem';
+import NavMenuItem from './NavMenuItem';
 
 export default function ButtonAppBar() {
     const mobileView = useMediaQuery('(max-width:600px)');
@@ -12,11 +29,35 @@ export default function ButtonAppBar() {
     // Sets up the profile picture on element load by getting pfp url from api
     // This also serves as a auth verification
     const [profilePicture, updateProfilePicture] = useState('');
-    const tabList = [{name:'Profile', href:'/',  icon: <AccountCircleOutlined style={{ marginRight: '15px' }} /> },
-        {name:'Buckets', href:'/buckets', icon: <StorageOutlined style={{ marginRight: '15px' }} /> }, 
-        {name: 'Concept Map', href: '/conceptmap', icon: <AccountTree style={{ marginRight: '15px' }} />},
-    ]
+    const tabList = [
+        {
+            name: 'Profile',
+            href: '/',
+            icon: <AccountCircleOutlined style={{ marginRight: '15px' }} />,
+        },
+        {
+            name: 'Buckets',
+            href: '/buckets',
+            icon: <StorageOutlined style={{ marginRight: '15px' }} />,
+        },
+        {
+            name: 'Concept Map',
+            href: '/conceptmap',
+            icon: <AccountTree style={{ marginRight: '15px' }} />,
+        },
+    ];
+
     const [tabs, updateTabs] = useState(tabList.slice(1));
+
+    const renderMenuItems = () => tabs.map((tab) => (
+        <NavMenuItem
+            icon={tab.icon}
+            text={tab.name}
+            onClick={() => { window.location.href = tab.href }}
+        />
+        
+    ));
+
 
     useEffect(() => {
         let mounted = true;
@@ -83,21 +124,13 @@ export default function ButtonAppBar() {
                                 onClose={handleClose}
                             >
                                 { mobileView &&
-                                    tabs.map((tab) => (
-                                        <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>
-                                            <Box display="flex" alignItems="center">
-                                                {tab.icon}
-                                                <Typography variant="inherit">{tab.name}</Typography> 
-                                            </Box>
-                                        </MenuItem>
-                                    ))
+                                    renderMenuItems()
                                 }
-                                <MenuItem onClick={doLogout}>
-                                    <Box display="flex" alignItems="center">
-                                        <LogoutIcon style={{ marginRight: '15px' }}></LogoutIcon>
-                                        <Typography variant="inherit">Logout</Typography> 
-                                    </Box>
-                                </MenuItem>
+                                <NavMenuItem
+                                    icon={<Logout />}
+                                    text={"Logout"}
+                                    onClick={doLogout}
+                                />
                             </Menu>
                         </>
                     ) : (
@@ -116,21 +149,12 @@ export default function ButtonAppBar() {
                                         open={Boolean(anchorEl)}
                                         onClose={handleClose}
                                     >
-                                        <MenuItem onClick={() => {window.location = '/login'}}>
-                                            <Box display="flex" alignItems="center">
-                                                <LoginOutlined style={{ marginRight: '15px' }} />
-                                                <Typography variant="inherit">Login</Typography> 
-                                            </Box>
-                                        </MenuItem>     
-                                        {tabs.map((tab) => (
-                                                <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>
-                                                    <Box display="flex" alignItems="center">
-                                                        {tab.icon}
-                                                        <Typography variant="inherit">{tab.name}</Typography> 
-                                                    </Box>
-                                                </MenuItem>
-                                            ))
-                                        }
+                                        <NavMenuItem
+                                            icon={<LoginOutlined />}
+                                            text={"Login"}
+                                            onClick={() => { window.location.href = '/login' }}
+                                        />
+                                        {renderMenuItems()}
                                     </Menu>  
                                 </>
                             :  
