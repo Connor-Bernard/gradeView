@@ -33,17 +33,17 @@ export default function ButtonAppBar() {
         {
             name: 'Profile',
             href: '/',
-            icon: <AccountCircleOutlined style={{ marginRight: '15px' }} />,
+            icon: <AccountCircleOutlined />,
         },
         {
             name: 'Buckets',
             href: '/buckets',
-            icon: <StorageOutlined style={{ marginRight: '15px' }} />,
+            icon: <StorageOutlined />,
         },
         {
             name: 'Concept Map',
             href: '/conceptmap',
-            icon: <AccountTree style={{ marginRight: '15px' }} />,
+            icon: <AccountTree />,
         },
     ];
 
