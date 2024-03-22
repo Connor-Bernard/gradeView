@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import api from '../utils/api';
 import Loader from '../components/Loader';
@@ -17,7 +17,7 @@ export default function ConceptMap() {
         if (mounted && localStorage.getItem('token')) {
             if (selectedStudent === "") {
                 api.get('/progressquerystring').then((res) => {
-                    setStudentMastery(res.data)
+                    setStudentMastery(res.data);
                     setLoading(false);
                 });
             } else {

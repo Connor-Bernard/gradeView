@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     AppBar,
     Box,
@@ -88,7 +88,7 @@ export default function ButtonAppBar() {
                 return () => mounted = false;
             });
         }
-    }, [loggedIn])
+    }, [loggedIn]);
 
     return (
         <Box sx={{ flexGrow: 1 }}>
