@@ -5,7 +5,7 @@ export const StudentSelectionContext = createContext({
     setSelectedStudent: () => {}
 });
 
-export default function StudentSelectionWrapper({children}) {
+export default function StudentSelectionWrapper({ children }) {
     const [selectedStudent, setSelectedStudent] = useState("");
     const value = { selectedStudent: selectedStudent, setSelectedStudent: setSelectedStudent };
 
