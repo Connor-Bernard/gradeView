@@ -1,22 +1,68 @@
 import { useEffect, useState } from 'react';
-import { AppBar, Box, Toolbar, Typography, Button, Link, Avatar, Menu, MenuItem, IconButton, useMediaQuery } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu';
+import {
+    AppBar,
+    Box,
+    Toolbar,
+    Typography,
+    Button,
+    Link,
+    Avatar,
+    Menu,
+    IconButton,
+    useMediaQuery,
+} from '@mui/material';
+import {
+    LoginOutlined,
+    StorageOutlined,
+    AccountCircleOutlined,
+    AccountTree,
+    Logout
+} from '@mui/icons-material';
+import  MenuIcon from '@mui/icons-material/Menu';
 import api from '../utils/api';
 import NavBarItem from './NavBarItem';
+import NavMenuItem from './NavMenuItem';
 
 export default function ButtonAppBar() {
-
     const mobileView = useMediaQuery('(max-width:600px)');
     const [loggedIn, setLoginStatus] = useState(localStorage.getItem('token') ? true : false);
-
     // Sets up the profile picture on element load by getting pfp url from api
     // This also serves as a auth verification
     const [profilePicture, updateProfilePicture] = useState('');
-    const [tabs, updateTabs] = useState([{name:'Buckets', href:'/buckets'}]);
+    const tabList = [
+        {
+            name: 'Profile',
+            href: '/',
+            icon: <AccountCircleOutlined />,
+        },
+        {
+            name: 'Buckets',
+            href: '/buckets',
+            icon: <StorageOutlined />,
+        },
+        {
+            name: 'Concept Map',
+            href: '/conceptmap',
+            icon: <AccountTree />,
+        },
+    ];
+
+    const [tabs, updateTabs] = useState(tabList.slice(1));
+
+    const renderMenuItems = () => tabs.map((tab) => (
+        <NavMenuItem
+            icon={tab.icon}
+            text={tab.name}
+            onClick={() => { window.location.href = tab.href }}
+        />
+        
+    ));
+
+
     useEffect(() => {
         let mounted = true;
         if(loggedIn){
-            updateTabs((tabs) => [{name:'Profile', href:'/'}, ...tabs]);
+            updateTabs((tabs) => tabList);
             api.get('/profilepicture').then((res) => {
                 if(mounted){
                     updateProfilePicture(res.data);
@@ -27,6 +73,8 @@ export default function ButtonAppBar() {
         }
         return () => mounted = false;
     }, [loggedIn]);
+
+
 
     // Set up handlers for user menu
     const [anchorEl, setAnchorEl] = useState(null);
@@ -76,11 +124,13 @@ export default function ButtonAppBar() {
                                 onClose={handleClose}
                             >
                                 { mobileView &&
-                                    tabs.map((tab) => (
-                                        <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>{tab.name}</MenuItem>
-                                    ))
+                                    renderMenuItems()
                                 }
-                                <MenuItem onClick={doLogout}>Logout</MenuItem>
+                                <NavMenuItem
+                                    icon={<Logout />}
+                                    text={"Logout"}
+                                    onClick={doLogout}
+                                />
                             </Menu>
                         </>
                     ) : (
@@ -99,11 +149,12 @@ export default function ButtonAppBar() {
                                         open={Boolean(anchorEl)}
                                         onClose={handleClose}
                                     >
-                                        {tabs.map((tab) => (
-                                                <MenuItem key={tab.name} onClick={() => {window.location = tab.href}}>{tab.name}</MenuItem>
-                                            ))
-                                        }
-                                            <MenuItem onClick={() => {window.location = '/login'}}>Login</MenuItem>     
+                                        <NavMenuItem
+                                            icon={<LoginOutlined />}
+                                            text={"Login"}
+                                            onClick={() => { window.location.href = '/login' }}
+                                        />
+                                        {renderMenuItems()}
                                     </Menu>  
                                 </>
                             :  

@@ -37,7 +37,6 @@ export default function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<div className="app">
-
 				<div className="content">
 					<BrowserRouter>
 						<div className="nav">
