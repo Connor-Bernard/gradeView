@@ -328,6 +328,16 @@
 
         loadCourseData(courseData);
 
+        window.onresize = function() {
+            if (window.RT) {
+                clearTimeout(window.RT);
+            }
+            window.RT = setTimeout(function() {
+                this.location.reload(false);
+            }, 200);
+        };
+
     </script>
+
 </body>
 </html>
