@@ -12,7 +12,7 @@ const router = Router({ mergeParams: true });
 
 /**
  * Middleware to check if the request has an authorization header.
- * // TODO: This should be moved to a lib file.
+ * TODO: This should be moved to a lib file.
  */
 router.use('/', async (req, _, next) => {
     const { authorization } = req.headers;
@@ -28,7 +28,7 @@ router.use('/', async (req, _, next) => {
 
 /**
  * Middleware to check if the email in the request is the same as the email in the authorization header.
- * ..TODO: this should be moved to a lib file.
+ * TODO: this should be moved to a lib file.
  */
 router.use('/:email', async (req, _, next) => {
     const { email } = req.params;
