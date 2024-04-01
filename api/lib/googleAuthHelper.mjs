@@ -1,10 +1,6 @@
 import config from "config";
-import AuthenticationError from "../v2/Errors/AuthorizationError.js";
-import {OAuth2Client} from "google-auth-library";
-
-export function hasAuthHeader(token) {
-
-}
+import AuthenticationError from "./Errors/AuthorizationError.js";
+import { OAuth2Client } from "google-auth-library";
 
 export async function getEmailFromAuth(token) {
     try {
