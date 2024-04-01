@@ -1,7 +1,13 @@
 import { Router } from 'express';
+import { getEmailFromAuth } from '../../../lib/googleAuthHelper.mjs';
+import { getStudent } from '../../../lib/redisHelper.mjs';
 
 const router = Router();
 
+/**
+ * This route is used to verify if the user has access to the system, but it should be done as middleware.
+ * @deprecated
+ */
 router.get('/verifyaccess', async (req, res) => {
     const { authorization } = req.headers;
     if (!authorization) {

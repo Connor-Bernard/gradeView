@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { getEmailFromAuth } from '../../../../lib/googleAuthHelper.mjs';
-import AuthorizationError from '../../Errors/AuthorizationError.js';
+import { getStudentScores } from '../../../../lib/redisHelper.mjs';
 
 const router = Router({ mergeParams: true });
 

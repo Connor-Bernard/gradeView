@@ -3,6 +3,7 @@ import GradesRouter from './grades/index.js';
 import ProjectionsRouter from './projections/index.js';
 import ProgressQueryStringRouter from './progressquerystring/index.js';
 import AuthorizationError from '../../Errors/AuthorizationError.js';
+import { getEmailFromAuth } from '../../../lib/googleAuthHelper.mjs';
 
 const router = Router({ mergeParams: true });
 
