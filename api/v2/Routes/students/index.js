@@ -37,7 +37,7 @@ router.use('/:email', async (req, _, next) => {
     const requesterEmail = await getEmailFromAuth(authorization);
     if (config.admins.includes(requesterEmail)) {
         // TODO: test that this actually checks if the student exists.
-        if (!getStudent(email)) {
+        if (!(await getStudent(email))) {
             throw new StudentNotFoundError('requested student does not exist.');
         }
         next();
