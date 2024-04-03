@@ -9,4 +9,3 @@ if __name__ == "__main__":
     flush_db()
     update_db()
     update_bins()
-    

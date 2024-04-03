@@ -1,6 +1,5 @@
+import React from 'react';
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
-
-
 
 export default function GradeTable({ assignments, headerLeft, headerRight}) {
 
