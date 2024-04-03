@@ -3,6 +3,25 @@ import UnauthorizedAccessError from './HttpErrors/UnauthorizedAccessError';
 import { getEmailFromAuth } from './googleAuthHelper.mjs';
 import { isAdmin, isStudent } from './userlib.mjs';
 
+/**
+ * Validates that the requester is either an admin or a student.
+ * @param {Request} req request to validate.
+ * @param {*} _ 
+ * @param {Function} next trigger the next middleware / request.
+ */
+export async function validateAdminOrStudentMiddleware(req, _, next) {
+    try {
+        validateAdminMiddleware(req, _, next);
+    } catch (err) {
+        switch (typeof err) {
+            case 'UnauthorizedAccessError':
+                break;
+            default:
+                throw err;
+        }
+    }
+    validateStudentMiddleware(req, _, next);
+}
 
 /**
  * Validates that an admin request is permitted.
