@@ -1,6 +1,6 @@
 import config from "config";
-import AuthenticationError from "./HttpErrors/AuthorizationError.js";
 import { OAuth2Client } from "google-auth-library";
+import AuthorizationError from "./HttpErrors/AuthorizationError.js";
 
 /**
  * Gets an email from a google auth token.
@@ -16,11 +16,11 @@ export async function getEmailFromAuth(token) {
         });
         const payload = ticket.getPayload();
         if (payload['hd'] !== 'berkeley.edu') {
-            throw new AuthenticationError('domain mismatch');
+            throw new AuthorizationError('domain mismatch');
         }
         return payload['email'];
     } catch (err) {
-        throw new AuthenticationError('Could not authenticate authorization token.');
+        throw new AuthorizationError('Could not authenticate authorization token.');
     }
 }
 
@@ -28,6 +28,7 @@ export async function getEmailFromAuth(token) {
  * Ensures that an email is a properly formatted berkeley email.
  * @param {string} email email to verify.
  * @returns {boolean} success of verification.
+ * @deprecated
  */
 export function verifyBerkeleyEmail(email) {
     return email.split("@").length === 2
@@ -39,6 +40,7 @@ export function verifyBerkeleyEmail(email) {
  * Checks to see if an email is a student email or an admin.
  * @param {string} email email to check access to.
  * @returns {boolean} whether the email is an admin or student.
+ * @deprecated use api/lib/userlib.mjs middlewares instead.
  */
 export function ensureStudentOrAdmin(email) {
     const isAdmin = config.get('admins').includes(email);
