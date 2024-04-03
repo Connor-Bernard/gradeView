@@ -1,4 +1,4 @@
-import NotFoundError from "./NotFoundError";
+import NotFoundError from './NotFoundError.js';
 
 /**
  * Should be thrown when a student resource is requested but not found.

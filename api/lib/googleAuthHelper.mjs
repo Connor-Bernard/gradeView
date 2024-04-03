@@ -1,5 +1,5 @@
 import config from "config";
-import AuthenticationError from "./Errors/AuthorizationError.js";
+import AuthenticationError from "./HttpErrors/AuthorizationError.js";
 import { OAuth2Client } from "google-auth-library";
 
 /**

@@ -32,6 +32,7 @@ export async function getEntry(key) {
     await client.connect();
 
     const res = await client.get(key);
+    // TODO: Throw error if the key does not exist in the db.
 
     await client.quit();
 

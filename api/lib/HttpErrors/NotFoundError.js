@@ -1,6 +1,5 @@
 /**
  * Should be thrown on an arbitrary resource not being found.
- * @abstract
  */
 export default class NotFoundError extends Error{
     constructor(message){
