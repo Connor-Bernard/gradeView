@@ -11,7 +11,7 @@ import { isAdmin, isStudent } from './userlib.mjs';
  */
 export async function validateAdminOrStudentMiddleware(req, _, next) {
     try {
-        validateAdminMiddleware(req, _, next);
+        await validateAdminMiddleware(req, _, next);
     } catch (err) {
         switch (typeof err) {
             case 'UnauthorizedAccessError':
@@ -20,7 +20,7 @@ export async function validateAdminOrStudentMiddleware(req, _, next) {
                 throw err;
         }
     }
-    validateStudentMiddleware(req, _, next);
+    await validateStudentMiddleware(req, _, next);
 }
 
 /**
