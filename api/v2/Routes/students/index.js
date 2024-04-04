@@ -2,7 +2,7 @@ import { Router } from 'express';
 import GradesRouter from './grades/index.js';
 import ProjectionsRouter from './projections/index.js';
 import ProgressQueryStringRouter from './progressquerystring/index.js';
-import StudentNotFoundError from '../../../lib/errors/StudentNotFoundError.js';
+import StudentNotFoundError from '../../../lib/HttpErrors/StudentNotFoundError.js';
 import { validateAdminOrStudentMiddleware } from '../../../lib/authlib.mjs';
 import { isStudent } from '../../../lib/userlib.mjs';
 
