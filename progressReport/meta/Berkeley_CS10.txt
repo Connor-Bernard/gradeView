@@ -17,12 +17,12 @@ student levels:
     Almost There: #3981c1
     Mastered: #20476a
 nodes:
-    Quest [blue2, Week1, link="https://cs61c.org"]
-        Abstraction [default, Week1, link="https://cs61c.org"]
-        Number Representation [default, Week2, link="https://cs61c.org"]
-        Iteration [default, Week3, link="https://cs61c.org"]
-        Domain and Range [blue2, Week4, link="https://cs61c.org"]
-        Booleans [default, Week5, link="https://cs61c.org"]
-        Functions [default, Week6, link="https://cs61c.org"]
-        HOFs I [default, Week6, link="https://cs61c.org"]
+    Quest [blue2, Week1]
+        Abstraction [default, Week1]
+        Number Representation [default, Week2]
+        Iteration [default, Week3]
+        Domain and Range [blue2, Week4]
+        Booleans [default, Week5]
+        Functions [default, Week6]
+        HOFs I [default, Week6]
 end

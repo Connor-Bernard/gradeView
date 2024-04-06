@@ -1,19 +1,15 @@
 import re
 import json
-import os
-import datetime
-from collections import OrderedDict
 
 
 class Node:
     count = 0
 
-    def __init__(self, label, style, week, link, parent=None, children=None):
+    def __init__(self, label, style, week, parent=None, children=None):
         self.id = Node.count + 1
         self.label = label
         self.style = style
         self.week = int(week)
-        self.link = link
         self.parent = parent
         if children is None:
             children = []
@@ -21,9 +17,8 @@ class Node:
         Node.count += 1
 
 
-def read_meta(name):
+def read_meta(f):
     Node.count = 0
-    f = open("meta/{}.txt".format(name), "r")
     name = ""
     term = ""
     orientation = ""
@@ -32,7 +27,7 @@ def read_meta(name):
     class_levels = []
     student_levels = []
     nodes = []
-    root = Node(label="", style="root", week=0, link="", parent=None, children=nodes)
+    root = Node(label="", style="root", week=0, parent=None, children=nodes)
 
     parse_mode = None
 
@@ -82,27 +77,23 @@ def read_meta(name):
             level_match = re.search(r"\s*([A-Za-z-_\s]+): #([A-Za-z0-9]+)", line)
             student_levels.append({"name": level_match.group(1), "color": "#{}".format(level_match.group(2))})
         elif parse_mode == "NODE":
-            node_match = re.search(r"(\s+)([A-Za-z0-9\-\s]+) \[([A-Za-z0-9]+), Week([0-9]+), link=\"(.+)\"]", line)
+            node_match = re.search(r"(\s+)([A-Za-z0-9\-\s\\/]+) \[([A-Za-z0-9]+), Week([0-9]+)]", line)
             root.week = max(root.week, int(node_match.group(4)))
             if len(node_match.group(1)) // 4 == 1:
-                cur_node_parent = Node(node_match.group(2), node_match.group(3), node_match.group(4),
-                                       node_match.group(5))
+                cur_node_parent = Node(node_match.group(2), node_match.group(3), node_match.group(4))
                 nodes.append(cur_node_parent)
                 cur_node_parent_depth = 1
             elif len(node_match.group(1)) // 4 < cur_node_parent_depth:
                 cur_node_parent = cur_node_parent.parent
                 cur_node_parent_depth -= 1
                 cur_node_parent.parent.children.append(
-                    Node(node_match.group(2), node_match.group(3), node_match.group(4), node_match.group(5),
-                         cur_node_parent))
+                    Node(node_match.group(2), node_match.group(3), node_match.group(4), cur_node_parent))
             elif len(node_match.group(1)) // 4 == cur_node_parent_depth:
-                new_children = Node(node_match.group(2), node_match.group(3), node_match.group(4), node_match.group(5),
-                                    cur_node_parent.parent)
+                new_children = Node(node_match.group(2), node_match.group(3), node_match.group(4), cur_node_parent.parent)
                 cur_node_parent.parent.children.append(new_children)
                 cur_node_parent = new_children
             elif len(node_match.group(1)) // 4 > cur_node_parent_depth:
-                new_children = Node(node_match.group(2), node_match.group(3), node_match.group(4), node_match.group(5),
-                                    cur_node_parent)
+                new_children = Node(node_match.group(2), node_match.group(3), node_match.group(4), cur_node_parent)
                 cur_node_parent.children.append(new_children)
                 cur_node_parent = new_children
                 cur_node_parent_depth += 1
@@ -114,7 +105,7 @@ def read_meta(name):
     return name, orientation, start_date, term, class_levels, student_levels, styles, root
 
 
-def to_json(name, term, start_date, class_levels, student_levels, root, render=False):
+def to_json(school_name, course_name, term, start_date, class_levels, student_levels, root, render=False):
     def nodes_to_json(node):
         if render or node.children:
             nodes_json = {
@@ -138,7 +129,7 @@ def to_json(name, term, start_date, class_levels, student_levels, root, render=F
         return nodes_json
 
     json_out = {
-        "name": name,
+        "name": course_name,
         "term": term,
         "start date": "{}/{}/{}".format(start_date[1], start_date[2], start_date[0]),
         "class levels": class_levels,
@@ -147,10 +138,14 @@ def to_json(name, term, start_date, class_levels, student_levels, root, render=F
         "nodes": nodes_to_json(root)
     }
 
-    with open('data/{}.json'.format(name), 'w', encoding='utf-8') as json_out_file:
+    with open('data/{}_{}.json'.format(school_name, course_name), 'w', encoding='utf-8') as json_out_file:
         json.dump(json_out, json_out_file, indent=4)
 
-def generate_map(name, render=False):
-    print("Log: {}".format(name))
-    name, orientation, start_date, term, class_levels, student_levels, styles, root = read_meta(name)
-    to_json(name, term, start_date, class_levels, student_levels, root, render)
+def generate_map(school_name, course_name, render=False):
+    print("Log: {}_{}".format(school_name, course_name))
+    try:
+        with open("meta/{}_{}.txt".format(school_name, course_name), "r") as f:
+            name, orientation, start_date, term, class_levels, student_levels, styles, root = read_meta(f)
+            to_json(school_name, course_name, term, start_date, class_levels, student_levels, root, render)
+    except FileNotFoundError:
+        return

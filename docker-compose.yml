@@ -47,6 +47,21 @@ services:
     ports:
       - 8080:${PROGRESS_REPORT_PORT}
     restart: unless-stopped 
+  redis:
+    build: 
+     context: ./database/redis
+     dockerfile: Dockerfile
+    command: redis-server --requirepass ${REDIS_DB_SECRET:-password}
+    ports:
+      - 6379:6379
+  dbcron:
+    build: 
+      context: ./database/dbcron
+      dockerfile: Dockerfile
+    volumes:
+      - ./database/dbcron:/database/dbcron
+    depends_on:
+      - redis
 networks:
   frontend:
     name: frontend

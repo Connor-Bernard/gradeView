@@ -1,3 +1,4 @@
+import React from 'react';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Typography, Box } from '@mui/material';
 
 export default function BinTable({ title, col1, col2, rows, keys }){

@@ -56,3 +56,36 @@ OR
 2. In the root directory run `make npm` to start the service
 
 Note: Running these will start both an api server as well as a website
+
+## Database
+
+### ACCESS DATABASE
+1. To access the cli when the container is running:\
+`docker exec -it gradeview-redis-1 redis-cli`
+2. First command is to enter the password. The password is stored in the root .env file as REDIS_DB_SECRET\
+`AUTH {value of REDIS_DB_SECRET}`
+
+### RETRIEVE DATA
+1. Select which data to use - since we only have the data from the Google Sheet, it is populated to the 0 index, so type:\
+`SELECT 0`
+2. To list out all of the keys in this database:\
+`KEYS *`
+3. To access the data for the assignment:concept mapping:\
+`GET Categories`\
+This returns a JSON in the following format:
+```
+“{\“Quest 1\“:
+    {\“Abstraction\“: \“2\“, \“Number Representation\“: \“4\“, \“Iteration\“: \“6\“, \“Domain and Range\“: \“6“, \“Booleans\“: \“6\“, \“Functions\“: \“4\“, \“HOFs I\“: \“12\“}
+}”
+```
+4. To access a students data, use their email. For example:\
+`GET dahluwalia@berkeley.edu`\
+This returns a JSON in the following format:
+```    
+“{\“Legal Name\“: \“Ahluwalia, Dev\“,
+  \“Assignments\“:
+         {\“Quest 1\“:
+             {\“Abstraction\“: 2, \“Number Representation\“: 4, \“Iteration\“: 6, \“Domain and Range\“: 6, \“Booleans\“: 6, \“Functions\“: 4, \“HOFs I\“: 12}
+         }
+}”
+```

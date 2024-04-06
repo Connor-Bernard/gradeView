@@ -324,6 +324,7 @@ function mapTopicsToGrades(userGradeData) {
  * Gets the user's progress for each of the topics taught so far.
  * @param {Promise<Compute | JSONClient | T>} apiAuthClient
  * @param {string} email the email of the user to look up.
+ * @returns {string} the query parameter consumed by the progress report encoding student mastery. 
  */
 async function getProgressReportQueryParameter(apiAuthClient, email){
     const userGrades = await getUserGrades(apiAuthClient, email);
@@ -438,7 +439,7 @@ async function main(){
     app.use(unless(['/api/bins', '/api/verifyaccess'], verificationMiddleWare));
     app.use('/api/admin', adminVerificationMiddleWare);
 
-    app.get('/api/bins', async (req, res) => {
+    app.get('/api/bins', async (_, res) => {
         return res.status(200).json(await getBins(apiAuthClient));
     });
 
@@ -500,7 +501,7 @@ async function main(){
     });
 
     // Responds with the current students in the spreadsheet
-    app.get('/api/admin/students', async (req, res) => {
+    app.get('/api/admin/students', async (_, res) => {
         return res.status(200).json(await getStudents(apiAuthClient));
     });
 
