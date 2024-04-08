@@ -57,6 +57,15 @@ export async function getStudent(email) {
 }
 
 /**
+ * Gets the grade bins of all assignments from the Redis database.
+ * @returns {object} the assignment categories.
+ */
+export async function getBins() {
+    return await getEntry('bins');
+}
+
+
+/**
  * Gets just the student's scores from the Redis database.
  * @param {string} email the email of the student whose information to get.
  * @returns {object} the student's scores.
