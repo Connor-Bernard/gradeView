@@ -9,16 +9,14 @@ dotenv.config();
  * Gets an authenticated Redis client.
  * @returns {RedisClient} Redis client.
  */
-export function getClient() {
+export function getClient(databaseIndex = 0) {
     const client = createClient({
         url: `redis://${config.get('redis.username')}:${process.env.REDIS_DB_SECRET}` +
-            `@${config.get('redis.host')}:${config.get('redis.port')}`,
+            `@${config.get('redis.host')}:${config.get('redis.port')}/${databaseIndex}`,
     });
-
     client.on('error', (err) => {
         console.error('Redis error: ', err);
     });
-
     return client;
 }
 
@@ -27,8 +25,8 @@ export function getClient() {
  * @param {string} key the key of the entry to get.
  * @returns {object} the entry's information.
  */
-export async function getEntry(key) {
-    const client = getClient();
+export async function getEntry(key, databaseIndex = 0) {
+    const client = getClient(databaseIndex);
     await client.connect();
 
     const res = await client.get(key);
@@ -55,6 +53,16 @@ export async function getCategories() {
 export async function getStudent(email) {
     return await getEntry(email);
 }
+
+/**
+ * Gets the grade bins of all assignments from the Redis database.
+ * @returns {object} the assignment categories.
+ */
+export async function getBins() {
+    const databaseIndex = 1;
+    return await getEntry('bins', databaseIndex);
+}
+
 
 /**
  * Gets just the student's scores from the Redis database.
