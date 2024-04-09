@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import { getBins } from "../../../lib/redisHelper.mjs";
-import NotFoundError from '../../../lib/HttpErrors/NotFoundError';
+import NotFoundError from '../../../lib/HttpErrors/NotFoundError.js';
 
 const router = Router({ mergeParams: true });
 
 router.get('/', async (_, res) => {
     try {
         const binsData = await getBins();
+        
         if (!binsData) {
             throw new NotFoundError('Bins data not found');
         }
