@@ -16,6 +16,7 @@ services:
     depends_on:
       - web
       - api
+      - dtgui-progress-report
   web:
     container_name: gradeview-web
     image: ${CI_REGISTRY_IMAGE:-gradeview}/web:${WEB_VERSION:-development}
