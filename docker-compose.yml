@@ -13,6 +13,9 @@ services:
       - concept_map_integration
     ports:
       - 80:80
+    depends_on:
+      - web
+      - api
   web:
     container_name: gradeview-web
     image: ${CI_REGISTRY_IMAGE:-gradeview}/web:${WEB_VERSION:-development}
