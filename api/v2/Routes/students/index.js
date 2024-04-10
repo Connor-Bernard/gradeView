@@ -15,6 +15,7 @@ router.use(RateLimit({
     max: 100, // 100 requests
 }));
 
+// TODO: sanitize email input.
 // Ensure the requester has access to the requested student's data.
 router.use('/:email', validateAdminOrStudentMiddleware);
 
