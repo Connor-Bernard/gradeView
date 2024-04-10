@@ -23,6 +23,13 @@
             "clientid": "435032403387-5sph719eh205fc6ks0taft7ojvgipdji.apps.googleusercontent.com"
         }
     },
-    "admins": ["connorbernard@berkeley.edu", "madelenf143@berkeley.edu", "john.schultz@berkeley.edu", "ddgarcia@berkeley.edu", "gandhi@berkeley.edu"]
+    "admins": [
+        "connorbernard@berkeley.edu",
+        "madelenf143@berkeley.edu",
+        "john.schultz@berkeley.edu",
+        "ddgarcia@berkeley.edu",
+        "gandhi@berkeley.edu",
+        "dahluwalia@berkeley.edu"
+    ]
 }
 
