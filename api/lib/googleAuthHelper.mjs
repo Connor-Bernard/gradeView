@@ -1,5 +1,5 @@
-import config from "config";
-import { OAuth2Client } from "google-auth-library";
+import config from 'config';
+import { OAuth2Client } from 'google-auth-library';
 import AuthorizationError from "./HttpErrors/AuthorizationError.js";
 
 /**
@@ -8,11 +8,12 @@ import AuthorizationError from "./HttpErrors/AuthorizationError.js";
  * @returns {string} user's email.
  */
 export async function getEmailFromAuth(token) {
+    const googleOauthAudience = config.get('googleconfig.oauth.clientid');
     try {
-        let oauthClient = new OAuth2Client(config.get('googleconfig.oauth.clientid'));
+        let oauthClient = new OAuth2Client(googleOauthAudience);
         const ticket = await oauthClient.verifyIdToken({
-            idToken: token,
-            audience: config.get('googleconfig.oauth.clientid'),
+            idToken: token.split(' ')[1],
+            audience: googleOauthAudience,
         });
         const payload = ticket.getPayload();
         if (payload['hd'] !== 'berkeley.edu') {
@@ -20,6 +21,7 @@ export async function getEmailFromAuth(token) {
         }
         return payload['email'];
     } catch (err) {
+        console.error(err);
         throw new AuthorizationError('Could not authenticate authorization token.');
     }
 }
