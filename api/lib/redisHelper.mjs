@@ -7,6 +7,7 @@ dotenv.config();
 
 /**
  * Gets an authenticated Redis client.
+ * @param {number} databaseIndex the index the entry is stored in.
  * @returns {RedisClient} Redis client.
  */
 export function getClient(databaseIndex = 0) {
@@ -23,6 +24,7 @@ export function getClient(databaseIndex = 0) {
 /**
  * Gets the value of a specified key in the database.
  * @param {string} key the key of the entry to get.
+ * @param {number} databaseIndex the index the entry is stored in.
  * @returns {object} the entry's information.
  */
 export async function getEntry(key, databaseIndex = 0) {
@@ -62,7 +64,6 @@ export async function getBins() {
     const databaseIndex = 1;
     return await getEntry('bins', databaseIndex);
 }
-
 
 /**
  * Gets just the student's scores from the Redis database.
