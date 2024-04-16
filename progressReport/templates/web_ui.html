@@ -325,7 +325,27 @@
                 parseNodeClass_InProcess(node["children"][i])
             }
         }
+        function resizeSVG() {
+        margin = {top: 100, right: window.innerWidth / 3 + 100, bottom: 100, left: window.innerWidth / 3 + 100};
+        width = window.innerWidth - margin.right - margin.left;
+        height = 50 * {{ course_node_count }};
+        
+        // Update the SVG dimensions
+        d3.select("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom);
+        
+        // Update the group transform
+        svg.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        
+        // Update the positions of nodes and links
+        update(root);
+    }
 
+    // Add event listener for window resize
+    window.addEventListener("resize", resizeSVG);
+
+    // Load the initial course data and setup the diagram
         loadCourseData(courseData);
 
     </script>
