@@ -1,7 +1,7 @@
 import React from 'react';
 import { useContext, useEffect, useState } from 'react';
 
-import api from '../utils/apiv2';
+import api from '../utils/api';
 import Loader from '../components/Loader';
 import PageHeader from '../components/PageHeader';
 import './css/conceptMap.css';
