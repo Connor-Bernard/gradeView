@@ -5,6 +5,7 @@ import { OAuth2Client } from 'google-auth-library';
 import esMain from 'es-main';
 import config from 'config';
 import dotenv from 'dotenv';
+import ApiV2Router from './Router.js';
 
 import ProgressReportData from './assets/progressReport/CS10.json' assert {type: 'json'};
 
@@ -359,6 +360,7 @@ async function main() {
     const app = express();
     app.use(cors());
     app.use(json());
+    app.use('/api', ApiV2Router);
 
     const apiAuthClient = await new google.auth.GoogleAuth({
         credentials: JSON.parse(process.env.SERVICE_ACCOUNT_CREDENTIALS),

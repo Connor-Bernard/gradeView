@@ -10,10 +10,4 @@ router.use('/bins', BinsRouter);
 router.use('/students', StudentsRouter);
 router.use('/verifyaccess', VerifyAccessRouter);
 
-// Error handling middleware
-router.use((err, _, res, next) => {
-    res.status(err.status ?? 500).send(err.message);
-    next(err);
-});
-
 export default router;
