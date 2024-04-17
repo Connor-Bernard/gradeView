@@ -28,7 +28,6 @@ router.use('/:email', async (req, _, next) => {
     }
     next();
 });
-
 router.use('/:id/grades', GradesRouter);
 router.use('/:id/projections', ProjectionsRouter);
 router.use('/:id/progressquerystring', ProgressQueryStringRouter);
