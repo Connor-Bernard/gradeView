@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Box, Typography, FormControl, InputLabel, MenuItem, Select, useMediaQuery } from '@mui/material';
-import api from '../utils/api';
+import api from '../utils/apiv2';
 import Loader from '../components/Loader';
 import GradeAccordion from '../components/GradeAccordion';
 import GradeGrid from '../components/GradeGrid';
