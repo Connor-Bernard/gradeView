@@ -18,10 +18,10 @@ import StudentSelectionWrapper from "./components/StudentSelectionWrapper";
 const theme = createTheme({
 	palette: {
 		primary: {
-			main:"#00284e"
+			main: "#00284e"
 		},
 		secondary: {
-			main:"#e3a83b",
+			main: "#e3a83b",
 		},
 	},
 	typography: {
@@ -39,25 +39,25 @@ export default function App() {
 		<ThemeProvider theme={theme}>
 			<StudentSelectionWrapper>
 				<div className="app">
-          <div className="content">
-            <BrowserRouter>
-              <div className="nav">
-                <NavBar />
-              </div>
-              <Routes>
-                <Route exact path='/login' element={localStorage.getItem('token') ? <Navigate to='/' /> : <Login />} />
-                <Route exact path='/buckets' element={<Buckets />} />
-                <Route element={<PrivateRoutes />}>
-                  <Route exact path='/' element={<Home />} />
-                </Route>
-                <Route exact path='/conceptmap' element={<ConceptMap />} />
-                <Route exact path='/serverError' element={<HTTPError errorCode={500}/>} />
-                <Route exact path='/clientError' element={<HTTPError errorCode={400}/>} />
-                <Route exact path='*' element={<HTTPError errorCode={404} />} />
-              </Routes>
-            </BrowserRouter>
-          </div>
-        </div>
+					<div className="content">
+						<BrowserRouter>
+							<div className="nav">
+								<NavBar />
+							</div>
+							<Routes>
+								<Route exact path='/login' element={localStorage.getItem('token') ? <Navigate to='/' /> : <Login />} />
+								<Route exact path='/buckets' element={<Buckets />} />
+								<Route element={<PrivateRoutes />}>
+									<Route exact path='/' element={<Home />} />
+								</Route>
+								<Route exact path='/conceptmap' element={<ConceptMap />} />
+								<Route exact path='/serverError' element={<HTTPError errorCode={500} />} />
+								<Route exact path='/clientError' element={<HTTPError errorCode={400} />} />
+								<Route exact path='*' element={<HTTPError errorCode={404} />} />
+							</Routes>
+						</BrowserRouter>
+					</div>
+				</div>
 			</StudentSelectionWrapper>
 		</ThemeProvider>
 	);
