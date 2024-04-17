@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getBins } from "../../../lib/redisHelper.mjs";
 import NotFoundError from '../../../lib/HttpErrors/NotFoundError.js';
+import 'express-async-errors';
 
 const router = Router({ mergeParams: true });
 

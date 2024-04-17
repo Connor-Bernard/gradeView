@@ -5,8 +5,6 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "testDb": "nodemon testDb.js",
-    "testApi": "nodemon testApi.js",
     "server": "concurrently \"npm run start\" \"cd ../website && npm run react\""
   },
   "author": "Connor Bernard",
@@ -22,6 +20,7 @@
     "dotenv": "^16.0.3",
     "es-main": "^1.2.0",
     "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
     "express-rate-limit": "^7.2.0",
     "googleapis": "^105.0.0",
     "nodemon": "^2.0.20",

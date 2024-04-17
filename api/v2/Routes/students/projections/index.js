@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getTotalPossibleScore, getMaxPointsSoFar, getStudentTotalScore } from '../../../../lib/redisHelper.mjs';
+import 'express-async-errors';
 
 const router = Router({ mergeParams: true });
 

@@ -12,10 +12,9 @@ import { isAdmin, isStudent } from './userlib.mjs';
 export async function validateAdminOrStudentMiddleware(req, _, next) {
     try {
         await validateAdminMiddleware(req, _, next);
-        return;
     } catch (err) {
         switch (typeof err) {
-            case UnauthorizedAccessError:
+            case 'UnauthorizedAccessError':
                 break;
             default:
                 throw err;

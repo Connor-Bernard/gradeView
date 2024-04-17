@@ -5,12 +5,13 @@ import { OAuth2Client } from 'google-auth-library';
 import esMain from 'es-main';
 import config from 'config';
 import dotenv from 'dotenv';
+import ApiV2Router from './Router.js';
 
 import ProgressReportData from './assets/progressReport/CS10.json' assert {type: 'json'};
 
-class AuthenticationError extends Error{}
-class UnauthorizedAccessError extends Error{}
-class BadSheetDataError extends Error{}
+class AuthenticationError extends Error { }
+class UnauthorizedAccessError extends Error { }
+class BadSheetDataError extends Error { }
 
 dotenv.config(); // Load environment variables from .env file
 const PORT = process.env.PORT || 8000;
@@ -34,14 +35,14 @@ const ENDBIN = config.get('spreadsheet.pages.binpage.endcell'); // The cell that
  * @returns {Promise<String>} user's email
  * @throws {AuthenticationError} if token is invalid
  */
-async function getEmailFromIdToken(oauthClient, token){
+async function getEmailFromIdToken(oauthClient, token) {
     try {
         const ticket = await oauthClient.verifyIdToken({
             idToken: token,
             audience: OAUTHCLIENTID
         });
         const payload = ticket.getPayload();
-        if(payload['hd'] !== 'berkeley.edu'){
+        if (payload['hd'] !== 'berkeley.edu') {
             throw new AuthenticationError('domain mismatch');
         }
         return payload['email'];
@@ -57,7 +58,7 @@ async function getEmailFromIdToken(oauthClient, token){
  * @returns {String} url of current user profile picture
  * @throws {AuthenticationError} if token is invalid
  */
-async function getProfilePictureFromIdToken(oauthClient, token){
+async function getProfilePictureFromIdToken(oauthClient, token) {
     try {
         const ticket = await oauthClient.verifyIdToken({
             idToken: token,
@@ -79,26 +80,26 @@ async function getProfilePictureFromIdToken(oauthClient, token){
  * @param {String} email 
  * @returns {Promise<Boolean>} the user's row, null if invalid
  */
-async function getUserRow(apiAuthClient, email){
-    if(email === MAXGRADEROW){
+async function getUserRow(apiAuthClient, email) {
+    if (email === MAXGRADEROW) {
         return MAXGRADEROW;
     }
-    if(ADMINS.includes(email)){
+    if (ADMINS.includes(email)) {
         return STARTGRADEROW;
     }
-    const sheets = google.sheets({version: 'v4', auth: apiAuthClient});
+    const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
         range: `${GRADINGPAGENAME}!B${STARTGRADEROW}:B`
     });
     const rows = res.data.values;
 
-    for(let i = 0; i < rows.length; i++){
-        if(rows[i][0] === email){
+    for (let i = 0; i < rows.length; i++) {
+        if (rows[i][0] === email) {
             return STARTGRADEROW + i;
         }
     }
-    throw new AuthenticationError('No user with token email found.');
+    throw new AuthenticationError(`No user with email '${email}' found.`);
 }
 
 /**
@@ -108,9 +109,9 @@ async function getUserRow(apiAuthClient, email){
  * @returns {Promise<Object>} dictionary of user's grades
  * @throws {AuthenticationError} if user is not found
  */
-async function getUserGrades(apiAuthClient, email){
+async function getUserGrades(apiAuthClient, email) {
     const userRow = await getUserRow(apiAuthClient, email);
-    const sheets = google.sheets({version: 'v4', auth: apiAuthClient});
+    const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
 
     const assignmentMetaRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
@@ -125,16 +126,16 @@ async function getUserGrades(apiAuthClient, email){
     let gradesRows = gradesRes.data.values;
 
     // Updates values to empty lists of lists in case there are no entries
-    if(!assignmentMeta){
+    if (!assignmentMeta) {
         assignmentMeta = [[]];
     }
-    if(!gradesRows){
+    if (!gradesRows) {
         gradesRows = [[]];
     }
 
     let assignments = []
     // Populate assignments dictionary with grades
-    for(let i = 0; i < assignmentMeta[0].length; i++){
+    for (let i = 0; i < assignmentMeta[0].length; i++) {
         assignments.push({
             id: i,
             assignment: assignmentMeta[0][i],
@@ -152,7 +153,7 @@ async function getUserGrades(apiAuthClient, email){
  * @param {String} token 
  * @returns {Promise<Object>} of user's grades
  */
-async function getUserGradesFromToken(apiAuthClient, oauthClient, token){
+async function getUserGradesFromToken(apiAuthClient, oauthClient, token) {
     return await getUserGrades(apiAuthClient, await getEmailFromIdToken(oauthClient, token));
 }
 
@@ -162,14 +163,14 @@ async function getUserGradesFromToken(apiAuthClient, oauthClient, token){
  * @param {String} email 
  * @returns {Promise<Object>} dictionary of user's grades
  */
-async function getUserGradesAsFraction(apiAuthClient, email){
+async function getUserGradesAsFraction(apiAuthClient, email) {
     const userGrades = await getUserGrades(apiAuthClient, email);
     const gradeMeta = await getUserGrades(apiAuthClient, MAXGRADEROW);
     gradeMeta.map((assignment) => {
-        if (!assignment.grade){
+        if (!assignment.grade) {
             return assignment.assignment = null;
         }
-        return assignment.grade = {studentGrade: userGrades[assignment.id]?.grade, maxGrade: assignment.grade}
+        return assignment.grade = { studentGrade: userGrades[assignment.id]?.grade, maxGrade: assignment.grade }
     });
     return gradeMeta.filter((assignment) => assignment.assignment);
 }
@@ -181,7 +182,7 @@ async function getUserGradesAsFraction(apiAuthClient, email){
  * @param {String} token 
  * @returns {Promise<Object>} dictionary of user's grades
  */
-async function getUserGradesFromTokenAsFraction(apiAuthClient, oauthClient, token){
+async function getUserGradesFromTokenAsFraction(apiAuthClient, oauthClient, token) {
     return await getUserGradesAsFraction(apiAuthClient, await getEmailFromIdToken(oauthClient, token));
 }
 
@@ -191,16 +192,16 @@ async function getUserGradesFromTokenAsFraction(apiAuthClient, oauthClient, toke
  * @param {String} email 
  * @returns {Promise<boolean>} user's total points
  */
-async function getUserPoints(apiAuthClient, email){
+async function getUserPoints(apiAuthClient, email) {
     const userPointData = await getUserGrades(apiAuthClient, email);
     let points = 0;
     userPointData.forEach((assignment) => {
         const grade = assignment.grade;
-        if(grade != null){
+        if (grade != null) {
             points += +grade;
         }
     });
-    if(isNaN(points)){
+    if (isNaN(points)) {
         throw new BadSheetDataError(`Unable to parse ${email} row data.`);
     }
     return points;
@@ -212,7 +213,7 @@ async function getUserPoints(apiAuthClient, email){
  * @param {String} email 
  * @returns {Promise<Object>} projections for users grades
  */
-async function getProjectedGrades(apiAuthClient, email){
+async function getProjectedGrades(apiAuthClient, email) {
     let projections = { 'zeros': null, 'pace': null, 'perfect': null };
     const bins = await getBins(apiAuthClient);
     const maxPoints = +bins[bins.length - 1][0];
@@ -231,7 +232,7 @@ async function getProjectedGrades(apiAuthClient, email){
  * @param {String} token 
  * @returns {Promise<Object>} projections for users grades
  */
-async function getProjectedGradesFromToken(apiAuthClient, oauthClient, token){
+async function getProjectedGradesFromToken(apiAuthClient, oauthClient, token) {
     return await getProjectedGrades(apiAuthClient, await getEmailFromIdToken(oauthClient, token));
 }
 
@@ -241,7 +242,7 @@ async function getProjectedGradesFromToken(apiAuthClient, oauthClient, token){
  * @param {token} token 
  * @returns whether or not the current user is an admin
  */
-async function hasAdminStatus(oauthClient, token){
+async function hasAdminStatus(oauthClient, token) {
     const ticket = await oauthClient.verifyIdToken({
         idToken: token,
         audience: OAUTHCLIENTID
@@ -255,7 +256,7 @@ async function hasAdminStatus(oauthClient, token){
  * @param {OAuth2Client} oauthClient 
  * @param {String} token 
  */
-async function confirmAdminAccount(oauthClient, token){
+async function confirmAdminAccount(oauthClient, token) {
     try {
         const ticket = await oauthClient.verifyIdToken({
             idToken: token,
@@ -265,11 +266,11 @@ async function confirmAdminAccount(oauthClient, token){
         if (payload['hd'] !== 'berkeley.edu') {
             throw new AuthenticationError('domain mismatch');
         }
-        if(!(ADMINS.includes(payload.email))){
+        if (!(ADMINS.includes(payload.email))) {
             throw new UnauthorizedAccessError('User is not an admin.');
         }
     } catch (err) {
-        if(typeof err == UnauthorizedAccessError){
+        if (typeof err == UnauthorizedAccessError) {
             throw err;
         }
         throw new AuthenticationError('Could not authenticate authorization token.');
@@ -295,7 +296,7 @@ async function getStudents(apiAuthClient) {
  * @param {Promise<Compute | JSONClient | T>} apiAuthClient 
  * @returns list of lists with the first value being the low end bucket val and the second being the grade
  */
-async function getBins(apiAuthClient){
+async function getBins(apiAuthClient) {
     const sheets = google.sheets({ version: 'v4', auth: apiAuthClient });
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEETID,
@@ -326,7 +327,7 @@ function mapTopicsToGrades(userGradeData) {
  * @param {string} email the email of the user to look up.
  * @returns {string} the query parameter consumed by the progress report encoding student mastery. 
  */
-async function getProgressReportQueryParameter(apiAuthClient, email){
+async function getProgressReportQueryParameter(apiAuthClient, email) {
     const userGrades = await getUserGrades(apiAuthClient, email);
     const maxGrades = await getUserGrades(apiAuthClient, MAXGRADEROW);
     const userTopicPoints = mapTopicsToGrades(userGrades);
@@ -355,10 +356,11 @@ async function getProgressReportQueryParameter(apiAuthClient, email){
 }
 
 
-async function main(){
+async function main() {
     const app = express();
     app.use(cors());
     app.use(json());
+    app.use('/api', ApiV2Router);
 
     const apiAuthClient = await new google.auth.GoogleAuth({
         credentials: JSON.parse(process.env.GRADE_DB_SECRET),
@@ -373,9 +375,9 @@ async function main(){
      * @param {Function} middleware 
      * @returns Function
      */
-    function unless(paths, middleware){
-        return function(req, res, next){
-            if(paths.includes(req.path)){
+    function unless(paths, middleware) {
+        return function (req, res, next) {
+            if (paths.includes(req.path)) {
                 return next();
             } else {
                 return middleware(req, res, next);
@@ -390,17 +392,17 @@ async function main(){
      * @param {any} next 
      * @returns a response message for an error if there is one
      */
-    async function verificationMiddleWare(req, res, next){
+    async function verificationMiddleWare(req, res, next) {
         let auth = req.headers['authorization'];
-        if(!auth){
-            return res.status(401).json({error: 'No Authorization provided.'});
+        if (!auth) {
+            return res.status(401).json({ error: 'No Authorization provided.' });
         }
         auth = auth.split(' ');
         // Make sure the user's email is in the google sheet
-        try{
+        try {
             await getUserRow(apiAuthClient, await getEmailFromIdToken(oauthClient, auth[1]));
-        } catch (e){
-            if(e instanceof AuthenticationError){
+        } catch (e) {
+            if (e instanceof AuthenticationError) {
                 return res.status(401).json({ error: 'User not authorized.' });
             }
             return res.status(400).json({ error: 'Unknown error.' });
@@ -415,19 +417,19 @@ async function main(){
      * @param {any} next 
      * @returns a response message for an error if there is one
      */
-    async function adminVerificationMiddleWare(req, res, next){
+    async function adminVerificationMiddleWare(req, res, next) {
         let auth = req.headers.authorization;
         if (!auth) {
             return res.status(401).json({ error: 'No Authorization provided.' });
         }
         auth = auth.split(' ');
-        try{
+        try {
             await confirmAdminAccount(oauthClient, auth[1]);
         } catch (e) {
-            if(e instanceof AuthenticationError){
+            if (e instanceof AuthenticationError) {
                 return res.status(401).json({ error: 'User not authorized.' });
             }
-            if(e instanceof UnauthorizedAccessError){
+            if (e instanceof UnauthorizedAccessError) {
                 return res.status(403).json({ error: 'User does not have access.' });
             }
             return res.status(400).json({ error: 'Unknown error.' });
@@ -472,13 +474,13 @@ async function main(){
     });
 
     app.get('/api/projections', async (req, res) => {
-        try{
+        try {
             return res.status(200).json(await getProjectedGradesFromToken(apiAuthClient,
                 oauthClient, req.headers.authorization.split(' ')[1]));
         } catch (e) {
-            if(e instanceof BadSheetDataError){
+            if (e instanceof BadSheetDataError) {
                 console.log(e);
-                return res.status(502).json({ error: '502: Bad Gateway'});
+                return res.status(502).json({ error: '502: Bad Gateway' });
             }
         }
     });
@@ -506,8 +508,23 @@ async function main(){
     });
 
     // Responds with the grades for the specified student
+    // TODO: should ideally not show admins.
     app.post('/api/admin/getStudent', async (req, res) => {
-        res.status(200).json(await getUserGradesAsFraction(apiAuthClient, req.body.email));
+        const { email } = req.body;
+
+        if (!email) {
+            res.status(400).json({ message: 'email required in body' });
+            return;
+        }
+
+        try {
+            const data = await getUserGradesAsFraction(apiAuthClient, email);
+            res.status(200).json(data);
+            return;
+        } catch (e) {
+            res.status(e.status ?? 500).json({ message: e.message ?? 'an unknown error occurred.' });
+            return;
+        }
     });
 
     // Responds with the grade projections for the specified student.
@@ -551,6 +568,6 @@ async function main(){
 }
 
 // Run the main function if this is a main module
-if(esMain(import.meta)){
+if (esMain(import.meta)) {
     main();
 }

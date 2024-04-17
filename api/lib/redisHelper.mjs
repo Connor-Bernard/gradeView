@@ -13,7 +13,7 @@ dotenv.config();
 export function getClient(databaseIndex = 0) {
     const client = createClient({
         url: `redis://${config.get('redis.username')}:${process.env.REDIS_DB_SECRET}` +
-            `@${config.get('redis.host')}:${config.get('redis.port')}/${databaseIndex}`
+            `@${config.get('redis.host')}:${config.get('redis.port')}/${databaseIndex}`,
     });
     client.on('error', (err) => {
         console.error('Redis error: ', err);
