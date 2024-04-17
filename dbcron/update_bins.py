@@ -17,7 +17,7 @@ WORKSHEET = int(os.getenv("BINS_WORKSHEET"))
 REDIS_PW = os.getenv("REDIS_DB_SECRET")
 
 #needs both spreadsheet and drive access or else there is a permissions error, added as a viewer on the spreadsheet
-credentials_json = os.getenv("GRADE_DB_SECRET")
+credentials_json = os.getenv("SERVICE_ACCOUNT_CREDENTIALS")
 credentials_dict = json.loads(credentials_json)
 credentials = Credentials.from_service_account_info(credentials_dict, scopes=SCOPES)
 client = gspread.authorize(credentials)

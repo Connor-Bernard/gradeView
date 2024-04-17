@@ -8,7 +8,6 @@ import { validateAdminOrStudentMiddleware } from '../../../lib/authlib.mjs';
 import { isStudent } from '../../../lib/userlib.mjs';
 import 'express-async-errors';
 
-
 const router = Router({ mergeParams: true });
 
 // Rate limit calls to 100 per 5 minutes
@@ -30,8 +29,6 @@ router.use('/:email', async (req, res, next) => {
     }
     next();
 });
-
-
 router.use('/:id/grades', GradesRouter);
 router.use('/:id/projections', ProjectionsRouter);
 router.use('/:id/progressquerystring', ProgressQueryStringRouter);

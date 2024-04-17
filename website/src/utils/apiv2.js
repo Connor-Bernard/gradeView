@@ -2,20 +2,20 @@ import axios from 'axios';
 
 const URL = window.location.origin;
 
-let apiv2;
+let api;
 
-//if (localStorage.getItem('token')) {
-    apiv2 = axios.create({
-        baseURL: `${URL}:3333/api/v2/`,
+if (localStorage.getItem('token')) {    
+    api = axios.create({
+        baseURL: `${URL}/api/v2`,
         headers: {'Authorization': localStorage.getItem('token')}
     });
-/**} else {
-    apiv2 = axios.create({
-        baseURL: `${URL}:3333/api/v2/`,
+} else {
+    api = axios.create({
+        baseURL: `${URL}/api/v2`,
     });
-}**/
+}
 
-apiv2.interceptors.response.use(undefined, (err) => {
+api.interceptors.response.use(undefined, (err) => {
     try {
         const errorCode = err.response.status;
         switch (true) {
@@ -33,4 +33,4 @@ apiv2.interceptors.response.use(undefined, (err) => {
     }
 });
 
-export default apiv2;
+export default api
