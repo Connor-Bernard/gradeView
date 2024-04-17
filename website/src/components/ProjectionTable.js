@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, TableContainer, Paper, Table, TableHead, TableCell, TableBody, TableRow } from '@mui/material';
 
 export default function ProjectionTable({ projections: { zeros, pace, perfect }, gradeData }){
