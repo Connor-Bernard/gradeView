@@ -5,7 +5,7 @@ import ProgressReportData from '../../../../assets/progressReport/CS10.json' ass
 
 const router = Router({ mergeParams: true });
 
-function mapTopicsToGrades(userGradeData) {
+/**function mapTopicsToGrades(userGradeData) {
     const topicsToGradesTable = {};
     userGradeData.forEach((assignment) => {
         if (!(assignment.assignment in topicsToGradesTable)) {
@@ -14,14 +14,28 @@ function mapTopicsToGrades(userGradeData) {
         topicsToGradesTable[assignment.assignment] += +(assignment.grade ?? 0);
     });
     return topicsToGradesTable;
+}**/
+
+function getTopicsFromUser(gradeData) {
+    const topicsTable = {};
+    Object.entries(gradeData).forEach(([assignment, topics]) => {
+        Object.entries(topics).forEach(([topic, score]) => {
+            if (topic in topicsTable) {
+                topicsTable[topic] += +(score ?? 0)
+            } else {
+                topicsTable[topic] = +(score ?? 0)
+            }
+        })
+    })
+    return topicsTable
 }
 
 router.get('/', async (req, res) => {
-    const { email } = req.params;
+    const email = res.locals.email
     const userGrades = await getStudentScores(email);
     const maxGrades = await getMaxPointsSoFar();
-    const userTopicPoints = mapTopicsToGrades(userGrades);
-    const maxTopicPoints = mapTopicsToGrades(maxGrades);
+    const userTopicPoints = getTopicsFromUser(userGrades);
+    const maxTopicPoints = getTopicsFromUser(maxGrades['Assignments']);
     const numMasteryLevels = ProgressReportData['student levels'].length - 2;
     Object.entries(userTopicPoints).forEach(([topic, userPoints]) => {
         const maxAchievablePoints = maxTopicPoints[topic];

@@ -3,11 +3,11 @@ server {
     server_name  _;
 
     location / {
-        proxy_pass http://web:3000;
+        proxy_pass http://gradeview-web:3000;
     }
 
     location /api {
-        proxy_pass http://api:8000;
+        proxy_pass http://gradeview-api:8000;
     }
 
     location /progress {

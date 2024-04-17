@@ -4,6 +4,8 @@ import api from '../utils/api';
 import Loader from '../components/Loader';
 import PageHeader from '../components/PageHeader';
 import './css/conceptMap.css';
+import jwtDecode from "jwt-decode";
+import apiv2 from "../utils/apiv2";
 
 export default function ConceptMap() {
     const [loading, setLoading] = useState(false);
@@ -13,7 +15,8 @@ export default function ConceptMap() {
         let mounted = true;
         setLoading(true);
         if (mounted && localStorage.getItem('token')) {
-            api.get('/progressquerystring').then((res) => {
+            let email = jwtDecode(localStorage.getItem('token')).email;
+            apiv2.get(email + '/progressquerystring').then((res) => {
                 setStudentMastery(res.data)
                 setLoading(false);
             });

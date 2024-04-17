@@ -361,7 +361,7 @@ async function main(){
     app.use(json());
 
     const apiAuthClient = await new google.auth.GoogleAuth({
-        credentials: JSON.parse(process.env.SERVICE_ACCOUNT_CREDENTIALS),
+        credentials: JSON.parse(process.env.GRADE_DB_SECRET),
         scopes: SCOPES
     }).getClient();
 
