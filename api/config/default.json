@@ -2,7 +2,6 @@
     "redis": {
         "username": "default",
         "host": "redis",
-        "!!!!!!!!!TODO!!!!!!!!!": "update the above field to the correct host",
         "port": 6379
     },
     "spreadsheet": {

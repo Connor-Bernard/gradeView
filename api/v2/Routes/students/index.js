@@ -33,4 +33,3 @@ router.use('/:id/projections', ProjectionsRouter);
 router.use('/:id/progressquerystring', ProgressQueryStringRouter);
 
 export default router;
-

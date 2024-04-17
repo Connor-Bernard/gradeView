@@ -13,14 +13,14 @@ export async function validateAdminOrStudentMiddleware(req, _, next) {
     try {
         await validateAdminMiddleware(req, _, next);
     } catch (err) {
-        switch (typeof err) {
-            case 'UnauthorizedAccessError':
+        switch (err.constructor) {
+            case UnauthorizedAccessError:
+                await validateStudentMiddleware(req, _, next);
                 break;
             default:
                 throw err;
         }
     }
-    await validateStudentMiddleware(req, _, next);
 }
 
 /**
@@ -50,6 +50,7 @@ export async function validateAdminMiddleware(req, _, next) {
  * @throws {UnauthorizedAccessError} if the requester is not the route email param.
  */
 export async function validateStudentMiddleware(req, _, next) {
+    const { email } = req.params
     validateAuthenticatedRequestFormat(req);
 
     const authEmail = await getEmailFromAuth(req.headers['authorization']);
@@ -57,8 +58,7 @@ export async function validateStudentMiddleware(req, _, next) {
         throw new AuthorizationError('not a registered student.');
     }
 
-    const reqEmail = req.params.email;
-    if (reqEmail && (authEmail !== reqEmail)) {
+    if (email && (authEmail !== email)) {
         throw new UnauthorizedAccessError('not permitted');
     }
 
