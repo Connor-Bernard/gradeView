@@ -1,3 +1,3 @@
 * * * * * cd /dbcron && /usr/local/bin/python3 /dbcron/update_db.py >> /var/log/cron.log 2>&1
-* * * * * cd /dbcron && /usr/local/bin/python3 /dbcron/update_bins.py >> /var/log/cron.log 2>&1
+1 * * * * cd /dbcron && /usr/local/bin/python3 /dbcron/update_bins.py >> /var/log/cron.log 2>&1
 1 * * * * cd /dbcron && /usr/local/bin/python3 /dbcron/flush_db.py >> /var/log/cron.log 2>&1

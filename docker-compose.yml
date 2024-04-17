@@ -60,7 +60,7 @@ services:
     ports:
       - 6379:6379
   dbcron:
-    build: ./dbCron
+    build: ./dbcron
     volumes:
       - ./dbcron:/dbcron
     networks:
