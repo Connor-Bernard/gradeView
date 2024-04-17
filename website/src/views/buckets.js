@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Typography, useMediaQuery } from '@mui/material';
-import api from '../utils/apiv2';
+import api from '../utils/api';
 import BinTable from '../components/BinTable';
 import Loader from '../components/Loader';
 
