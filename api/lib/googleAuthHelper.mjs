@@ -21,7 +21,6 @@ export async function getEmailFromAuth(token) {
         }
         return payload['email'];
     } catch (err) {
-        console.error(err);
         throw new AuthorizationError('Could not authenticate authorization token.');
     }
 }

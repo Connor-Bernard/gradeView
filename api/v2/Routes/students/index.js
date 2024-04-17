@@ -6,6 +6,7 @@ import ProgressQueryStringRouter from './progressquerystring/index.js';
 import StudentNotFoundError from '../../../lib/HttpErrors/StudentNotFoundError.js';
 import { validateAdminOrStudentMiddleware } from '../../../lib/authlib.mjs';
 import { isStudent } from '../../../lib/userlib.mjs';
+import 'express-async-errors';
 
 const router = Router({ mergeParams: true });
 
@@ -26,16 +27,6 @@ router.use('/:email', async (req, _, next) => {
         throw new StudentNotFoundError('requested student does not exist');
     }
     next();
-});
-
-router.get('/:email', async (req, res) => {
-    // TODO: implement me.
-    const userInfo = {
-        email: req.params.email,
-        name: '',
-        pfp: ''
-    };
-    return res.status(501).json({ message: 'Not implemented' });
 });
 
 router.use('/:id/grades', GradesRouter);

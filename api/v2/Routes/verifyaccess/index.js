@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getEmailFromAuth } from '../../../lib/googleAuthHelper.mjs';
 import { getStudent } from '../../../lib/redisHelper.mjs';
+import 'express-async-errors';
 
 const router = Router();
 
@@ -18,7 +19,6 @@ router.get('/verifyaccess', async (req, res) => {
         await getStudent(await getEmailFromAuth(auth));
         return res.status(200).send(true);
     } catch (e) {
-        console.error(e);
         return res.status(200).send(false);
     }
 });
