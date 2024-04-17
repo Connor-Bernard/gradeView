@@ -16,7 +16,7 @@ export default function ConceptMap() {
         setLoading(true);
         if (mounted && localStorage.getItem('token')) {
             let email = jwtDecode(localStorage.getItem('token')).email;
-            apiv2.get(email + '/progressquerystring').then((res) => {
+            api.get('v2/students/' + email + '/progressquerystring').then((res) => {
                 setStudentMastery(res.data)
                 setLoading(false);
             });

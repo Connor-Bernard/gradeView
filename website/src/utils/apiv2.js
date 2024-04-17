@@ -4,16 +4,16 @@ const URL = window.location.origin;
 
 let apiv2;
 
-if (localStorage.getItem('token')) {
+//if (localStorage.getItem('token')) {
     apiv2 = axios.create({
-        baseURL: `${URL}/api/v2`,
+        baseURL: `${URL}:3333/api/v2/`,
         headers: {'Authorization': localStorage.getItem('token')}
     });
-} else {
+/**} else {
     apiv2 = axios.create({
-        baseURL: `${URL}/api/v2`,
+        baseURL: `${URL}:3333/api/v2/`,
     });
-}
+}**/
 
 apiv2.interceptors.response.use(undefined, (err) => {
     try {

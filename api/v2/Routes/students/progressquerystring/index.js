@@ -30,12 +30,7 @@ function getTopicsFromUser(gradeData) {
     return topicsTable
 }
 
-router.get('/', async (req, res) => {
-    const email = res.locals.email
-    const userGrades = await getStudentScores(email);
-    const maxGrades = await getMaxPointsSoFar();
-    const userTopicPoints = getTopicsFromUser(userGrades);
-    const maxTopicPoints = getTopicsFromUser(maxGrades['Assignments']);
+async function getMasteryString(userTopicPoints, maxTopicPoints) {
     const numMasteryLevels = ProgressReportData['student levels'].length - 2;
     Object.entries(userTopicPoints).forEach(([topic, userPoints]) => {
         const maxAchievablePoints = maxTopicPoints[topic];
@@ -56,7 +51,18 @@ router.get('/', async (req, res) => {
             userTopicPoints[topic] = Math.ceil(unBoundedMasteryLevel);
         }
     });
-    return res.status(200).json(Object.values(userTopicPoints).join(''));
+    let masteryNum = Object.values(userTopicPoints).join('');
+    return masteryNum;
+}
+
+router.get('/', async (req, res) => {
+    const email = res.locals.email
+    const userGrades = await getStudentScores(email);
+    const maxGrades = await getMaxPointsSoFar();
+    const userTopicPoints = getTopicsFromUser(userGrades);
+    const maxTopicPoints = getTopicsFromUser(maxGrades['Assignments']);
+    const masteryNum = await getMasteryString(userTopicPoints, maxTopicPoints);
+    return res.status(200).json(masteryNum);
 });
 
 export default router;
