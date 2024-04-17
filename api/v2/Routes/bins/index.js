@@ -8,7 +8,6 @@ const router = Router({ mergeParams: true });
 router.get('/', async (_, res) => {
     try {
         const binsData = await getBins();
-        
         if (!binsData) {
             throw new NotFoundError('Bins data not found');
         }
