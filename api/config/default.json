@@ -1,4 +1,10 @@
 {
+    "redis": {
+        "username": "default",
+        "host": "localhost",
+        "!!!!!!!!!TODO!!!!!!!!!": "update the above field to the correct host",
+        "port": 6379
+    },
     "spreadsheet": {
         "id": "1iX0ulEYbyYOy7Dehy3jGmSsWK4JAJA47Hvaa2cF7u1U",
         "scopes": [
