@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useContext, useEffect, useState} from 'react';
 
 import api from '../utils/api';
 import Loader from '../components/Loader';
@@ -6,10 +6,13 @@ import PageHeader from '../components/PageHeader';
 import './css/conceptMap.css';
 import jwtDecode from "jwt-decode";
 import apiv2 from "../utils/apiv2";
+import {StudentSelectionContext} from "../components/StudentSelectionWrapper";
 
 export default function ConceptMap() {
     const [loading, setLoading] = useState(false);
     const [studentMastery, setStudentMastery] = useState('000000');
+
+    const {selectedStudent, setSelectedStudent} = useContext(StudentSelectionContext);
 
     useEffect(() => {
         let mounted = true;
@@ -25,6 +28,18 @@ export default function ConceptMap() {
         }
         return () => mounted = false;
     }, []);
+
+    useEffect(() => {
+        let mounted = true;
+        if (mounted) {
+            setLoading(true);
+            api.get('v2/students/' + selectedStudent + '/progressquerystring').then((res) => {
+                setStudentMastery(res.data)
+                setLoading(false);
+            });
+        }
+        return () => mounted = false;
+    }, [selectedStudent])
 
     if (loading) {
         return <Loader />;
