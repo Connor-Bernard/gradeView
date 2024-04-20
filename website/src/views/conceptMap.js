@@ -1,18 +1,18 @@
-import {useContext, useEffect, useState} from 'react';
+import React from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import api from '../utils/api';
 import Loader from '../components/Loader';
 import PageHeader from '../components/PageHeader';
 import './css/conceptMap.css';
 import jwtDecode from "jwt-decode";
-import apiv2 from "../utils/apiv2";
-import {StudentSelectionContext} from "../components/StudentSelectionWrapper";
+import { StudentSelectionContext } from "../components/StudentSelectionWrapper";
 
 export default function ConceptMap() {
     const [loading, setLoading] = useState(false);
     const [studentMastery, setStudentMastery] = useState('000000');
 
-    const {selectedStudent, setSelectedStudent} = useContext(StudentSelectionContext);
+    const { selectedStudent, setSelectedStudent } = useContext(StudentSelectionContext);
 
     useEffect(() => {
         let mounted = true;

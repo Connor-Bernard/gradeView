@@ -2,19 +2,9 @@ import { Router } from 'express';
 import {getEmailFromAuth} from "../../../../lib/googleAuthHelper.mjs";
 import {getMaxPointsSoFar, getStudentScores} from "../../../../lib/redisHelper.mjs";
 import ProgressReportData from '../../../../assets/progressReport/CS10.json' assert {type: 'json'};
+import 'express-async-errors'
 
 const router = Router({ mergeParams: true });
-
-/**function mapTopicsToGrades(userGradeData) {
-    const topicsToGradesTable = {};
-    userGradeData.forEach((assignment) => {
-        if (!(assignment.assignment in topicsToGradesTable)) {
-            topicsToGradesTable[assignment.assignment] = 0;
-        }
-        topicsToGradesTable[assignment.assignment] += +(assignment.grade ?? 0);
-    });
-    return topicsToGradesTable;
-}**/
 
 function getTopicsFromUser(gradeData) {
     const topicsTable = {};
