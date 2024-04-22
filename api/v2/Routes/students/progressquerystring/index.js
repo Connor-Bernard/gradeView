@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {getEmailFromAuth} from "../../../../lib/googleAuthHelper.mjs";
 import {getMaxPointsSoFar, getStudentScores} from "../../../../lib/redisHelper.mjs";
 import ProgressReportData from '../../../../assets/progressReport/CS10.json' assert {type: 'json'};
-import 'express-async-errors'
+import 'express-async-errors';
 
 const router = Router({ mergeParams: true });
 
