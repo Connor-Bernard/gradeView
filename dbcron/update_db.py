@@ -6,7 +6,6 @@ import os
 import redis
 
 load_dotenv()
-print("this is running")
 
 PORT = int(os.getenv("SERVER_PORT"))
 SCOPES = json.loads(os.getenv("SPREADSHEET_SCOPES"))
