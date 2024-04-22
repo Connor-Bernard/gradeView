@@ -5,7 +5,7 @@ import api from '../utils/api';
 import Loader from '../components/Loader';
 import PageHeader from '../components/PageHeader';
 import './css/conceptMap.css';
-import jwtDecode from "jwt-decode";
+import jwtDecode from 'jwt-decode';
 import { StudentSelectionContext } from "../components/StudentSelectionWrapper";
 
 export default function ConceptMap() {
