@@ -1,5 +1,6 @@
 import config from 'config';
 import dotenv from 'dotenv';
+import MisformedKeyError from '../errors/redis/MisformedKeyError.js';
 
 import { createClient } from 'redis';
 
@@ -53,6 +54,12 @@ export async function getCategories() {
  * @returns {object} the student's information.
  */
 export async function getStudent(email) {
+    if (typeof email !== 'string') {
+        throw new MisformedKeyError(
+            'could not get student info',
+            { expectedType: 'string', email },
+        );
+    }
     return await getEntry(email);
 }
 
@@ -61,8 +68,10 @@ export async function getStudent(email) {
  * @returns {object} the assignment categories.
  */
 export async function getBins() {
+    // TODO: this should be exported into a constant.
     const databaseIndex = 1;
-    return await getEntry('bins', databaseIndex);
+    const binsEntry = await getEntry('bins', databaseIndex);
+    return binsEntry.bins;
 }
 
 /**
@@ -81,17 +90,22 @@ export async function getStudentScores(email) {
  * @returns {number} the total amount of points the user has accumulated.
  */
 export async function getStudentTotalScore(email) {
-    const studentInfo = await getStudent(email);
-    return Object.values(studentInfo).reduce((acc, curr) => acc + curr, 0);
+    const studentScores = await getStudentScores(email);
+    return Object.values(studentScores).reduce((assignmentTotal, assignment) => {
+        Object.values(assignment).forEach((points) => {
+            assignmentTotal += +(points ?? 0);
+        });
+        return assignmentTotal;
+    }, 0);
 }
 
 /**
  * Gets the total amount of points in the class so far.
- * @returns {boolean} the total amount of points possible for the class.
+ * @returns {number} the total amount of points possible for the class.
  */
 export async function getTotalPossibleScore() {
-    const categories = await getCategories();
-    return Object.values(categories).reduce((acc, curr) => acc + curr, 0);
+    const bins = await getBins();
+    return bins.at(-1).points;
 }
 
 /**
