@@ -8,14 +8,15 @@ export default function GradeAccordion({ category, assignments }) {
 
     const [cumGrade, setCumGrade] = useState(0);
     const [cumMaxGrade, setCumMaxGrade] = useState(0);
+    const [expanded, setExpanded] = useState(true);
 
     useEffect(() => {
         let cg = 0;
         let cmg = 0;
-        assignments.forEach((assignment) => {
-            cg += +(assignment.grade?.studentGrade || 0);
-            cmg += +(assignment.grade?.maxGrade || 0);
-        });
+        Object.values(assignments).forEach((category) => {
+            cg += category.student;
+            cmg += category.max;
+        })
         setCumGrade(Math.round(cg * 100) / 100);
         setCumMaxGrade(Math.round(cmg * 100) / 100);
     }, [assignments]);
@@ -26,18 +27,19 @@ export default function GradeAccordion({ category, assignments }) {
      * @param {Float} max 
      * @returns {String} 'bold' or 'normal'
      */
-    function isBold(student, max){
-        if(student === max){
+    function isBold(student, max) {
+        if (student === max) {
             return 'bold';
         }
         return 'normal';
     }
 
     // Code for keeping accordion unhidden
-    const [expanded, setExpanded] = useState(true);
-    const handleChange = (panel) => (event, newExpanded) => {
-        setExpanded(newExpanded ? panel : false);
-    };
+    function handleChange(panel) {
+        return (_, newExpanded) => {
+            setExpanded(newExpanded ? panel : false);
+        };
+    }
     const headerLeft = 'Assignment';
     const headerRight = 'Grade';
 
@@ -49,8 +51,8 @@ export default function GradeAccordion({ category, assignments }) {
                     aria-controls='panel1a-content'
                     id='panel1a-header'>
                     <Typography>{category}</Typography>
-                    <Typography sx={{ marginLeft: 'auto', pr: 1, fontWeight: isBold(cumGrade, cumMaxGrade)}}>
-                         {cumGrade} / {cumMaxGrade}
+                    <Typography sx={{ marginLeft: 'auto', pr: 1, fontWeight: isBold(cumGrade, cumMaxGrade) }}>
+                        {cumGrade} / {cumMaxGrade}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>

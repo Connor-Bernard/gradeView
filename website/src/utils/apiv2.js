@@ -4,10 +4,10 @@ const URL = window.location.origin;
 
 let api;
 
-if (localStorage.getItem('token')) {    
+if (localStorage.getItem('token')) {
     api = axios.create({
         baseURL: `${URL}/api/v2`,
-        headers: {'Authorization': localStorage.getItem('token')}
+        headers: { 'Authorization': localStorage.getItem('token') }
     });
 } else {
     api = axios.create({
@@ -33,4 +33,4 @@ api.interceptors.response.use(undefined, (err) => {
     }
 });
 
-export default api
+export default api;

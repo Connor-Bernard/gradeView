@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {getMaxPointsSoFar, getStudentScores} from "../../../../lib/redisHelper.mjs";
+import { getMaxScores, getStudentScores } from "../../../../lib/redisHelper.mjs";
 import ProgressReportData from '../../../../assets/progressReport/CS10.json' assert {type: 'json'};
 import 'express-async-errors';
 
@@ -19,7 +19,7 @@ function mapTopicsToGrades(userGradeData) {
 router.get('/', async (req, res) => {
     const { email } = req.params;
     const userGrades = await getStudentScores(email);
-    const maxGrades = await getMaxPointsSoFar();
+    const maxGrades = await getMaxScores();
     const userTopicPoints = mapTopicsToGrades(userGrades);
     const maxTopicPoints = mapTopicsToGrades(maxGrades);
     const numMasteryLevels = ProgressReportData['student levels'].length - 2;

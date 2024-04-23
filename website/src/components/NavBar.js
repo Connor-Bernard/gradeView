@@ -29,7 +29,7 @@ import { StudentSelectionContext } from "./StudentSelectionWrapper";
 
 export default function ButtonAppBar() {
     const mobileView = useMediaQuery('(max-width:600px)');
-    const [loggedIn, setLoginStatus] = useState(localStorage.getItem('token') ? true : false);
+    const [loggedIn, setLoginStatus] = useState(!!localStorage.getItem('token'));
     const { selectedStudent, setSelectedStudent } = useContext(StudentSelectionContext);
     const [isAdmin, setAdminStatus] = useState(false);
 
@@ -55,23 +55,14 @@ export default function ButtonAppBar() {
     ];
 
     const [tabs, updateTabs] = useState(tabList.slice(1));
-
-    const renderMenuItems = () => tabs.map((tab) => (
-        <NavMenuItem
-            icon={tab.icon}
-            text={tab.name}
-            onClick={() => { window.location.href = tab.href }}
-        />
-        
-    ));
-
+    const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
         let mounted = true;
-        if(loggedIn){
-            updateTabs((tabs) => tabList);
+        if (loggedIn) {
+            updateTabs(() => tabList);
             api.get('/profilepicture').then((res) => {
-                if(mounted){
+                if (mounted) {
                     updateProfilePicture(res.data);
                 }
             }).catch((e) => {
@@ -81,33 +72,41 @@ export default function ButtonAppBar() {
         return () => mounted = false;
     }, [loggedIn]);
 
-
+    function renderMenuItems() {
+        return tabs.map((tab) => (
+            <NavMenuItem
+                icon={tab.icon}
+                text={tab.name}
+                onClick={() => { window.location.href = tab.href }}
+            />
+        ));
+    }
 
     // Set up handlers for user menu
-    const [anchorEl, setAnchorEl] = useState(null);
-    function handleMenu(e){
+    function handleMenu(e) {
         setAnchorEl(e.currentTarget);
     }
-    function handleClose(){
+    function handleClose() {
         setAnchorEl(null);
     }
-    function doLogout(){
+    function doLogout() {
         localStorage.setItem('token', '');
+        localStorage.setItem('email', '');
         setLoginStatus(false);
         window.location.reload(false);
     }
 
     // Moved from home.js
-    function loadStudentData(e){
+    function loadStudentData(e) {
         setSelectedStudent(e.target.value);
     }
 
     const [students, setStudents] = useState([]);
     useEffect(() => {
         let mounted = true;
-        if(isAdmin){
+        if (isAdmin) {
             api.get('/admin/students').then((res) => {
-                if(mounted){
+                if (mounted) {
                     setStudents(res.data);
                     setSelectedStudent(res.data[0][1]);
                 }
@@ -133,98 +132,98 @@ export default function ButtonAppBar() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position='static'>
                 <Toolbar>
-                    <Box sx={{flexGrow:1, gap:'20px'}} display='flex'>
+                    <Box sx={{ flexGrow: 1, gap: '20px' }} display='flex'>
                         <Typography variant='h6' component='div' display='inline-block'>
-                            <a href='/' style={{textDecoration:'none',color:'inherit'}}>Grade Viewer</a>
+                            <a href='/' style={{ textDecoration: 'none', color: 'inherit' }}>Grade Viewer</a>
                         </Typography>
-                        { !mobileView &&
+                        {!mobileView &&
                             <>
-                            {loggedIn &&
-                                <NavBarItem href='/'>My Grades</NavBarItem>
-                            }
-                            <NavBarItem href='/buckets'>Buckets</NavBarItem>
-                            <NavBarItem href='/conceptmap'>Concept Map</NavBarItem>
+                                {loggedIn &&
+                                    <NavBarItem href='/'>My Grades</NavBarItem>
+                                }
+                                <NavBarItem href='/buckets'>Buckets</NavBarItem>
+                                <NavBarItem href='/conceptmap'>Concept Map</NavBarItem>
                             </>
                         }
                     </Box>
-                    { loggedIn ?
-                    (
-                        <>
-                            {isAdmin &&
-                                <Box>
-                                    <FormControl size='small' sx={{m: 1, minWidth:100}} variant={"filled"}>
-                                        <InputLabel id='student-dropdown-label'>Student</InputLabel>
-                                        <Select
-                                            labelId='student-dropdown-label'
-                                            id='student-dropdown'
-                                            label='student'
-                                            onChange={loadStudentData}
-                                            style={{backgroundColor: "white"}}
-                                            defaultValue={selectedStudent}
-                                        >
-                                            {
-                                                students.map((student) => (
-                                                    <MenuItem key={student[1]} value={student[1]}>{student[0]}</MenuItem>
-                                                ))
-                                            }
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-                            }
-                            <IconButton onClick={handleMenu} >
-                                <Avatar src={profilePicture} imgProps={{referrerPolicy:'no-referrer'}} />
-                            </IconButton>
-                            <Menu
-                                id='loggedInMenu'
-                                anchorEl={anchorEl}
-                                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                                keepMounted
-                                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                            >
-                                { mobileView &&
-                                    renderMenuItems()
+                    {loggedIn ?
+                        (
+                            <>
+                                {isAdmin &&
+                                    <Box>
+                                        <FormControl size='small' sx={{ m: 1, minWidth: 100 }} variant={"filled"}>
+                                            <InputLabel id='student-dropdown-label'>Student</InputLabel>
+                                            <Select
+                                                labelId='student-dropdown-label'
+                                                id='student-dropdown'
+                                                label='student'
+                                                onChange={loadStudentData}
+                                                style={{ backgroundColor: "white" }}
+                                                defaultValue={selectedStudent}
+                                            >
+                                                {
+                                                    students.map((student) => (
+                                                        <MenuItem key={student[1]} value={student[1]}>{student[0]}</MenuItem>
+                                                    ))
+                                                }
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
                                 }
-                                <NavMenuItem
-                                    icon={<Logout />}
-                                    text={"Logout"}
-                                    onClick={doLogout}
-                                />
-                            </Menu>
-                        </>
-                    ) : (
-                        <>
-                            { mobileView ? 
-                                <> 
-                                    <IconButton onClick={handleMenu} color="inherit">
-                                        <MenuIcon/> 
-                                    </IconButton>    
-                                    <Menu
-                                        id='loggedInMenuMobile'
-                                        anchorEl={anchorEl}
-                                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                                        keepMounted
-                                        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                                        open={Boolean(anchorEl)}
-                                        onClose={handleClose}
-                                    >
-                                        <NavMenuItem
-                                            icon={<LoginOutlined />}
-                                            text={"Login"}
-                                            onClick={() => { window.location.href = '/login' }}
-                                        />
-                                        {renderMenuItems()}
-                                    </Menu>  
-                                </>
-                            :  
-                                <Link href='/login' color='inherit' underline='none'>
-                                    <Button variant='outlined' color='inherit'>Login</Button>
-                                </Link>
-                            }
-                    </>
-                    )
-                }
+                                <IconButton onClick={handleMenu} >
+                                    <Avatar src={profilePicture} imgProps={{ referrerPolicy: 'no-referrer' }} />
+                                </IconButton>
+                                <Menu
+                                    id='loggedInMenu'
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                    keepMounted
+                                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                >
+                                    {mobileView &&
+                                        renderMenuItems()
+                                    }
+                                    <NavMenuItem
+                                        icon={<Logout />}
+                                        text={"Logout"}
+                                        onClick={doLogout}
+                                    />
+                                </Menu>
+                            </>
+                        ) : (
+                            <>
+                                {mobileView ?
+                                    <>
+                                        <IconButton onClick={handleMenu} color="inherit">
+                                            <MenuIcon />
+                                        </IconButton>
+                                        <Menu
+                                            id='loggedInMenuMobile'
+                                            anchorEl={anchorEl}
+                                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                            keepMounted
+                                            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                            open={Boolean(anchorEl)}
+                                            onClose={handleClose}
+                                        >
+                                            <NavMenuItem
+                                                icon={<LoginOutlined />}
+                                                text={"Login"}
+                                                onClick={() => { window.location.href = '/login' }}
+                                            />
+                                            {renderMenuItems()}
+                                        </Menu>
+                                    </>
+                                    :
+                                    <Link href='/login' color='inherit' underline='none'>
+                                        <Button variant='outlined' color='inherit'>Login</Button>
+                                    </Link>
+                                }
+                            </>
+                        )
+                    }
                 </Toolbar>
             </AppBar>
         </Box>
