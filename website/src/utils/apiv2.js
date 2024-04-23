@@ -33,4 +33,4 @@ api.interceptors.response.use(undefined, (err) => {
     }
 });
 
-export default api
+export default api;

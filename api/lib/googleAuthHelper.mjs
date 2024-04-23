@@ -1,6 +1,6 @@
 import config from 'config';
 import { OAuth2Client } from 'google-auth-library';
-import AuthorizationError from "./HttpErrors/AuthorizationError.js";
+import AuthorizationError from './HttpErrors/AuthorizationError.js';
 
 /**
  * Gets an email from a google auth token.
