@@ -22,7 +22,7 @@ import {
     Logout
 } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
-import api from '../utils/api';
+import api from '../utils/apiv2';
 import NavBarItem from './NavBarItem';
 import NavMenuItem from './NavMenuItem';
 import { StudentSelectionContext } from "./StudentSelectionWrapper";
@@ -105,7 +105,7 @@ export default function ButtonAppBar() {
     useEffect(() => {
         let mounted = true;
         if (isAdmin) {
-            api.get('/admin/students').then((res) => {
+            api.get('/students').then((res) => {
                 if (mounted) {
                     setStudents(res.data);
                     setSelectedStudent(res.data[0][1]);
