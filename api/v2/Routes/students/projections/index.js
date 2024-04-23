@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getTotalPossibleScore, getMaxPointsSoFar, getStudentTotalScore } from '../../../../lib/redisHelper.mjs';
+import { getTotalPossibleScore, getMaxScores, getStudentTotalScore } from '../../../../lib/redisHelper.mjs';
 import 'express-async-errors';
 
 const router = Router({ mergeParams: true });
@@ -7,7 +7,7 @@ const router = Router({ mergeParams: true });
 router.get('/', async (req, res) => {
     const { email } = req.params;
     let maxPoints = await getTotalPossibleScore();
-    let maxPointsSoFar = await getMaxPointsSoFar();
+    let maxPointsSoFar = await getMaxScores();
     let userGrades = await getStudentTotalScore(email);
 
     return res.status(200).json({

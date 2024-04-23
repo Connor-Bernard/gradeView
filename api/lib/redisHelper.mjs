@@ -94,6 +94,10 @@ export async function getTotalPossibleScore() {
     return Object.values(categories).reduce((acc, curr) => acc + curr, 0);
 }
 
-export async function getMaxPointsSoFar() {
-    return await getStudent("MAX POINTS")
+/**
+ * Gets the max points possible so far.
+ * @returns {object} the maximal scores for all assignments so far.
+ */
+export async function getMaxScores() {
+    return await getStudentScores('MAX POINTS')
 }
