@@ -7,6 +7,7 @@ import PageHeader from '../components/PageHeader';
 import './css/conceptMap.css';
 import jwtDecode from 'jwt-decode';
 import { StudentSelectionContext } from "../components/StudentSelectionWrapper";
+import apiv2 from "../utils/apiv2";
 
 export default function ConceptMap() {
     const [loading, setLoading] = useState(false);
@@ -19,7 +20,7 @@ export default function ConceptMap() {
         setLoading(true);
         if (mounted && localStorage.getItem('token')) {
             let email = jwtDecode(localStorage.getItem('token')).email;
-            api.get('v2/students/' + email + '/progressquerystring').then((res) => {
+            apiv2.get('/students/' + email + '/progressquerystring').then((res) => {
                 setStudentMastery(res.data)
                 setLoading(false);
             });
@@ -33,7 +34,7 @@ export default function ConceptMap() {
         let mounted = true;
         if (mounted) {
             setLoading(true);
-            api.get('v2/students/' + selectedStudent + '/progressquerystring').then((res) => {
+            apiv2.get('/students/' + selectedStudent + '/progressquerystring').then((res) => {
                 setStudentMastery(res.data)
                 setLoading(false);
             });
