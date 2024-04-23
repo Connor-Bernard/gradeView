@@ -19,7 +19,7 @@ router.use(RateLimit({
 router.use('/:email', validateAdminOrStudentMiddleware);
 
 router.use('/:id/grades', GradesRouter);
-router.use('/:id/projections', ProjectionsRouter);
+router.use('/:email/projections', ProjectionsRouter);
 router.use('/:id/progressquerystring', ProgressQueryStringRouter);
 
 export default router;

@@ -14,16 +14,28 @@ router.get('/', async (req, res) => {
     } else {
         studentScores = await getStudentScores(id);
     }
-    
-    Object.keys(studentScores).forEach((assignment) => {
-        Object.entries(studentScores[assignment]).forEach(([category, pointsScored]) => {
-            studentScores[assignment][category] = {
-                student: pointsScored,
-                max: maxScores[assignment][category],
-            }
-        });
-    });
-    res.status(200).json(studentScores);
+
+    res.status(200).json(getStudentScoresWithMaxPoints(studentScores, maxScores));
 });
+
+/**
+ * Gets the student's scores but with the max points added on.
+ * @param {object} studentScores the student's scores.
+ * @param {object} maxScores the maximum possible scores.
+ * @returns {object} students scores with max points.
+ */
+function getStudentScoresWithMaxPoints(studentScores, maxScores) {
+    return Object.keys(studentScores).reduce((assignmentsDict, assignment) => {
+        assignmentsDict[assignment] = Object.entries(studentScores[assignment])
+            .reduce((scoresDict, [category, pointsScored]) => {
+                scoresDict[category] = {
+                    student: pointsScored,
+                    max: maxScores[assignment][category]
+                };
+                return scoresDict;
+            }, {});
+        return assignmentsDict;
+    }, {});
+}
 
 export default router;
