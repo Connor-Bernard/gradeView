@@ -2,9 +2,6 @@ import redis
 import json
 import os
 from dotenv import load_dotenv
-
-
-
 load_dotenv()
 PORT = int(os.getenv("SERVER_PORT"))
 HOST = os.getenv("SERVER_HOST")
