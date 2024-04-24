@@ -63,7 +63,7 @@ export default function ButtonAppBar() {
             updateTabs(() => tabList);
             api.get('/profilepicture').then((res) => {
                 if (mounted) {
-                    updateProfilePicture(res.data);
+                    updateProfilePicture(res.data.picture);
                 }
             }).catch((e) => {
                 console.log(e);
@@ -121,7 +121,7 @@ export default function ButtonAppBar() {
             // Update user admin status
             api.get('/isadmin').then((res) => {
                 if (mounted) {
-                    setAdminStatus(res.data);
+                    setAdminStatus(res.data.isAdmin);
                 }
                 return () => mounted = false;
             });

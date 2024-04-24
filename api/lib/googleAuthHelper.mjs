@@ -2,8 +2,9 @@ import config from 'config';
 import { OAuth2Client } from 'google-auth-library';
 import AuthorizationError from './HttpErrors/AuthorizationError.js';
 
+
 /**
- * Gets an email from a google auth token.
+ * * Gets an email from a google auth token.
  * @param {string} token user token to retrieve email from.
  * @returns {string} user's email.
  */
@@ -34,6 +35,32 @@ export async function getEmailFromAuth(token) {
 export function verifyBerkeleyEmail(email) {
     return email.split("@").length === 2
             && email.split("@")[1] === "berkeley.edu";
+}
+
+
+/**
+ * Gets the current user's profile picture.
+ * @param {OAuth2Client} oauthClient 
+ * @param {String} token 
+ * @returns {String} url of current user profile picture
+ * @throws {AuthenticationError} if token is invalid
+ */
+export async function getProfilePictureFromIdToken(token) {
+    const googleOauthAudience = config.get('googleconfig.oauth.clientid');
+    try {
+        let oauthClient = new OAuth2Client(googleOauthAudience);
+        const ticket = await oauthClient.verifyIdToken({
+            idToken: token.split(' ')[1],
+            audience: googleOauthAudience
+        });
+        const payload = ticket.getPayload();
+        if (payload['hd'] !== 'berkeley.edu') {
+            throw new AuthenticationError('domain mismatch');
+        }
+        return payload['picture'];
+    } catch (err) {
+        throw new AuthorizationError('Could not authenticate authorization token.');
+    }
 }
 
 // TODO: check if the user is included in the list of users (in the db);
