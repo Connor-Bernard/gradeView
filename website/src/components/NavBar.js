@@ -105,9 +105,9 @@ export default function ButtonAppBar() {
     useEffect(() => {
         let mounted = true;
         if (isAdmin) {
-            api.get('/students').then((res) => {
+            api.get('/students/getall').then((res) => {
                 if (mounted) {
-                    setStudents(res.data);
+                    setStudents(res.data.students);
                     setSelectedStudent(res.data[0][1]);
                 }
             });

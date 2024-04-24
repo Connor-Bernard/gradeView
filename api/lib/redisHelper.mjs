@@ -132,9 +132,9 @@ export async function getStudents() {
         const studentData = await client.get(key);
         if (studentData) {
             const data = JSON.parse(studentData);
-            console.log(data);
-            if (data && data['Legal Name']) { // Ensure the data includes a legal name
-                students.push([data['Legal Name'], key]);
+            //add key.endsWith(...) to get rid of the "MAX POINTS" row
+            if (data && data['Legal Name'] && key.endsWith("berkeley.edu")) { // Ensure the data includes a legal name
+                students.push([data['Legal Name'], key]); 
             }
         }
     }

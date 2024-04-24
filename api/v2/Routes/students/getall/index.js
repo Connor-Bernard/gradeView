@@ -11,7 +11,8 @@ router.get('/', async (req, res) => {
     const authEmail = await getEmailFromAuth(req.headers['authorization']);
     try {
         if (isAdmin(authEmail)) {
-            const students = getStudents();
+            const students = await getStudents();
+            console.log(students);
             return res.status(200).json({students: students});
         } else {
             throw new UnauthorizedAccessError("You are not an admin");
