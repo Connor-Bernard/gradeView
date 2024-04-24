@@ -3,6 +3,7 @@ import RateLimit from 'express-rate-limit';
 import GradesRouter from './grades/index.js';
 import ProjectionsRouter from './projections/index.js';
 import ProgressQueryStringRouter from './progressquerystring/index.js';
+import GetAllStudentsRouter from "./getall/index.js";
 import { validateAdminOrStudentMiddleware } from '../../../lib/authlib.mjs';
 import 'express-async-errors';
 
@@ -21,5 +22,7 @@ router.use('/:email', validateAdminOrStudentMiddleware);
 router.use('/:id/grades', GradesRouter);
 router.use('/:email/projections', ProjectionsRouter);
 router.use('/:id/progressquerystring', ProgressQueryStringRouter);
+router.use('/getall', GetAllStudentsRouter);
+
 
 export default router;
