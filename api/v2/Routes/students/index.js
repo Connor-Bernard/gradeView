@@ -21,7 +21,7 @@ router.use(RateLimit({
 router.use('/:email', validateAdminOrStudentMiddleware);
 
 // Ensure the requested student exists.
-router.use('/:email', async (req, res, next) => {
+router.use('/:email', async (req, _, next) => {
     const { email } = req.params;
     if (!(await isStudent(email))) {
         throw new StudentNotFoundError('requested student does not exist');

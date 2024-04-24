@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import {getEmailFromAuth} from "../../../../lib/googleAuthHelper.mjs";
-import {getMaxPointsSoFar, getStudentScores} from "../../../../lib/redisHelper.mjs";
+import { getEmailFromAuth } from "../../../../lib/googleAuthHelper.mjs";
+import { getMaxPointsSoFar, getStudentScores } from '../../../../lib/redisHelper.mjs';
 import ProgressReportData from '../../../../assets/progressReport/CS10.json' assert {type: 'json'};
 import 'express-async-errors';
 
@@ -46,8 +46,8 @@ async function getMasteryString(userTopicPoints, maxTopicPoints) {
 }
 
 router.get('/', async (req, res) => {
-    const email = res.params.id;
-    const userGrades = await getStudentScores(email);
+    const { id } = req.params;
+    const userGrades = await getStudentScores(id);
     const maxGrades = await getMaxPointsSoFar();
     const userTopicPoints = getTopicsFromUser(userGrades);
     const maxTopicPoints = getTopicsFromUser(maxGrades['Assignments']);
