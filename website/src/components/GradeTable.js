@@ -34,7 +34,7 @@ export default function GradeTable({ assignments, headerLeft, headerRight }) {
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                 <TableCell component='th' scope='assignment' >{concept}</TableCell>
                                 <TableCell align='right' sx={{ fontWeight: isBold(points.student, points.max) }}>
-                                    {`${points.student || points.student === 0 ? points.student : '-'} / ${points.max}`}
+                                    {`${points.student ?? '-'} / ${points.max}`}
                                 </TableCell>
                             </TableRow>
                         ))
