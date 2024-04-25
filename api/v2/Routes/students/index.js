@@ -27,7 +27,6 @@ router.use('/:id/progressquerystring', ProgressQueryStringRouter);
 router.get('/', validateAdminMiddleware, async (_, res) => {
     try {
         const students = await getStudents();
-        console.log(students);
         return res.status(200).json({ students });
     } catch (error) {
         console.error('Error retrieving students from Redis:', error);
