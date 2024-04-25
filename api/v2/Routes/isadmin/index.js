@@ -8,7 +8,6 @@ const router = Router({ mergeParams: true });
 // Responds with whether or not the current user is an admin
 router.get('/', async (req, res) => {
     try {
-        console.log(req.headers);
         const authHeader = req.headers['authorization'];
         if (!authHeader) {
             throw new AuthorizationError("Authorization Header is empty.");
