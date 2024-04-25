@@ -61,13 +61,7 @@ export default function ButtonAppBar() {
         let mounted = true;
         if (loggedIn) {
             updateTabs(() => tabList);
-            api.get('/profilepicture').then((res) => {
-                if (mounted) {
-                    updateProfilePicture(res.data.picture);
-                }
-            }).catch((e) => {
-                console.log(e);
-            });
+            updateProfilePicture(localStorage.getItem('profilepicture'));
         }
         return () => mounted = false;
     }, [loggedIn]);

@@ -22,6 +22,22 @@ export default function Login() {
         );
     }, []);
 
+    // Sanitize the input by escaping HTML special characters
+    function sanitizeInput(input) {
+        if (!input) return input; // Handle null or undefined inputs
+        return input.replace(/[&<>"']/g, function(match) {
+        // Replace special HTML characters with their respective HTML entities
+        switch (match) {
+            case '&': return '&amp;';
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '"': return '&quot;';
+            case "'": return '&#39;';
+            default: return match;
+        }
+        });
+    }
+
     // Updates OAuth2 token to be the local token value
     async function handleGoogleLogin(authData) {
         const token = `Bearer ${authData.credential}`;
@@ -36,6 +52,8 @@ export default function Login() {
                 localStorage.setItem('token', token);
                 // TODO: this is pretty awful.  We should have this in a context or something.
                 localStorage.setItem('email', jwtDecode(authData.credential)?.email);
+                localStorage.setItem('profilepicture', sanitizeInput(jwtDecode(authData.credential)?.picture));
+                console.log(jwtDecode(authData.credential));
                 window.location.reload(false);
             }
         }).catch(() => {
