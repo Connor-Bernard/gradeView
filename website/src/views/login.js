@@ -53,7 +53,6 @@ export default function Login() {
                 // TODO: this is pretty awful.  We should have this in a context or something.
                 localStorage.setItem('email', jwtDecode(authData.credential)?.email);
                 localStorage.setItem('profilepicture', sanitizeInput(jwtDecode(authData.credential)?.picture));
-                console.log(jwtDecode(authData.credential));
                 window.location.reload(false);
             }
         }).catch(() => {
