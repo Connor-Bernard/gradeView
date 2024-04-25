@@ -50,8 +50,9 @@ export async function validateAdminMiddleware(req, _, next) {
  * @throws {UnauthorizedAccessError} if the requester is not the route email param.
  */
 export async function validateStudentMiddleware(req, _, next) {
-    const { email } = req.params
     validateAuthenticatedRequestFormat(req);
+
+    const { email } = req.params
 
     const authEmail = await getEmailFromAuth(req.headers['authorization']);
     if (!isStudent(authEmail)) {

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Typography, useMediaQuery } from '@mui/material';
-import api from '../utils/apiv2';
+import apiv2 from '../utils/apiv2';
 import BinTable from '../components/BinTable';
 import Loader from '../components/Loader';
 
-export default function Buckets(){
+export default function Buckets() {
 
     const minMedia = useMediaQuery('(min-width:600px)');
     const [binRows, setBins] = useState([]);
@@ -13,14 +13,14 @@ export default function Buckets(){
     useEffect(() => {
         let mounted = true;
         setLoadCount(i => i + 1);
-        api.get('/bins').then((res) => {
+        apiv2.get('/bins').then((res) => {
             if (mounted) {
                 let tempBins = [];
-                for(let i = res.data.length - 1; i >= 0; i--){
+                for (let i = res.data.length - 1; i >= 0; i--) {
                     const grade = res.data[i]['letter'];
-                    const lower = (i != 0) ? +res.data[i - 1]['points'] + 1: 0;
+                    const lower = (i !== 0) ? +res.data[i - 1]['points'] + 1 : 0;
                     const range = `${lower}-${res.data[i]['points']}`;
-                    tempBins.push({grade, range});
+                    tempBins.push({ grade, range });
                 }
                 setBins(tempBins);
             }
@@ -49,22 +49,22 @@ export default function Buckets(){
         createGradingRow('Reading Quizzes', 10)
     ];
 
-    return(
+    return (
         <>
-        { loadCount > 0 ? ( <Loader /> ) : (
+            {loadCount > 0 ? (<Loader />) : (
                 <>
-                <Typography variant='h5' component='div' sx={{m:2, fontWeight:500}}>Buckets</Typography>
-                <Box sx={ minMedia ? 
-                        {mt:4, display:'flex', flexBasis:'min-content', justifyContent:'center', gap:'10%'} : 
-                        {display:'flex', flexDirection:'column', alignItems:'center', gap:4} 
+                    <Typography variant='h5' component='div' sx={{ m: 2, fontWeight: 500 }}>Buckets</Typography>
+                    <Box sx={minMedia ?
+                        { mt: 4, display: 'flex', flexBasis: 'min-content', justifyContent: 'center', gap: '10%' } :
+                        { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }
                     }
-                >
-                    <BinTable title='Grading Breakdown' col1='Assignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
-                    <BinTable title='Buckets' col1='Letter Grade' col2='Range' rows={binRows} keys={['grade', 'range']} />
-                </Box>
+                    >
+                        <BinTable title='Grading Breakdown' col1='Assignment' col2='Points' rows={gradingRows} keys={['assignment', 'points']} />
+                        <BinTable title='Buckets' col1='Letter Grade' col2='Range' rows={binRows} keys={['grade', 'range']} />
+                    </Box>
                 </>
             )
-        }
+            }
         </>
     );
 }

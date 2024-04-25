@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
 
-export default function GradeTable({ assignments, headerLeft, headerRight}) {
+export default function GradeTable({ assignments, headerLeft, headerRight }) {
 
     /**
      * Gets the formatting for the font-weight.
@@ -9,8 +9,8 @@ export default function GradeTable({ assignments, headerLeft, headerRight}) {
      * @param {Float} max 
      * @returns {String} 'bold' or 'normal'
      */
-    function isBold(student, max){
-        if(student === max){
+    function isBold(student, max) {
+        if (student === max) {
             return 'bold';
         }
         return 'normal';
@@ -21,20 +21,20 @@ export default function GradeTable({ assignments, headerLeft, headerRight}) {
             <Table aria-label='Grade Table'>
                 <TableHead >
                     <TableRow>
-                        <TableCell align='left' sx={{fontSize:20, padding:3, borderBottom: 'none'}}>{headerLeft}</TableCell>
-                        <TableCell align='right'sx={{fontSize:20, padding:3, borderBottom: 'none'}}>{headerRight}</TableCell>
+                        <TableCell align='left' sx={{ fontSize: 20, padding: 3, borderBottom: 'none' }}>{headerLeft}</TableCell>
+                        <TableCell align='right' sx={{ fontSize: 20, padding: 3, borderBottom: 'none' }}>{headerRight}</TableCell>
                     </TableRow>
-                </TableHead>        
+                </TableHead>
 
                 <TableBody>
                     {
-                        assignments.map((assignment) => (
+                        Object.entries(assignments).map(([concept, points]) => (
                             <TableRow
-                                key={assignment.id + assignment.assignment}
+                                key={concept}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                <TableCell component='th' scope='assignment' >{assignment.assignment}</TableCell>
-                                <TableCell align='right' sx={{fontWeight: isBold(assignment.grade?.studentGrade, assignment.grade?.maxGrade)}}>
-                                    {`${assignment.grade?.studentGrade || 'N/A'} / ${assignment.grade?.maxGrade || 'N/A'}`}
+                                <TableCell component='th' scope='assignment' >{concept}</TableCell>
+                                <TableCell align='right' sx={{ fontWeight: isBold(points.student, points.max) }}>
+                                    {`${points.student ?? '-'} / ${points.max}`}
                                 </TableCell>
                             </TableRow>
                         ))
