@@ -1,27 +1,26 @@
 import { Router } from 'express';
-import { getMaxScores, getStudentScores } from "../../../../lib/redisHelper.mjs";
+import { getEmailFromAuth } from "../../../../lib/googleAuthHelper.mjs";
+import { getMaxPointsSoFar, getMaxScores, getStudentScores } from '../../../../lib/redisHelper.mjs';
 import ProgressReportData from '../../../../assets/progressReport/CS10.json' assert {type: 'json'};
 import 'express-async-errors';
 
 const router = Router({ mergeParams: true });
 
-function mapTopicsToGrades(userGradeData) {
-    const topicsToGradesTable = {};
-    userGradeData.forEach((assignment) => {
-        if (!(assignment.assignment in topicsToGradesTable)) {
-            topicsToGradesTable[assignment.assignment] = 0;
-        }
-        topicsToGradesTable[assignment.assignment] += +(assignment.grade ?? 0);
-    });
-    return topicsToGradesTable;
+function getTopicsFromUser(gradeData) {
+    const topicsTable = {};
+    Object.entries(gradeData).forEach(([assignment, topics]) => {
+        Object.entries(topics).forEach(([topic, score]) => {
+            if (topic in topicsTable) {
+                topicsTable[topic] += +(score ?? 0)
+            } else {
+                topicsTable[topic] = +(score ?? 0)
+            }
+        })
+    })
+    return topicsTable
 }
 
-router.get('/', async (req, res) => {
-    const { email } = req.params;
-    const userGrades = await getStudentScores(email);
-    const maxGrades = await getMaxScores();
-    const userTopicPoints = mapTopicsToGrades(userGrades);
-    const maxTopicPoints = mapTopicsToGrades(maxGrades);
+async function getMasteryString(userTopicPoints, maxTopicPoints) {
     const numMasteryLevels = ProgressReportData['student levels'].length - 2;
     Object.entries(userTopicPoints).forEach(([topic, userPoints]) => {
         const maxAchievablePoints = maxTopicPoints[topic];
@@ -42,7 +41,18 @@ router.get('/', async (req, res) => {
             userTopicPoints[topic] = Math.ceil(unBoundedMasteryLevel);
         }
     });
-    return res.status(200).json(Object.values(userTopicPoints).join(''));
+    let masteryNum = Object.values(userTopicPoints).join('');
+    return masteryNum;
+}
+
+router.get('/', async (req, res) => {
+    const { id } = req.params;
+    const userGrades = await getStudentScores(id);
+    const maxGrades = await getMaxPointsSoFar();
+    const userTopicPoints = getTopicsFromUser(userGrades);
+    const maxTopicPoints = getTopicsFromUser(maxGrades['Assignments']);
+    const masteryNum = await getMasteryString(userTopicPoints, maxTopicPoints);
+    return res.status(200).json(masteryNum);
 });
 
 export default router;
