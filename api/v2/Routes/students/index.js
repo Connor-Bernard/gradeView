@@ -25,13 +25,9 @@ router.use('/:email/projections', ProjectionsRouter);
 router.use('/:id/progressquerystring', ProgressQueryStringRouter);
 
 router.get('/', validateAdminMiddleware, async (_, res) => {
-    try {
         const students = await getStudents();
         return res.status(200).json({ students });
-    } catch (error) {
-        console.error('Error retrieving students from Redis:', error);
-        return res.status(500).json({ message: 'Internal Server Error' });
-    }
+    
 });
 
 export default router;

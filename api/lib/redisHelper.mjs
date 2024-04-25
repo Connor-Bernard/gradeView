@@ -122,20 +122,15 @@ export async function getMaxScores() {
  * @returns {Promise<Array<Array<string>>>} List of [legalName, email]
  */
 export async function getStudents() {
-    const client = getClient();
+    const client = await getClient();
     await client.connect();
 
     var keys = await client.keys('*@*');
     const students = [];
 
     for (const key of keys) {
-        const studentData = await client.get(key);
-        if (studentData) {
-            const data = JSON.parse(studentData);
-            if (data && data['Legal Name']) { // Ensure the data includes a legal name
-                students.push([data['Legal Name'], key]); 
-            }
-        }
+        const studentData = await getEntry(key)
+        students.push([studentData['Legal Name'], key]); 
     }
 
     await client.quit();
