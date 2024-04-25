@@ -22,7 +22,7 @@ import {
     Logout
 } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
-import api from '../utils/apiv2';
+import apiv2 from '../utils/apiv2';
 import NavBarItem from './NavBarItem';
 import NavMenuItem from './NavMenuItem';
 import { StudentSelectionContext } from "./StudentSelectionWrapper";
@@ -95,10 +95,10 @@ export default function ButtonAppBar() {
     useEffect(() => {
         let mounted = true;
         if (isAdmin) {
-            api.get('/students').then((res) => {
+            apiv2.get('/students').then((res) => {
                 if (mounted) {
                     setStudents(res.data.students);
-                    setSelectedStudent(res.data[0][1]);
+                    setSelectedStudent(res.data.students[0][1]);
                 }
             });
         }
@@ -109,7 +109,7 @@ export default function ButtonAppBar() {
         let mounted = true;
         if (loggedIn) {
             // Update user admin status
-            api.get('/isadmin').then((res) => {
+            apiv2.get('/isadmin').then((res) => {
                 if (mounted) {
                     setAdminStatus(res.data.isAdmin);
                 }

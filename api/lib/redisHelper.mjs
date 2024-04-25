@@ -125,8 +125,7 @@ export async function getStudents() {
     const client = getClient();
     await client.connect();
 
-    var keys = await client.keys('*');
-    keys = keys.filter((key) => key.endsWith("berkeley.edu"));
+    var keys = await client.keys('*@*');
     const students = [];
 
     for (const key of keys) {
