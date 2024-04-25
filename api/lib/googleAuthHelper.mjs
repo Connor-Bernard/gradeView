@@ -37,32 +37,6 @@ export function verifyBerkeleyEmail(email) {
             && email.split("@")[1] === "berkeley.edu";
 }
 
-
-/**
- * Gets the current user's profile picture.
- * @param {OAuth2Client} oauthClient 
- * @param {String} token 
- * @returns {String} url of current user profile picture
- * @throws {AuthenticationError} if token is invalid
- */
-export async function getProfilePictureFromIdToken(token) {
-    const googleOauthAudience = config.get('googleconfig.oauth.clientid');
-    try {
-        let oauthClient = new OAuth2Client(googleOauthAudience);
-        const ticket = await oauthClient.verifyIdToken({
-            idToken: token.split(' ')[1],
-            audience: googleOauthAudience
-        });
-        const payload = ticket.getPayload();
-        if (payload['hd'] !== 'berkeley.edu') {
-            throw new AuthenticationError('domain mismatch');
-        }
-        return payload['picture'];
-    } catch (err) {
-        throw new AuthorizationError('Could not authenticate authorization token.');
-    }
-}
-
 // TODO: check if the user is included in the list of users (in the db);
 /**
  * Checks to see if an email is a student email or an admin.
