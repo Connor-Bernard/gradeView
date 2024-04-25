@@ -113,7 +113,7 @@ export async function getTotalPossibleScore() {
  * @returns {object} the maximal scores for all assignments so far.
  */
 export async function getMaxScores() {
-    return await getStudentScores('MAX POINTS')
+    return await getStudentScores('MAX POINTS');
 }
 
 /**
@@ -125,15 +125,15 @@ export async function getStudents() {
     const client = getClient();
     await client.connect();
 
-    const keys = await client.keys('*');  // Retrieve all keys, adjust pattern as needed for specificity
+    var keys = await client.keys('*');
+    keys = keys.filter((key) => key.endsWith("berkeley.edu"));
     const students = [];
 
     for (const key of keys) {
         const studentData = await client.get(key);
         if (studentData) {
             const data = JSON.parse(studentData);
-            //add key.endsWith(...) to get rid of the "MAX POINTS" row
-            if (data && data['Legal Name'] && key.endsWith("berkeley.edu")) { // Ensure the data includes a legal name
+            if (data && data['Legal Name']) { // Ensure the data includes a legal name
                 students.push([data['Legal Name'], key]); 
             }
         }

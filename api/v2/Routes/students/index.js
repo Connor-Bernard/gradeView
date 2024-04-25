@@ -3,9 +3,10 @@ import RateLimit from 'express-rate-limit';
 import GradesRouter from './grades/index.js';
 import ProjectionsRouter from './projections/index.js';
 import ProgressQueryStringRouter from './progressquerystring/index.js';
-import GetAllStudentsRouter from "./getall/index.js";
 import { validateAdminOrStudentMiddleware } from '../../../lib/authlib.mjs';
+import { validateAdminMiddleware } from '../../../lib/authlib.mjs';
 import 'express-async-errors';
+import { getStudents } from '../../../lib/redisHelper.mjs';
 
 const router = Router({ mergeParams: true });
 
@@ -22,7 +23,16 @@ router.use('/:email', validateAdminOrStudentMiddleware);
 router.use('/:id/grades', GradesRouter);
 router.use('/:email/projections', ProjectionsRouter);
 router.use('/:id/progressquerystring', ProgressQueryStringRouter);
-router.use('/getall', GetAllStudentsRouter);
 
+router.get('/', validateAdminMiddleware, async (_, res) => {
+    try {
+        const students = await getStudents();
+        console.log(students);
+        return res.status(200).json({ students });
+    } catch (error) {
+        console.error('Error retrieving students from Redis:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
 
 export default router;

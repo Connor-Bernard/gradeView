@@ -32,9 +32,6 @@ export default function ButtonAppBar() {
     const [loggedIn, setLoginStatus] = useState(!!localStorage.getItem('token'));
     const { selectedStudent, setSelectedStudent } = useContext(StudentSelectionContext);
     const [isAdmin, setAdminStatus] = useState(false);
-
-    // Sets up the profile picture on element load by getting pfp url from api
-    // This also serves as a auth verification
     const [profilePicture, updateProfilePicture] = useState('');
     const tabList = [
         {
@@ -53,7 +50,6 @@ export default function ButtonAppBar() {
             icon: <AccountTree />,
         },
     ];
-
     const [tabs, updateTabs] = useState(tabList.slice(1));
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -99,7 +95,7 @@ export default function ButtonAppBar() {
     useEffect(() => {
         let mounted = true;
         if (isAdmin) {
-            api.get('/students/getall').then((res) => {
+            api.get('/students').then((res) => {
                 if (mounted) {
                     setStudents(res.data.students);
                     setSelectedStudent(res.data[0][1]);
