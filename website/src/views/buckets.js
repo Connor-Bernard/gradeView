@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Typography, useMediaQuery } from '@mui/material';
-import api from '../utils/apiv2';
+import apiv2 from '../utils/apiv2';
 import BinTable from '../components/BinTable';
 import Loader from '../components/Loader';
 
@@ -13,7 +13,7 @@ export default function Buckets() {
     useEffect(() => {
         let mounted = true;
         setLoadCount(i => i + 1);
-        api.get('/bins').then((res) => {
+        apiv2.get('/bins').then((res) => {
             if (mounted) {
                 let tempBins = [];
                 for (let i = res.data.length - 1; i >= 0; i--) {
