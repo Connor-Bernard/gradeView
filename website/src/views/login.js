@@ -7,7 +7,6 @@ import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 
 export default function Login() {
-
     const [error, setError] = useState(false);
 
     // Initialize the google OAUTH
@@ -41,11 +40,11 @@ export default function Login() {
     // Updates OAuth2 token to be the local token value
     async function handleGoogleLogin(authData) {
         const token = `Bearer ${authData.credential}`;
-        axios.get(`/api/verifyaccess`, {
+        axios.get(`/api/v2/login`, {
             headers: { 'Authorization': token }
         }).then((loginRes) => {
             console.log(loginRes);
-            if (loginRes.data === false) {
+            if (!loginRes.data.status) {
                 setError('Account is not authorized.');
                 return;
             } else {
