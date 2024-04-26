@@ -5,6 +5,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { OutlinedInput, Stack, Button, InputAdornment, IconButton, FormControl, InputLabel, Typography, Alert } from '@mui/material';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import DOMPurify from 'dompurify';
 
 export default function Login() {
     const [error, setError] = useState(false);
@@ -21,21 +22,6 @@ export default function Login() {
         );
     }, []);
 
-    // Sanitize the input by escaping HTML special characters
-    function sanitizeInput(input) {
-        if (!input) return input; // Handle null or undefined inputs
-        return input.replace(/[&<>"']/g, function(match) {
-        // Replace special HTML characters with their respective HTML entities
-        switch (match) {
-            case '&': return '&amp;';
-            case '<': return '&lt;';
-            case '>': return '&gt;';
-            case '"': return '&quot;';
-            case "'": return '&#39;';
-            default: return match;
-        }
-        });
-    }
 
     // Updates OAuth2 token to be the local token value
     async function handleGoogleLogin(authData) {
@@ -51,7 +37,7 @@ export default function Login() {
                 localStorage.setItem('token', token);
                 // TODO: this is pretty awful.  We should have this in a context or something.
                 localStorage.setItem('email', jwtDecode(authData.credential)?.email);
-                localStorage.setItem('profilepicture', sanitizeInput(jwtDecode(authData.credential)?.picture));
+                localStorage.setItem('profilepicture', DOMPurify.sanitize(jwtDecode(authData.credential)?.picture));
                 window.location.reload(false);
             }
         }).catch(() => {
