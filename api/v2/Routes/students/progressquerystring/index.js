@@ -50,12 +50,10 @@ async function getMasteryString(userTopicPoints, maxTopicPoints) {
 router.get('/', async (req, res) => {
     const { id } = req.params;
     const maxScores = await getMaxScores();
+    console.log(maxScores);
     const studentScores = await getStudentScores(id);
-    const maxGrades = await getMaxPointsSoFar(studentScores, maxScores);
-    console.log(maxGrades);
-    console.log(maxGrades["Assignments"]);
     const userTopicPoints = getTopicsFromUser(studentScores);
-    const maxTopicPoints = getTopicsFromUser(maxGrades['Assignments']);
+    const maxTopicPoints = getTopicsFromUser(maxScores);
     const masteryNum = await getMasteryString(userTopicPoints, maxTopicPoints);
     return res.status(200).json(masteryNum);
 });
