@@ -27,7 +27,6 @@ router.use('/:id/progressquerystring', ProgressQueryStringRouter);
 router.get('/', validateAdminMiddleware, async (_, res) => {
         const students = await getStudents();
         return res.status(200).json({ students });
-    
 });
 
 export default router;
