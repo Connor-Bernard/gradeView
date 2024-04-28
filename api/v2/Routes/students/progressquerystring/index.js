@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getEmailFromAuth } from "../../../../lib/googleAuthHelper.mjs";
-import { getMaxPointsSoFar } from '../../../../lib/helper.mjs';
+import { getMaxPointsSoFar } from '../../../../lib/studentHelper.mjs';
 import { getMaxScores, getStudentScores, getTotalPossibleScore } from '../../../../lib/redisHelper.mjs';
 import ProgressReportData from '../../../../assets/progressReport/CS10.json' assert {type: 'json'};
 import 'express-async-errors';
