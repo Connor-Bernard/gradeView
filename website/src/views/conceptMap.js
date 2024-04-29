@@ -33,8 +33,7 @@ export default function ConceptMap() {
         if (mounted) {
             setLoading(true);
             apiv2.get(`/students/${selectedStudent}/progressquerystring`).then((res) => {
-                //.substring(0, 6) for quest data only
-                setStudentMastery(res.data); //remove substring when we are ready for midterm and postterm
+                setStudentMastery(res.data);
                 setLoading(false);
             });
         }
