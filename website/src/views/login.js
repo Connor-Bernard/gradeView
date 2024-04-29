@@ -5,9 +5,9 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { OutlinedInput, Stack, Button, InputAdornment, IconButton, FormControl, InputLabel, Typography, Alert } from '@mui/material';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import DOMPurify from 'dompurify';
 
 export default function Login() {
-
     const [error, setError] = useState(false);
 
     // Initialize the google OAUTH
@@ -22,20 +22,22 @@ export default function Login() {
         );
     }, []);
 
+
     // Updates OAuth2 token to be the local token value
     async function handleGoogleLogin(authData) {
         const token = `Bearer ${authData.credential}`;
-        axios.get(`/api/verifyaccess`, {
+        axios.get(`/api/v2/login`, {
             headers: { 'Authorization': token }
         }).then((loginRes) => {
             console.log(loginRes);
-            if (loginRes.data === false) {
+            if (!loginRes.data.status) {
                 setError('Account is not authorized.');
                 return;
             } else {
                 localStorage.setItem('token', token);
                 // TODO: this is pretty awful.  We should have this in a context or something.
                 localStorage.setItem('email', jwtDecode(authData.credential)?.email);
+                localStorage.setItem('profilepicture', DOMPurify.sanitize(jwtDecode(authData.credential)?.picture));
                 window.location.reload(false);
             }
         }).catch(() => {

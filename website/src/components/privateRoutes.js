@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
-import api from '../utils/api';
+import apiv2 from '../utils/apiv2';
 import Loader from './Loader';
 
-export default function PrivateRoutes(){
+export default function PrivateRoutes() {
     const [loaded, setLoaded] = useState(false);
     const [authorized, setAuthorized] = useState(false);
     useEffect(() => {
@@ -13,9 +13,9 @@ export default function PrivateRoutes(){
             return;
         }
         let mounted = true;
-        api.get('/verifyaccess').then((res) => {
-            if(mounted){
-                setAuthorized(res.data);
+        apiv2.get('/login').then((res) => {
+            if (mounted) {
+                setAuthorized(res.data.status);
             }
             setLoaded(true);
         });

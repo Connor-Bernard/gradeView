@@ -22,7 +22,7 @@ import {
     Logout
 } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
-import api from '../utils/api';
+import apiv2 from '../utils/apiv2';
 import NavBarItem from './NavBarItem';
 import NavMenuItem from './NavMenuItem';
 import { StudentSelectionContext } from "./StudentSelectionWrapper";
@@ -32,9 +32,6 @@ export default function ButtonAppBar() {
     const [loggedIn, setLoginStatus] = useState(!!localStorage.getItem('token'));
     const { selectedStudent, setSelectedStudent } = useContext(StudentSelectionContext);
     const [isAdmin, setAdminStatus] = useState(false);
-
-    // Sets up the profile picture on element load by getting pfp url from api
-    // This also serves as a auth verification
     const [profilePicture, updateProfilePicture] = useState('');
     const tabList = [
         {
@@ -53,7 +50,6 @@ export default function ButtonAppBar() {
             icon: <AccountTree />,
         },
     ];
-
     const [tabs, updateTabs] = useState(tabList.slice(1));
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -61,13 +57,7 @@ export default function ButtonAppBar() {
         let mounted = true;
         if (loggedIn) {
             updateTabs(() => tabList);
-            api.get('/profilepicture').then((res) => {
-                if (mounted) {
-                    updateProfilePicture(res.data);
-                }
-            }).catch((e) => {
-                console.log(e);
-            });
+            updateProfilePicture(localStorage.getItem('profilepicture'));
         }
         return () => mounted = false;
     }, [loggedIn]);
@@ -105,10 +95,10 @@ export default function ButtonAppBar() {
     useEffect(() => {
         let mounted = true;
         if (isAdmin) {
-            api.get('/admin/students').then((res) => {
+            apiv2.get('/students').then((res) => {
                 if (mounted) {
-                    setStudents(res.data);
-                    setSelectedStudent(res.data[0][1]);
+                    setStudents(res.data.students);
+                    setSelectedStudent(res.data.students[0][1]);
                 }
             });
         }
@@ -119,9 +109,9 @@ export default function ButtonAppBar() {
         let mounted = true;
         if (loggedIn) {
             // Update user admin status
-            api.get('/isadmin').then((res) => {
+            apiv2.get('/isadmin').then((res) => {
                 if (mounted) {
-                    setAdminStatus(res.data);
+                    setAdminStatus(res.data.isAdmin);
                 }
                 return () => mounted = false;
             });

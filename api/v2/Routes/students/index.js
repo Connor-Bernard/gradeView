@@ -4,7 +4,9 @@ import GradesRouter from './grades/index.js';
 import ProjectionsRouter from './projections/index.js';
 import ProgressQueryStringRouter from './progressquerystring/index.js';
 import { validateAdminOrStudentMiddleware } from '../../../lib/authlib.mjs';
+import { validateAdminMiddleware } from '../../../lib/authlib.mjs';
 import 'express-async-errors';
+import { getStudents } from '../../../lib/redisHelper.mjs';
 
 const router = Router({ mergeParams: true });
 
@@ -21,5 +23,10 @@ router.use('/:email', validateAdminOrStudentMiddleware);
 router.use('/:id/grades', GradesRouter);
 router.use('/:email/projections', ProjectionsRouter);
 router.use('/:id/progressquerystring', ProgressQueryStringRouter);
+
+router.get('/', validateAdminMiddleware, async (_, res) => {
+        const students = await getStudents();
+        return res.status(200).json({ students });
+});
 
 export default router;

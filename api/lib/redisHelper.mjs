@@ -113,5 +113,26 @@ export async function getTotalPossibleScore() {
  * @returns {object} the maximal scores for all assignments so far.
  */
 export async function getMaxScores() {
-    return await getStudentScores('MAX POINTS')
+    return await getStudentScores('MAX POINTS');
+}
+
+/**
+ * Gets a list of all of the students in the class.
+ * Each student is represented as a list: [legalName, email]
+ * @returns {Promise<Array<Array<string>>>} List of [legalName, email]
+ */
+export async function getStudents() {
+    const client = await getClient();
+    await client.connect();
+
+    var keys = await client.keys('*@*');
+    const students = [];
+
+    for (const key of keys) {
+        const studentData = await getEntry(key)
+        students.push([studentData['Legal Name'], key]); 
+    }
+
+    await client.quit();
+    return students;
 }
