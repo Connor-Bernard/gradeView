@@ -75,7 +75,7 @@ export async function getBins() {
 }
 
 /**
- * Gets just the student's scores from the Redis database.
+ * Gets the student's scores from the Redis database.
  * @param {string} email the email of the student whose information to get.
  * @returns {object} the student's scores.
  */

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getTotalPossibleScore, getMaxScores, getStudentTotalScore, getStudentScores } from '../../../../lib/redisHelper.mjs';
+import { getMaxPointsSoFar } from '../../../../lib/studentHelper.mjs';
 import 'express-async-errors';
 import { isAdmin } from '../../../../lib/userlib.mjs';
 
@@ -28,19 +29,6 @@ router.get('/', async (req, res) => {
     });
 });
 
-/**
- * Gets the max points the user can possibly have achieved.
- * @param {object} studentScores the student's scores in the class.
- * @param {object} maxScores the max scores for assignments in the class.
- * @returns {number} the max points the user could have gotten so far.
- */
-function getMaxPointsSoFar(studentScores, maxScores) {
-    return Object.keys(studentScores).reduce((acc, assignment) => {
-        Object.values(maxScores[assignment]).forEach((catTotal) => {
-            acc += +(catTotal ?? 0);
-        }, 0);
-        return acc;
-    }, 0);
-}
+
 
 export default router;

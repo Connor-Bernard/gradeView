@@ -1,7 +1,5 @@
 import React from 'react';
 import { useContext, useEffect, useState } from 'react';
-
-import api from '../utils/api';
 import Loader from '../components/Loader';
 import PageHeader from '../components/PageHeader';
 import './css/conceptMap.css';
@@ -20,8 +18,8 @@ export default function ConceptMap() {
         setLoading(true);
         if (mounted && localStorage.getItem('token')) {
             let email = jwtDecode(localStorage.getItem('token')).email;
-            apiv2.get('/students/' + email + '/progressquerystring').then((res) => {
-                setStudentMastery(res.data)
+            apiv2.get(`/students/${email}/progressquerystring`).then((res) => {
+                setStudentMastery(res.data);
                 setLoading(false);
             });
         } else {
@@ -34,8 +32,8 @@ export default function ConceptMap() {
         let mounted = true;
         if (mounted) {
             setLoading(true);
-            apiv2.get('/students/' + selectedStudent + '/progressquerystring').then((res) => {
-                setStudentMastery(res.data)
+            apiv2.get(`/students/${selectedStudent}/progressquerystring`).then((res) => {
+                setStudentMastery(res.data);
                 setLoading(false);
             });
         }
