@@ -6,10 +6,12 @@ import './css/conceptMap.css';
 import jwtDecode from 'jwt-decode';
 import { StudentSelectionContext } from "../components/StudentSelectionWrapper";
 import apiv2 from "../utils/apiv2";
+import {useMediaQuery} from "@mui/material";
 
 export default function ConceptMap() {
     const [loading, setLoading] = useState(false);
     const [studentMastery, setStudentMastery] = useState('000000');
+    const mobile = useMediaQuery('(max-width:600px)');
 
     const { selectedStudent, setSelectedStudent } = useContext(StudentSelectionContext);
 
@@ -42,6 +44,10 @@ export default function ConceptMap() {
 
     if (loading) {
         return <Loader />;
+    }
+
+    if (mobile) {
+        return <p>Concept Map is not available on mobile devices</p>;
     }
 
     return (
