@@ -44,11 +44,6 @@ export default function ButtonAppBar() {
             href: '/buckets',
             icon: <StorageOutlined />,
         },
-        {
-            name: 'Concept Map',
-            href: '/conceptmap',
-            icon: <AccountTree />,
-        },
     ];
     const [tabs, updateTabs] = useState(tabList.slice(1));
     const [anchorEl, setAnchorEl] = useState(null);
