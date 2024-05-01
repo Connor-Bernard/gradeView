@@ -6,7 +6,7 @@ import './css/conceptMap.css';
 import jwtDecode from 'jwt-decode';
 import { StudentSelectionContext } from "../components/StudentSelectionWrapper";
 import apiv2 from "../utils/apiv2";
-import {useMediaQuery} from "@mui/material";
+import { Typography, useMediaQuery } from "@mui/material";
 
 export default function ConceptMap() {
     const [loading, setLoading] = useState(false);
@@ -47,7 +47,7 @@ export default function ConceptMap() {
     }
 
     if (mobile) {
-        return <p>Concept Map is not available on mobile devices</p>;
+        return <Typography sx={{fontWeight: "bold"}}>Concept Map is not available on mobile devices</Typography>;
     }
 
     return (
