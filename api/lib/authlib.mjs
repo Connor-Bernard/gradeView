@@ -13,6 +13,7 @@ export async function validateAdminOrStudentMiddleware(req, _, next) {
     try {
         await validateAdminMiddleware(req, _, next);
     } catch (err) {
+        console.error('Error validating middleware:', err); // Logs the error
         switch (err.constructor) {
             case UnauthorizedAccessError:
                 await validateStudentMiddleware(req, _, next);
