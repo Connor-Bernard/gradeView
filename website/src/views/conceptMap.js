@@ -64,7 +64,28 @@ export default function ConceptMap() {
             });
         }
         return () => mounted = false;
-    }, [selectedStudent])
+    }, [selectedStudent]);
+
+    /**
+     * Add an event listener to adjust the iframe's height based on the message received from the iframe content.
+     */
+    useEffect(() => {
+        function handleMessage(event) {
+            const iframe = document.getElementById('ConceptMap');
+            if (iframe && event.data) {
+                const height = parseFloat(event.data) + 1; //TODO: Change this line
+                iframe.style.height = `${height}px`; // Adjust iframe height dynamically
+            }
+        }
+
+        // Add the message event listener
+        window.addEventListener('message', handleMessage);
+
+        // Cleanup the event listener when the component unmounts
+        return () => {
+            window.removeEventListener('message', handleMessage);
+        };
+    }, []);
 
     if (loading) {
         return <Loader />;

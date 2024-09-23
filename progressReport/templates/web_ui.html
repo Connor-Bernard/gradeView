@@ -348,6 +348,12 @@
     // Load the initial course data and setup the diagram
         loadCourseData(courseData);
 
+    // Event listener to communicate the content height to the parent page
+    // This removes two scrolling bars
+    window.addEventListener('DOMContentLoaded', function() {
+        const bodyHeight = document.body.scrollHeight;
+        window.parent.postMessage(bodyHeight, '*');  // Send the content height to the parent
+    });
     </script>
 </body>
 </html>
