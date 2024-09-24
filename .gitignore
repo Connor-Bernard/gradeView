@@ -2,6 +2,7 @@
 /website/node_modules
 /website/server/node_modules
 /api/node_modules
+**/__pycache__
 
 # Environment variables
 *.env
