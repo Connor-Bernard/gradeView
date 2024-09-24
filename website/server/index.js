@@ -5,6 +5,8 @@ const { proxy, limit } = require('./middleware');
 const dotenv = require('dotenv');
 dotenv.config();
 
+
+
 const app = express();
 
 app.use(cors());
@@ -20,6 +22,15 @@ app.use(limit(10));
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
+
+// Begin (very rudimentary) code to handle post request from Canvas
+const consumer_key = "024ipn04qG"
+app.use(express.urlencoded({ extended: true }));
+
+app.post('/conceptmap', (req, res) => {
+    res.send(req.body)
+});
+// End code to handle post request from Canvas
 
 // Start the server listening on the unix socket or port if configured otherwise port 3000.
 const sock = process.env.SOCKETS_DIR && `${process.env.SOCKETS_DIR}/app.sock`;
