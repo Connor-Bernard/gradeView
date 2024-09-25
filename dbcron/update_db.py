@@ -28,24 +28,24 @@ credentials = Credentials.from_service_account_info(credentials_dict, scopes=SCO
 client = gspread.authorize(credentials)
 
 #redis setup
-redis_client = redis.Redis(host=HOST, port=PORT, db=DB, password=REDIS_PW) 
+redis_client = redis.Redis(host=HOST, port=PORT, db=DB, password=REDIS_PW)
 
 def update_redis():
     sheet = client.open(SHEETNAME).get_worksheet(WORKSHEET)
     categories = sheet.row_values(CATEGORYROW)[CATEGORYCOL:] #gets the categories from row 2, starting from column C
     concepts = sheet.row_values(CONCEPTSROW)[CONCEPTSCOL:] #gets the concepts from row 1, starting from column C
     max_points = sheet.row_values(MAXPOINTSROW)[MAXPOINTSCOL:] #gets the max points from row 3, starting from column C
-    
+
     category_scores = {}
     for category, concept, points in zip(categories, concepts, max_points):
         if category not in category_scores:
             category_scores[category] = {} #creates a hashmap entry for each category
         category_scores[category][concept] = points #nested hashmap of     category:concept:points
-    
+
     redis_client.set("Categories", json.dumps(category_scores)) #the one record that holds all of the categories info
-    
+
     records = sheet.get_all_records()
-    
+
     for record in records:
         email = record.pop('Email')
         legal_name = record.pop('Legal Name')
@@ -55,12 +55,12 @@ def update_redis():
             "Legal Name": legal_name,
             "Assignments": {}
         }
-        
+
         for category, concept in zip(categories, concepts):
             if category not in users_to_assignments["Assignments"]:
                 users_to_assignments["Assignments"][category] = {}
             users_to_assignments["Assignments"][category][concept] = record[concept]
-        
+
         redis_client.set(email, json.dumps(users_to_assignments)) #sets key value for user:other data
 
 if __name__ == "__main__":
