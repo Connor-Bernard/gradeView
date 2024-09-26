@@ -7,6 +7,7 @@ import GradeGrid from '../components/GradeGrid';
 import Grid from '@mui/material/Unstable_Grid2';
 import ProjectionTable from '../components/ProjectionTable';
 import { StudentSelectionContext } from "../components/StudentSelectionWrapper";
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
 
@@ -23,12 +24,23 @@ function Home() {
     const binsInfo = useFetch('/bins');
     const gradeInfo = useFetch(`students/${fetchEmail}/grades`);
     const projectionsInfo = useFetch(`/students/${fetchEmail}/projections`);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (binsInfo.data && localStorage.getItem('token')) {
             setBinsData(binsInfo.data.map(({ letter, points }) => [points, letter]));
         }
     }, [binsInfo.data]);
+
+
+    // Redirect to error page if any of the fetch requests return an error
+    useEffect(() => {
+        if (binsInfo.error || gradeInfo.error || projectionsInfo.error) {
+            const errorCode = binsInfo.error?.status || gradeInfo.error?.status || projectionsInfo.error?.status;
+            const errorText = binsInfo.error?.message || gradeInfo.error?.message || projectionsInfo.error?.message;
+            navigate('/serviceError', { state: { errorCode, errorText } });
+        }
+    }, [binsInfo.error, gradeInfo.error, projectionsInfo.error, navigate]);
 
     if (gradeInfo.loading || binsInfo.loading || projectionsInfo.loading) {
         return (<Loader />);
