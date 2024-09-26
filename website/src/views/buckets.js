@@ -45,7 +45,7 @@ export default function Buckets() {
         createGradingRow('Project 5: Pyturis', 45),
         createGradingRow('Final Project', 60),
         createGradingRow('Labs', 80),
-        createGradingRow('Attendance / Participation', 25),
+        createGradingRow('Attendance / Participation', 25)
     ];
 
     return (
