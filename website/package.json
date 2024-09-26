@@ -24,6 +24,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.7.0",
     "react-scripts": "^5.0.1",
+    "rollup": "^3.29.5",
     "web-vitals": "^4.2.3"
   },
   "scripts": {
@@ -50,5 +51,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  }, 
+  "overrides": {
+    "nth-check": "https://registry.npmjs.org/nth-check/-/nth-check-2.1.1.tgz",
+    "postcss": "https://registry.npmjs.org/postcss/-/postcss-8.4.31.tgz"
   }
 }
