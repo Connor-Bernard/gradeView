@@ -8,9 +8,7 @@ export default class StudentNotEnrolledError extends Base {
         let smartMessage = message;
         
         // Append additional details if available
-        if (studentEmail && courseName) {
-            smartMessage += `; student "${studentEmail}" is not enrolled"`;
-        } else if (studentEmail) {
+        if (studentEmail) {
             smartMessage += `; student "${studentEmail}" is not enrolled`;
         }
 
