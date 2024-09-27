@@ -1,7 +1,5 @@
 import { Router } from 'express';
-import { getEmailFromAuth } from "../../../../lib/googleAuthHelper.mjs";
-import { getMaxPointsSoFar } from '../../../../lib/studentHelper.mjs';
-import { getMaxScores, getStudentScores, getTotalPossibleScore } from '../../../../lib/redisHelper.mjs';
+import { getMaxScores, getStudentScores } from '../../../../lib/redisHelper.mjs';
 import ProgressReportData from '../../../../assets/progressReport/CS10.json' assert {type: 'json'};
 import 'express-async-errors';
 
@@ -49,11 +47,16 @@ async function getMasteryString(userTopicPoints, maxTopicPoints) {
 
 router.get('/', async (req, res) => {
     const { id } = req.params;
-    const maxScores = await getMaxScores();
-    const studentScores = await getStudentScores(id);
-    const userTopicPoints = getTopicsFromUser(studentScores);
-    const maxTopicPoints = getTopicsFromUser(maxScores);
-    const masteryNum = await getMasteryString(userTopicPoints, maxTopicPoints);
+    let masteryNum
+    try {
+        const maxScores = await getMaxScores();
+        const studentScores = await getStudentScores(id);
+        const userTopicPoints = getTopicsFromUser(studentScores);
+        const maxTopicPoints = getTopicsFromUser(maxScores);
+        masteryNum = await getMasteryString(userTopicPoints, maxTopicPoints);
+    } catch (error) {
+        return res.status(404).json({ message: "Error fetching student."});
+    }
     return res.status(200).json(masteryNum);
 });
 

@@ -6,15 +6,28 @@ import { isAdmin } from '../../../../lib/userlib.mjs';
 const router = Router({ mergeParams: true });
 
 router.get('/', async (req, res) => {
-    const { id } = req.params;
-    const maxScores = await getMaxScores();
-    let studentScores;
-    if (isAdmin(id)) {
-        studentScores = maxScores;
-    } else {
-        studentScores = await getStudentScores(id);
+    const { id } = req.params; // the id is the student's email
+    let maxScores;
+    try {
+        // Attempt to get max scores, if fails, return 404
+        maxScores = await getMaxScores();
+    } catch (error) {
+        return res.status(404).json({ message: 'Error fetching max scores' });
     }
 
+    let studentScores;
+    try {
+        if (isAdmin(id)) {
+            studentScores = maxScores;
+        } else {
+            // Attempt to get student scores
+            studentScores = await getStudentScores(id);
+        }
+    } catch (error) {
+        return res.status(404).json({ message: `Error fetching scores for student with id ${id}` });
+    } finally {
+        // record metrics?
+    }
     res.status(200).json(getStudentScoresWithMaxPoints(studentScores, maxScores));
 });
 

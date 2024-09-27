@@ -7,12 +7,21 @@ const router = Router({ mergeParams: true });
 
 // Responds with whether or not the current user is an admin
 router.get('/', async (req, res) => {
-    const authHeader = req.headers['authorization'];
-    if (!authHeader) {
-        throw new AuthorizationError("Authorization Header is empty.");
+    let adminStatus = false;
+    try {
+        const authHeader = req.headers['authorization'];
+        if (!authHeader) {
+            throw new AuthorizationError("Authorization Header is empty.");
+        }
+        const authEmail = await getEmailFromAuth(authHeader);
+        adminStatus = await isAdmin(authEmail);
+    } catch (error) {
+        if (error instanceof AuthorizationError) {
+            return res.status(401).json({ message: error.message });
+        }
+        console.error('Error:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
-    const authEmail = await getEmailFromAuth(authHeader);
-    const adminStatus = await isAdmin(authEmail);
     res.status(200).json({ isAdmin: adminStatus });
     
 });
