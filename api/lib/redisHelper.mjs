@@ -1,8 +1,9 @@
 import config from 'config';
 import dotenv from 'dotenv';
 import MisformedKeyError from '../errors/redis/MisformedKeyError.js';
-
+import StudentNotFoundError from '../lib/HttpErrors/StudentNotFoundError.js';
 import { createClient } from 'redis';
+import NotFoundError from './HttpErrors/NotFoundError.js';
 
 dotenv.config();
 
@@ -26,17 +27,24 @@ export function getClient(databaseIndex = 0) {
  * Gets the value of a specified key in the database.
  * @param {string} key the key of the entry to get.
  * @param {number} databaseIndex the index the entry is stored in.
+ * @throws {NotFoundError} if the key is not in the database.
  * @returns {object} the entry's information.
  */
 export async function getEntry(key, databaseIndex = 0) {
     const client = getClient(databaseIndex);
     await client.connect();
 
-    const res = await client.get(key);
-    // TODO: Throw error if the key does not exist in the db.
-
-    await client.quit();
-
+    let res;
+    try {
+        res = await client.get(key);
+        // Check if the key exists, otherwise throw a custom error
+        if (res === null) {
+            console.error(`Error while fetching key "${key}":`, error.message);
+            throw new NotFoundError(`Key "${key}" not found in database ${databaseIndex}`);
+        }
+    } finally {
+        await client.quit();
+    }
     return JSON.parse(res);
 }
 
@@ -52,6 +60,8 @@ export async function getCategories() {
  * Gets a specified student's information from the Redis database. 
  * @param {string} email the email of the student whose information to get. 
  * @returns {object} the student's information.
+ * @throws {StudentNotFoundError} If the student is not in the database, meaning
+ * the student is not enrolled in the class.
  */
 export async function getStudent(email) {
     if (typeof email !== 'string') {
@@ -60,7 +70,15 @@ export async function getStudent(email) {
             { expectedType: 'string', email },
         );
     }
-    return await getEntry(email);
+    let student;
+    try {
+        student = await getEntry(email);
+    } catch (error) {
+        throw new StudentNotFoundError(`Student ${email} is not in the database.`);
+    } finally {
+        //TODO: record metrics?
+    }
+    return student;
 }
 
 /**
