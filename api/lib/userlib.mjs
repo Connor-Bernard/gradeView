@@ -1,6 +1,6 @@
 import config from 'config';
 import { getStudent } from './redisHelper.mjs';
-
+import  StudentNotFoundError from '../lib/HttpErrors/StudentNotFoundError.js';
 /**
  * Checks if the specified user is an admin.
  * @param {string} email the email of the user to check.
@@ -20,7 +20,11 @@ export async function isStudent(email) {
     try {
         const student = await getStudent(email);
         return !!student;
-    } catch (err) {
-        return false;
+    } catch (error) {
+        if (error instanceof StudentNotFoundError) {
+            return false;
+        }
+        // If it's another type of error, rethrow it to be handled elsewhere
+        throw error;
     }
 }

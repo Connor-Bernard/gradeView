@@ -13,6 +13,10 @@ router.get('/', async (_, res) => {
         }
         return res.status(200).json(binsData);
     } catch (error) {
+        if (error instanceof NotFoundError) {
+            console.error('Error: Bins data not found:', error.message);
+            return res.status(404).json({ message: error.message });
+        }
         console.error('Error retrieving bins from Redis:', error);
         return res.status(500).json({ message: 'Internal Server Error' });
     }
