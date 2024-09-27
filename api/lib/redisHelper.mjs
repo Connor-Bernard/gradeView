@@ -39,7 +39,7 @@ export async function getEntry(key, databaseIndex = 0) {
         res = await client.get(key);
         // Check if the key exists, otherwise throw a custom error
         if (res === null) {
-            console.error(`Error while fetching key "${key}":`, error.message);
+            console.error('Error while fetching key "%s": %s', key, error.message);
             throw new NotFoundError(`Key "${key}" not found in database ${databaseIndex}`);
         }
     } finally {
