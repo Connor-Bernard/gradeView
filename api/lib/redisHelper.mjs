@@ -1,6 +1,8 @@
 import config from 'config';
 import dotenv from 'dotenv';
 import MisformedKeyError from '../errors/redis/MisformedKeyError.js';
+import KeyNotFoundError from '../errors/redis/KeyNotFound.js';
+import StudentNotEnrolledError from '../errors/redis/StudentNotEnrolled.js';
 
 import { createClient } from 'redis';
 
@@ -24,20 +26,26 @@ export function getClient(databaseIndex = 0) {
 
 /**
  * Gets the value of a specified key in the database.
- * @param {string} key the key of the entry to get.
- * @param {number} databaseIndex the index the entry is stored in.
+ * @param {string} key - the key of the entry to get.
+ * @param {number} [databaseIndex=0] - the index the entry is stored in.
  * @returns {object} the entry's information.
+ * @throws {KeyNotFoundError} if the key is not in the database.
  */
 export async function getEntry(key, databaseIndex = 0) {
     const client = getClient(databaseIndex);
     await client.connect();
 
-    const res = await client.get(key);
-    // TODO: Throw error if the key does not exist in the db.
-
-    await client.quit();
-
-    return JSON.parse(res);
+    try {
+        const res = await client.get(key);
+        if (res === null) {
+            const err = new KeyNotFoundError("failed to get entry", key, databaseIndex);
+            console.error(err.message);
+            throw err;
+        }
+        return JSON.parse(res);
+    } finally {
+        await client.quit();
+    }
 }
 
 /**
@@ -49,9 +57,12 @@ export async function getCategories() {
 }
 
 /**
- * Gets a specified student's information from the Redis database. 
- * @param {string} email the email of the student whose information to get. 
- * @returns {object} the student's information.
+ * Gets a specified student's information from the Redis database.
+ * @param {string} email - The email of the student whose information to get.
+ * @returns {object} The student's information.
+ * @throws {MisformedKeyError} If the key is not a valid type.
+ * @throws {StudentNotEnrolledError} If the student is not in the database, meaning
+ * the student is not enrolled in the class.
  */
 export async function getStudent(email) {
     if (typeof email !== 'string') {
@@ -60,7 +71,17 @@ export async function getStudent(email) {
             { expectedType: 'string', email },
         );
     }
-    return await getEntry(email);
+    try {
+        const student = await getEntry(email);
+        return student;
+    } catch (err) {
+        switch (typeof err) {
+            case 'KeyNotFoundError':
+                throw new StudentNotEnrolledError("Student is not in the database.", email, err);
+            default:
+                throw err;
+        }
+    }
 }
 
 /**

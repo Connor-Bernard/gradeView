@@ -3,7 +3,7 @@ import { getStudent } from './redisHelper.mjs';
 
 /**
  * Checks if the specified user is an admin.
- * @param {string} email the email of the user to check.
+ * @param {string} email - the email of the user to check.
  * @returns {boolean} whether the user is an admin.
  */
 export function isAdmin(email) {
@@ -13,14 +13,20 @@ export function isAdmin(email) {
 
 /**
  * Checks if the specified user is a student.
- * @param {string} email the email of the user to check.
+ * @param {string} email - the email of the user to check.
  * @returns {boolean} whether the user is a student.
  */
 export async function isStudent(email) {
+    // TODO:at some point we should handle this more gracefully (check to see if the user exists instead of throwing an error).
     try {
         const student = await getStudent(email);
         return !!student;
     } catch (err) {
-        return false;
+        switch (typeof err) {
+            case 'StudentNotEnrolledError':
+                return false;
+            default:
+                throw err;
+        }
     }
 }

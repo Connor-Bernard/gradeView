@@ -55,14 +55,13 @@ export async function validateStudentMiddleware(req, _, next) {
     const { email } = req.params
 
     const authEmail = await getEmailFromAuth(req.headers['authorization']);
-    if (!isStudent(authEmail)) {
-        throw new AuthorizationError('not a registered student.');
+    const studentExists = await isStudent(authEmail);
+    if (!studentExists) {
+        throw new AuthorizationError('You are not a registered student.');
     }
-
     if (email && (authEmail !== email)) {
         throw new UnauthorizedAccessError('not permitted');
     }
-
     next();
 }
 

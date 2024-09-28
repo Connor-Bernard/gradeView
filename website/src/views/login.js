@@ -29,9 +29,8 @@ export default function Login() {
         axios.get(`/api/v2/login`, {
             headers: { 'Authorization': token }
         }).then((loginRes) => {
-            console.log(loginRes);
             if (!loginRes.data.status) {
-                setError('Account is not authorized.');
+                setError('You are not a registered student or admin.  Please contact course staff if you think this is a mistake.');
                 return;
             } else {
                 localStorage.setItem('token', token);
