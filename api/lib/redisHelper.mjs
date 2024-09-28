@@ -11,7 +11,7 @@ dotenv.config();
  * @param {number} databaseIndex the index the entry is stored in.
  * @returns {RedisClient} Redis client.
  */
-export function getClient(databaseIndex = 0) {
+export function getClient(databaseIndex = config.get("redis.databaseIndexes.user")) {
     const client = createClient({
         url: `redis://${config.get('redis.username')}:${process.env.REDIS_DB_SECRET}` +
             `@${config.get('redis.host')}:${config.get('redis.port')}/${databaseIndex}`,
@@ -28,7 +28,7 @@ export function getClient(databaseIndex = 0) {
  * @param {number} databaseIndex the index the entry is stored in.
  * @returns {object} the entry's information.
  */
-export async function getEntry(key, databaseIndex = 0) {
+export async function getEntry(key, databaseIndex = config.get("redis.databaseIndexes.user")) {
     const client = getClient(databaseIndex);
     await client.connect();
 
@@ -69,7 +69,7 @@ export async function getStudent(email) {
  */
 export async function getBins() {
     // TODO: this should be exported into a constant.
-    const databaseIndex = 1;
+    const databaseIndex = config.get("redis.databaseIndexes.bins");
     const binsEntry = await getEntry('bins', databaseIndex);
     return binsEntry.bins;
 }

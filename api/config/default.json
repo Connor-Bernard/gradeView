@@ -2,7 +2,11 @@
     "redis": {
         "username": "default",
         "host": "redis",
-        "port": 6379
+        "port": 6379, 
+        "databaseIndexes": {
+            "user" : 0, 
+            "bins": 1
+        }
     },
     "spreadsheet": {
         "id": "1iX0ulEYbyYOy7Dehy3jGmSsWK4JAJA47Hvaa2cF7u1U",
