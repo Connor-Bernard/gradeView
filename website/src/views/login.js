@@ -30,7 +30,7 @@ export default function Login() {
             headers: { 'Authorization': token }
         }).then((loginRes) => {
             if (!loginRes.data.status) {
-                setError('You are not a registered student or admin.');
+                setError('You are not a registered student or admin.  Please contact course staff if you think this is a mistake.');
                 return;
             } else {
                 localStorage.setItem('token', token);
