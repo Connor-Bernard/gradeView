@@ -38,14 +38,14 @@ export async function getEntry(key, databaseIndex = 0) {
     try {
         const res = await client.get(key);
         if (res === null) {
-            const err = KeyNotFoundError("failed to get entry", key, databaseIndex);
+            const err = new KeyNotFoundError("failed to get entry", key, databaseIndex);
             console.error(err.message);
             throw err;
         }
+        return JSON.parse(res);
     } finally {
         await client.quit();
     }
-    return JSON.parse(res);
 }
 
 /**
