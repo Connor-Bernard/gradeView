@@ -1,10 +1,9 @@
 import config from 'config';
 import { getStudent } from './redisHelper.mjs';
-import StudentNotEnrolledError from '../errors/redis/StudentNotEnrolled.js';
 
 /**
  * Checks if the specified user is an admin.
- * @param {string} email the email of the user to check.
+ * @param {string} email - the email of the user to check.
  * @returns {boolean} whether the user is an admin.
  */
 export function isAdmin(email) {
@@ -14,18 +13,20 @@ export function isAdmin(email) {
 
 /**
  * Checks if the specified user is a student.
- * @param {string} email the email of the user to check.
+ * @param {string} email - the email of the user to check.
  * @returns {boolean} whether the user is a student.
  */
 export async function isStudent(email) {
+    // TODO:at some point we should handle this more gracefully (check to see if the user exists instead of throwing an error).
     try {
         const student = await getStudent(email);
         return !!student;
-    } catch (error) {
-        if (error instanceof StudentNotEnrolledError) {
-            return false;
+    } catch (err) {
+        switch (typeof err) {
+            case 'StudentNotEnrolledError':
+                return false;
+            default:
+                throw err;
         }
-        // If it's another type of error, rethrow it to be handled elsewhere
-        throw error;
     }
 }
