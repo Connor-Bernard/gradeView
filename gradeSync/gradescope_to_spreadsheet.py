@@ -60,7 +60,7 @@ def allow_user_to_authenticate_google_account():
                 "credentials.json", SCOPES
             )
             creds = flow.run_local_server(port=0)
-            print("Authentication succesful")
+            print("Authentication successful")
     # Save the credentials for the next run
     with open("token.json", "w") as token:
         token.write(creds.to_json())
